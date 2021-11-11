@@ -7,3 +7,5 @@ aiofiles
 dnspython
 apscheduler
 requests
+jinja2
+aiohttp_jinja2

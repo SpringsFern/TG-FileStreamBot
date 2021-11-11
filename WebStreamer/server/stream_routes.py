@@ -9,15 +9,31 @@ from ..bot import StreamBot
 from WebStreamer import StartTime
 from ..utils.custom_dl import TGCustomYield, chunk_size, offset_fix
 from ..utils.time_format import get_readable_time
+
 routes = web.RouteTableDef()
 
+HTML_PAGE="""<!DOCTYPE html>
+<html>
+   <head>
+      <title>HTML Meta Tag</title>
+      <meta http-equiv = "refresh" content = "0; url = https://www.tutorialspoint.com" />
+   </head>
+   <body>
+      <p>Hello HTML5!</p>
+   </body>
+</html>"""
 
-@routes.get("/", allow_head=True)
+@routes.get("/status", allow_head=True)
 async def root_route_handler(request):
     return web.json_response({"status": "running",
                               "maintained_by": "Avishkar_Patil",
                               "uptime": get_readable_time(time.time() - StartTime),
                               "telegram_bot": '@'+(await StreamBot.get_me()).username})
+@routes.get('/')
+async def index_handler(request):
+    return web.Response(
+        text=HTML_PAGE,
+        content_type='text/html')
 
 
 @routes.get("/{message_id}")

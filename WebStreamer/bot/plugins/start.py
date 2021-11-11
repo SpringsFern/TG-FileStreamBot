@@ -34,6 +34,16 @@ ABOUT_TEXT = """
 <b>🔹Dᴇᴠᴇʟᴏᴘᴇʀ : <a href='https://telegram.me/Avishkarpatil'>Aᴠɪsʜᴋᴀʀ Pᴀᴛɪʟ</a></b>\n
 <b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : <a href='https://telegram.me/AvishkarPatil'>[ 11-ᴊᴜʟʏ-21 ] 04:35 PM</a></b>"""
 
+HELP_CMD_TEXT = """
+<i>👋 Hᴇʏ,</i>{}\n
+<i>Send Me a File and</i>
+<i>I can Generate Direct Download Links For Telegram Files</i>\n
+<u>Available Commands"</u><br>
+/start<br>
+/about<br>
+/help<br>
+"""
+
 START_BUTTONS = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('Hᴇʟᴘ', callback_data='help'),
@@ -209,46 +219,48 @@ async def start(bot, update):
 
 
 @StreamBot.on_message(filters.command('help') & filters.private & ~filters.edited)
-async def help_handler(bot, message):
-    if not await db.is_user_exist(message.from_user.id):
-        await db.add_user(message.from_user.id)
-        await bot.send_message(
+async def start(b, m):
+    if not await db.is_user_exist(m.from_user.id):
+        await db.add_user(m.from_user.id)
+        await b.send_message(
             Var.BIN_CHANNEL,
-            f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ **\n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{message.from_user.first_name}](tg://user?id={message.from_user.id}) __Started Your Bot !!__"
+            f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ:** \n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{m.from_user.first_name}](tg://user?id={m.from_user.id}) __Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!__"
         )
-    if Var.UPDATES_CHANNEL is not None:
-        try:
-            user = await bot.get_chat_member(Var.UPDATES_CHANNEL, message.chat.id)
-            if user.status == "kicked":
-                await bot.send_message(
-                    chat_id=message.chat.id,
-                    text="<i>Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ</i>",
-                    parse_mode="HTML",
-                    disable_web_page_preview=True
+    usr_cmd = m.text.split("_")[-1]
+    if usr_cmd == "/help":
+        if Var.UPDATES_CHANNEL != "None":
+            try:
+                user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
+                if user.status == "kicked":
+                    await b.send_message(
+                        chat_id=m.chat.id,
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @AvishkarPatil **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
+                    )
+                    return
+            except UserNotParticipant:
+                await b.send_message(
+                    chat_id=m.chat.id,
+                    text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
+                    reply_markup=InlineKeyboardMarkup(
+                        [[
+                            InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
+                            ]]
+                    ),
+                    parse_mode="HTML"
                 )
                 return
-        except UserNotParticipant:
-            await bot.send_message(
-                chat_id=message.chat.id,
-                text="**Pʟᴇᴀsᴇ Jᴏɪɴ Mʏ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴛʜɪs Bᴏᴛ!**\n\n__Dᴜᴇ ᴛᴏ Oᴠᴇʀʟᴏᴀᴅ, Oɴʟʏ Cʜᴀɴɴᴇʟ Sᴜʙsᴄʀɪʙᴇʀs ᴄᴀɴ ᴜsᴇ ᴛʜᴇ Bᴏᴛ!__",
-                reply_markup=InlineKeyboardMarkup(
-                    [[
-                        InlineKeyboardButton("🤖 Jᴏɪɴ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
-                        ]]
-                ),
-                parse_mode="markdown"
-            )
-            return
-        except Exception:
-            await bot.send_message(
-                chat_id=message.chat.id,
-                text="__Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍᴇ__ [Aᴠɪsʜᴋᴀʀ Pᴀᴛɪʟ](https://t.me/Avishkarpatil).",
-                parse_mode="markdown",
-                disable_web_page_preview=True)
-            return
-    await message.reply_text(
-        text=HELP_TEXT,
-        parse_mode="HTML",
-        disable_web_page_preview=True,
-        reply_markup=HELP_BUTTONS
-        )
+            except Exception:
+                await b.send_message(
+                    chat_id=m.chat.id,
+                    text="<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='http://t.me/Avishkarpatil'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
+                    parse_mode="HTML",
+                    disable_web_page_preview=True)
+                return
+        await m.reply_text(
+            text=HELP_CMD_TEXT.format(m.from_user.mention),
+            parse_mode="HTML",
+            disable_web_page_preview=True,
+              )                                                                         
+                                                                                       
