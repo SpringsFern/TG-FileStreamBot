@@ -14,22 +14,18 @@ routes = web.RouteTableDef()
 
 HTML_PAGE="""<!DOCTYPE html>
 <html>
-   <head>
-      <title>HTML Meta Tag</title>
-      <meta http-equiv = "refresh" content = "0; url = https://deekshithsh.github.io/FileStreamBot/" />
-   </head>
    <body>
-      <p>Hello HTML5!</p>
+      <p>Welcome to TeleXBot</p>
    </body>
 </html>"""
 
-@routes.get("/status", allow_head=True)
+@routes.get("/", allow_head=True)
 async def root_route_handler(request):
     return web.json_response({"status": "running",
-                              "maintained_by": "Avishkar_Patil",
+                              "maintained_by": "Deekshith SH",
                               "uptime": get_readable_time(time.time() - StartTime),
                               "telegram_bot": '@'+(await StreamBot.get_me()).username})
-@routes.get('/')
+@routes.get('/home')
 async def index_handler(request):
     return web.Response(
         text=HTML_PAGE,
