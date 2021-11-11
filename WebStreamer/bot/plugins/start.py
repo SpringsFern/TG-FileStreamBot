@@ -12,8 +12,7 @@ db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 START_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
 <i>I'ᴍ Tᴇʟᴇɢʀᴀᴍ Fɪʟᴇs Sᴛʀᴇᴀᴍɪɴɢ Bᴏᴛ ᴀs ᴡᴇʟʟ Dɪʀᴇᴄᴛ Lɪɴᴋs Gᴇɴᴇʀᴀᴛᴇ</i>\n
-<i>Cʟɪᴄᴋ ᴏɴ Hᴇʟᴘ ᴛᴏ ɢᴇᴛ ᴍᴏʀᴇ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</i>\n
-<i><b>🍃 Bᴏᴛ Mᴀɪɴᴛᴀɪɴᴇᴅ Bʏ :</b>@DeekshithSH</i>"""
+<i>Cʟɪᴄᴋ ᴏɴ Hᴇʟᴘ ᴛᴏ ɢᴇᴛ ᴍᴏʀᴇ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</i>\n"""
 
 HELP_TEXT = """
 <i>- Sᴇɴᴅ ᴍᴇ ᴀɴʏ ꜰɪʟᴇ (ᴏʀ) ᴍᴇᴅɪᴀ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.</i>
@@ -24,9 +23,8 @@ HELP_TEXT = """
 
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : FileStreamX</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : <a href='https://telegram.me/DeekshithSH'>3.0.1</a></b>\n
-<b>🔹Dᴇᴠᴇʟᴏᴘᴇʀ : <a href='https://telegram.me/DeekshithSH'>Aᴠɪsʜᴋᴀʀ Pᴀᴛɪʟ</a></b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : <a href='https://telegram.me/DeekshithSH'>[ 11-ᴊᴜʟʏ-21 ] 04:35 PM</a></b>"""
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.1</b>\n
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 11-ᴊᴜʟʏ-21 ] 04:35 PM</b>"""
 
 HELP_CMD_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
@@ -193,7 +191,6 @@ async def start(b, m):
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Lɪɴᴋ ᴇxᴘɪʀᴇᴅ ɪɴ 24 ʜᴏᴜʀꜱ</b>\n
-<i>🍃 Bᴏᴛ Mᴀɪɴᴛᴀɪɴᴇᴅ Bʏ :</i> <b>@DeekshithSH</b>
 """
 
         await m.reply_text(
