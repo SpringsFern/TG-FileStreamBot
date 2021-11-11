@@ -16,7 +16,7 @@ HTML_PAGE="""<!DOCTYPE html>
 <html>
    <head>
       <title>HTML Meta Tag</title>
-      <meta http-equiv = "refresh" content = "0; url = https://www.tutorialspoint.com" />
+      <meta http-equiv = "refresh" content = "0; url = https://deekshithsh.github.io/FileStreamBot/" />
    </head>
    <body>
       <p>Hello HTML5!</p>
