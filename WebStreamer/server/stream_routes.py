@@ -15,8 +15,8 @@ routes = web.RouteTableDef()
 HTML_PAGE="""<!DOCTYPE html>
 <html>
    <body>
-      Status: Running
-      Maintained By: Deekshith SH
+    <a href="/status">Status: Running <br>
+      Maintained By: Deekshith SH</a>
    </body>
 </html>"""
 
