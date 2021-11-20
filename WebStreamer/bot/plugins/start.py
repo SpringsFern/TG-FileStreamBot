@@ -22,9 +22,9 @@ HELP_TEXT = """
 <i>Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ (ᴏʀ) ʀᴇᴘᴏʀᴛ ʙᴜɢꜱ</i> <b>: <a href='https://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>"""
 
 ABOUT_TEXT = """
-<b>⚜ Mʏ ɴᴀᴍᴇ : FileStreamX</b>\n
+<b>⚜ Mʏ ɴᴀᴍᴇ : Direct Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.1</b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 11-ᴊᴜʟʏ-21 ] 04:35 PM</b>"""
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 20-Nov-21 ] 05:28 PM</b>"""
 
 HELP_CMD_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
