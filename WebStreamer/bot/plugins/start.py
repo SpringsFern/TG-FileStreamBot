@@ -12,6 +12,7 @@ db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 START_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
 <i>I'ᴍ Tᴇʟᴇɢʀᴀᴍ Fɪʟᴇs Sᴛʀᴇᴀᴍɪɴɢ Bᴏᴛ ᴀs ᴡᴇʟʟ Dɪʀᴇᴄᴛ Lɪɴᴋs Gᴇɴᴇʀᴀᴛᴇ</i>\n
+<i>Use our Testing(unstable) Bot to get Latest Features<i>\n
 <i>Cʟɪᴄᴋ ᴏɴ Hᴇʟᴘ ᴛᴏ ɢᴇᴛ ᴍᴏʀᴇ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</i>\n"""
 
 HELP_TEXT = """
@@ -23,8 +24,8 @@ HELP_TEXT = """
 
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Direct Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.1</b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 20-Nov-21 ] 05:28 PM</b>"""
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.2</b>\n
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 20-Nov-21 ] 06:12 PM</b>"""
 
 HELP_CMD_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
