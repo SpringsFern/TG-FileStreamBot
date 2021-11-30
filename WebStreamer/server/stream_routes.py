@@ -16,7 +16,7 @@ HTML_PAGE="""<!DOCTYPE html>
 <html>
    <body>
         Status: Running <br>
-        Maintained By: <a href='https://t.me/DeekshithSH'>Deekshith SH</a>,<br>
+        Maintained By: <a href='https://telegram.me/DeekshithSH'>Deekshith SH</a>,<br>
         Source Code: <a href='https://github.com/avipatilpro/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
         My Source Code: <a href='https://github.com/DeekshithSH/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
         <a href="/status">Status</a>
