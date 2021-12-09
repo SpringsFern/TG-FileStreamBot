@@ -59,6 +59,10 @@ async def private_receive_handler(b, m: Message,):
                     parse_mode="markdown",
                     disable_web_page_preview=True
                 )
+            await b.send_message(
+                    Var.BIN_CHANNEL,
+                    f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
+                )
         else:
             file1.close()
     try:
@@ -72,6 +76,10 @@ async def private_receive_handler(b, m: Message,):
                     text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
                     parse_mode="markdown",
                     disable_web_page_preview=True
+                )
+            await b.send_message(
+                    Var.BIN_CHANNEL,
+                    f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
                 )
         else:
             log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)

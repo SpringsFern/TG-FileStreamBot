@@ -29,7 +29,7 @@ HELP_TEXT = """
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Direct Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.4</b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 9-Dec-21 ] 08:03 PM</b>"""
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 9-Dec-21 ] 08:44 PM</b>"""
 
 HELP_CMD_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
@@ -131,13 +131,17 @@ async def start(b, m):
             value = m.chat.id
             file1 = open("blacklist.txt", "r")
             readfile = file1.read()
-            if str(value) in readfile:
+            if str(value) + "-end" in readfile:
                 await b.send_message(
                         chat_id=m.chat.id,
                         text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
                         parse_mode="markdown",
                         disable_web_page_preview=True
                     )
+                await b.send_message(
+                        Var.BIN_CHANNEL,
+                        f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
+                     )
             else:
                 await m.reply_text(
                     text=START_TEXT.format(m.from_user.mention),
@@ -189,6 +193,10 @@ async def start(b, m):
                         text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
                         parse_mode="markdown",
                         disable_web_page_preview=True
+                    )
+                await b.send_message(
+                        Var.BIN_CHANNEL,
+                        f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
                     )
             else:
                 file1.close()
@@ -243,6 +251,10 @@ async def start(b ,m):
                 text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
                 parse_mode="markdown",
                 disable_web_page_preview=True
+            )
+        await b.send_message(
+                Var.BIN_CHANNEL,
+                f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
             )
     else:
         file1.close()
@@ -303,6 +315,10 @@ async def start(b, m):
                         text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
                         parse_mode="markdown",
                         disable_web_page_preview=True
+                    )
+                await b.send_message(
+                        Var.BIN_CHANNEL,
+                        f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
                     )
             else:
                 file1.close()
