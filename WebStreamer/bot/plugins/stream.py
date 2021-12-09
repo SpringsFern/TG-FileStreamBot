@@ -61,7 +61,7 @@ async def private_receive_handler(b, m: Message,):
                 )
             await b.send_message(
                     Var.BIN_CHANNEL,
-                    f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
+                    f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
                 )
         else:
             file1.close()
@@ -79,7 +79,7 @@ async def private_receive_handler(b, m: Message,):
                 )
             await b.send_message(
                     Var.BIN_CHANNEL,
-                    f"**Bannde User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot**"
+                    f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
                 )
         else:
             log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
