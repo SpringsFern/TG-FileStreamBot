@@ -127,12 +127,25 @@ async def start(b, m):
                     parse_mode="HTML",
                     disable_web_page_preview=True)
                 return
-        await m.reply_text(
-            text=START_TEXT.format(m.from_user.mention),
-            parse_mode="HTML",
-            disable_web_page_preview=True,
-            reply_markup=START_BUTTONS
-              )                                                                         
+        else:
+            value = m.chat.id
+            file1 = open("blacklist.txt", "r")
+            readfile = file1.read()
+            if str(value) in readfile:
+                await b.send_message(
+                        chat_id=m.chat.id,
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
+                    )
+            else:
+                await m.reply_text(
+                    text=START_TEXT.format(m.from_user.mention),
+                    parse_mode="HTML",
+                    disable_web_page_preview=True,
+                    reply_markup=START_BUTTONS
+                      )  
+            file1.close()                                                                       
                                                                                        
                                                                             
     else:
