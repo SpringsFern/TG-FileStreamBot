@@ -145,15 +145,23 @@ Bot also Supported with Channels. Just add bot Channel as Admin. If any new file
 
 ### User Commands
 Commands Available for all user
+
 `/start` : To check if the bot is alive or not.
+
 `/help` : Show Help Message
+
 `/about` : Show About Message
+
 
 ### Owner Commands
 Commands Available only for Owner
+
 `/status` :Show Total Users in DataBase
+
 `/ban` : ban a user eg:"/ban 8456824875"
+
 `/unban` : unban a user eg:"/ban 8456824875"
+
 </details>
 
 
