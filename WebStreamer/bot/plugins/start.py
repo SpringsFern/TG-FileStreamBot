@@ -28,8 +28,8 @@ HELP_TEXT = """
 
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Direct Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3</b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 30-Nov-21 ] 06:22 PM</b>"""
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.4</b>\n
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 9-Dec-21 ] 08:03 PM</b>"""
 
 HELP_CMD_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
