@@ -160,7 +160,7 @@ Commands Available only for Owner
 
 `/ban` : ban a user eg:"/ban 8456824875"
 
-`/unban` : unban a user eg:"/ban 8456824875"
+`/unban` : unban a user eg:"/unban 8456824875"
 
 </details>
 
