@@ -179,29 +179,42 @@ async def start(b, m):
                     parse_mode="markdown",
                     disable_web_page_preview=True)
                 return
+        else:
+            value = m.chat.id
+            file1 = open("blacklist.txt", "r")
+            readfile = file1.read()
+            if str(value) in readfile:
+                await b.send_message(
+                        chat_id=m.chat.id,
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
+                    )
+            else:
+                file1.close()
+             
+                get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd))
+        
+                file_size = None
+                if get_msg.video:
+                    file_size = f"{humanbytes(get_msg.video.file_size)}"
+                elif get_msg.document:
+                    file_size = f"{humanbytes(get_msg.document.file_size)}"
+                elif get_msg.audio:
+                    file_size = f"{humanbytes(get_msg.audio.file_size)}"
+        
+                file_name = None
+                if get_msg.video:
+                    file_name = f"{get_msg.video.file_name}"
+                elif get_msg.document:
+                    file_name = f"{get_msg.document.file_name}"
+                elif get_msg.audio:
+                    file_name = f"{get_msg.audio.file_name}"
 
-        get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd))
-
-        file_size = None
-        if get_msg.video:
-            file_size = f"{humanbytes(get_msg.video.file_size)}"
-        elif get_msg.document:
-            file_size = f"{humanbytes(get_msg.document.file_size)}"
-        elif get_msg.audio:
-            file_size = f"{humanbytes(get_msg.audio.file_size)}"
-
-        file_name = None
-        if get_msg.video:
-            file_name = f"{get_msg.video.file_name}"
-        elif get_msg.document:
-            file_name = f"{get_msg.document.file_name}"
-        elif get_msg.audio:
-            file_name = f"{get_msg.audio.file_name}"
-
-        stream_link = "https://{}/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/{}".format(Var.FQDN,
-                                     Var.PORT,
-                                     get_msg.message_id)
+                stream_link = "https://{}/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+                    "http://{}:{}/{}".format(Var.FQDN,
+                                             Var.PORT,
+                                             get_msg.message_id)
 
         msg_text ="""
 <i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
@@ -219,12 +232,25 @@ async def start(b, m):
 
 
 @StreamBot.on_message(filters.private & filters.command(["about"]))
-async def start(bot, update):
-    await update.reply_text(
-        text=ABOUT_TEXT.format(update.from_user.mention),
-        disable_web_page_preview=True,
-        reply_markup=ABOUT_BUTTONS
-    )
+async def start(b ,m):
+
+    value = m.chat.id
+    file1 = open("blacklist.txt", "r")
+    readfile = file1.read()
+    if str(value) in readfile:
+        await b.send_message(
+                chat_id=m.chat.id,
+                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                parse_mode="markdown",
+                disable_web_page_preview=True
+            )
+    else:
+        file1.close()
+        await m.reply_text(
+            text=ABOUT_TEXT.format(m.from_user.mention),
+            disable_web_page_preview=True,
+            reply_markup=ABOUT_BUTTONS
+        )
 
 
 @StreamBot.on_message(filters.command('help') & filters.private & ~filters.edited)
@@ -267,9 +293,21 @@ async def start(b, m):
                     parse_mode="HTML",
                     disable_web_page_preview=True)
                 return
-        await m.reply_text(
-            text=HELP_CMD_TEXT.format(m.from_user.mention),
-            parse_mode="HTML",
-            disable_web_page_preview=True,
-              )                                                                         
-                                                                                       
+        else:
+            value = m.chat.id
+            file1 = open("blacklist.txt", "r")
+            readfile = file1.read()
+            if str(value) in readfile:
+                await b.send_message(
+                        chat_id=m.chat.id,
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
+                    )
+            else:
+                file1.close()
+                await m.reply_text(
+                    text=HELP_CMD_TEXT.format(m.from_user.mention),
+                    parse_mode="HTML",
+                    disable_web_page_preview=True,
+                    )                                                                         

@@ -1,5 +1,6 @@
 # (c)  @Avishkarpatil | @AbirHasan2005
 
+import fileinput
 import os
 import time
 import string
@@ -21,6 +22,21 @@ broadcast_ids = {}
 async def sts(c: Client, m: Message):
     total_users = await db.total_users_count()
     await m.reply_text(text=f"**Total Users in DB:** `{total_users}`", parse_mode="Markdown", quote=True)
+
+@StreamBot.on_message(filters.command("ban") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
+async def sts(c: Client, m: Message):
+    id = m.text.split("/ban ")[-1]
+    text_file = open("blacklist.txt", "a")
+    text_file.write(id + "-end" + "\n")
+    text_file.close()
+
+@StreamBot.on_message(filters.command("unban") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
+async def sts(c: Client, m: Message):
+
+    id = m.text.split("/unban ")[-1]
+    with fileinput.FileInput('blacklist.txt', inplace=True, backup='.bak') as file:
+        for line in file:
+            print(line.replace(id + "-end" + "\n", ""), end='')
 
 
 @StreamBot.on_message(filters.command("broadcast") & filters.private & filters.user(Var.OWNER_ID) & filters.reply & ~filters.edited)
