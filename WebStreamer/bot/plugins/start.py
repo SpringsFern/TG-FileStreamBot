@@ -29,7 +29,7 @@ HELP_TEXT = """
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Direct Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.4</b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 9-Dec-21 ] 08:44 PM</b>"""
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 10-Dec-21 ] 11:00 PM</b>"""
 
 HELP_CMD_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
