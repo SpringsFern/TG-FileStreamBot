@@ -128,10 +128,7 @@ async def start(b, m):
                     disable_web_page_preview=True)
                 return
         else:
-            value = m.chat.id
-            file1 = open("blacklist.txt", "r")
-            readfile = file1.read()
-            if str(value) + "-end" in readfile:
+            if await db.is_user_banned(m.from_user.id):
                 await b.send_message(
                         chat_id=m.chat.id,
                         text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
@@ -148,8 +145,7 @@ async def start(b, m):
                     parse_mode="HTML",
                     disable_web_page_preview=True,
                     reply_markup=START_BUTTONS
-                      )  
-            file1.close()                                                                       
+                      )                                                                     
                                                                                        
                                                                             
     else:
@@ -184,10 +180,7 @@ async def start(b, m):
                     disable_web_page_preview=True)
                 return
         else:
-            value = m.chat.id
-            file1 = open("blacklist.txt", "r")
-            readfile = file1.read()
-            if str(value) in readfile:
+            if await db.is_user_banned(m.from_user.id):
                 await b.send_message(
                         chat_id=m.chat.id,
                         text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
@@ -199,7 +192,6 @@ async def start(b, m):
                         f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
                     )
             else:
-                file1.close()
              
                 get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd))
         
@@ -242,10 +234,7 @@ async def start(b, m):
 @StreamBot.on_message(filters.private & filters.command(["about"]))
 async def start(b ,m):
 
-    value = m.chat.id
-    file1 = open("blacklist.txt", "r")
-    readfile = file1.read()
-    if str(value) in readfile:
+    if await db.is_user_banned(m.from_user.id):
         await b.send_message(
                 chat_id=m.chat.id,
                 text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
@@ -257,7 +246,6 @@ async def start(b ,m):
                 f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
             )
     else:
-        file1.close()
         await m.reply_text(
             text=ABOUT_TEXT.format(m.from_user.mention),
             disable_web_page_preview=True,
@@ -306,10 +294,7 @@ async def start(b, m):
                     disable_web_page_preview=True)
                 return
         else:
-            value = m.chat.id
-            file1 = open("blacklist.txt", "r")
-            readfile = file1.read()
-            if str(value) in readfile:
+            if await db.is_user_banned(m.from_user.id):
                 await b.send_message(
                         chat_id=m.chat.id,
                         text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
@@ -321,7 +306,6 @@ async def start(b, m):
                         f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
                     )
             else:
-                file1.close()
                 await m.reply_text(
                     text=HELP_CMD_TEXT.format(m.from_user.mention),
                     parse_mode="HTML",

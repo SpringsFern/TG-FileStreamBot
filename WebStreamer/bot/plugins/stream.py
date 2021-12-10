@@ -49,10 +49,7 @@ async def private_receive_handler(b, m: Message,):
                 disable_web_page_preview=True)
             return
     else:
-        value = m.chat.id
-        file1 = open("blacklist.txt", "r")
-        readfile = file1.read()
-        if str(value) in readfile:
+        if await db.is_user_banned(m.from_user.id):
             await b.send_message(
                     chat_id=m.chat.id,
                     text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
@@ -63,14 +60,8 @@ async def private_receive_handler(b, m: Message,):
                     Var.BIN_CHANNEL,
                     f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
                 )
-        else:
-            file1.close()
     try:
-        
-        value = m.chat.id
-        file1 = open("blacklist.txt", "r")
-        readfile = file1.read()
-        if str(value) in readfile:
+        if await db.is_user_banned(m.from_user.id):
             await b.send_message(
                     chat_id=m.chat.id,
                     text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
@@ -102,7 +93,6 @@ async def private_receive_handler(b, m: Message,):
                 file_name = f"{m.document.file_name}"
             elif m.audio:
                 file_name = f"{m.audio.file_name}"
-            file1.close()
     
             msg_text ="""
 <i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n

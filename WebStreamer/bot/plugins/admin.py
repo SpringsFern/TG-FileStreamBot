@@ -21,36 +21,39 @@ broadcast_ids = {}
 @StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
 async def sts(c: Client, m: Message):
     total_users = await db.total_users_count()
-    await m.reply_text(text=f"**Total Users in DB:** `{total_users}`", parse_mode="Markdown", quote=True)
+    banned_users = await db.total_banned_users_count()
+    await m.reply_text(text=f"**Total Users in DB:** `{total_users}` \n**Banned Users in DB:** `{banned_users}`", parse_mode="Markdown", quote=True)
 
 @StreamBot.on_message(filters.command("ban") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
 async def sts(b, m: Message):
     id = m.text.split("/ban ")[-1]
-    text_file = open("blacklist.txt", "a")
-    text_file.write(id + "-end" + "\n")
-    text_file.close()
-    await m.reply_text(text=f"`{id}`** is Banned** ", parse_mode="Markdown", quote=True)
-    await b.send_message(
-        chat_id=id,
-        text="Your Banned to Use The Bot \n Reason: 🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ**",
-        parse_mode="markdown",
-        disable_web_page_preview=True
-    )
+    if not await db.is_user_banned(int(id)):
+        await db.ban_user(int(id))
+        await m.reply_text(text=f"`{id}`** is Banned** ", parse_mode="Markdown", quote=True)
+        await b.send_message(
+            chat_id=id,
+            text="**Your Banned to Use The Bot \n Reason: 18+ ᴄᴏɴᴛᴇɴᴛꜱ**",
+            parse_mode="markdown",
+            disable_web_page_preview=True
+        )
+    else:
+        await m.reply_text(text=f"`{id}`** is Already Banned** ", parse_mode="Markdown", quote=True)
 
 @StreamBot.on_message(filters.command("unban") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
 async def sts(b, m: Message):
 
     id = m.text.split("/unban ")[-1]
-    with fileinput.FileInput('blacklist.txt', inplace=True, backup='.bak') as file:
-        for line in file:
-            print(line.replace(id + "-end" + "\n", ""), end='')
-    await m.reply_text(text=f"`{id}`** is Unbanned** ", parse_mode="Markdown", quote=True)
-    await b.send_message(
-        chat_id=id,
-        text="**Your Unbanned now Use can The Bot**",
-        parse_mode="markdown",
-        disable_web_page_preview=True
-    )
+    if await db.is_user_banned(int(id)):
+        await db.unban_user(int(id))
+        await m.reply_text(text=f"`{id}`** is Unbanned** ", parse_mode="Markdown", quote=True)
+        await b.send_message(
+            chat_id=id,
+            text="**Your Unbanned now Use can use The Bot**",
+            parse_mode="markdown",
+            disable_web_page_preview=True
+        )
+    else:
+        await m.reply_text(text=f"`{id}`** is not Banned** ", parse_mode="Markdown", quote=True)
 
 
 @StreamBot.on_message(filters.command("broadcast") & filters.private & filters.user(Var.OWNER_ID) & filters.reply & ~filters.edited)
