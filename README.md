@@ -156,7 +156,7 @@ Commands Available for all user
 ### Owner Commands
 Commands Available only for Owner
 
-`/status` :Show Total Users in DataBase
+`/status` :Show Total and Banned Users in DataBase
 
 `/ban` : ban a user eg:"/ban 8456824875"
 
