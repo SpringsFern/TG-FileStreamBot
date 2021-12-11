@@ -15,7 +15,9 @@ routes = web.RouteTableDef()
 HTML_PAGE="""<!DOCTYPE html>
 <html>
    <body>
-        Status: Running <br>
+        Status: Running <br>"""
+
+HTML_PAGE2="""<br>
         Maintained By: <a href='https://telegram.me/DeekshithSH'>Deekshith SH</a>,<br>
         Source Code: <a href='https://github.com/avipatilpro/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
         My Source Code: <a href='https://github.com/DeekshithSH/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
@@ -26,7 +28,7 @@ HTML_PAGE="""<!DOCTYPE html>
 @routes.get('/')
 async def index_handler(request):
     return web.Response(
-        text=HTML_PAGE,
+        text=HTML_PAGE + "Uptime: " + get_readable_time(time.time() - StartTime) + HTML_PAGE2,
         content_type='text/html')
 
 @routes.get("/status", allow_head=True)
