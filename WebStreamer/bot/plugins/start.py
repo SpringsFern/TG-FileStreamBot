@@ -29,7 +29,7 @@ HELP_TEXT = """
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Direct Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.4</b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 10-Dec-21 ] 11:00 PM</b>"""
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 11-Dec-21 ] 09:35 PM</b>"""
 
 HELP_CMD_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
@@ -367,10 +367,10 @@ async def start(b, m):
             else:
                 await b.send_message(
                         Var.OWNER_ID,
-                        f"[{m.from_user.first_name}](tg://user?id={m.from_user.id}) **\n User ID: {m.chat.id,} \n Suggest a Name \n {usr_sent_name}**"
+                        f"[{m.from_user.first_name}](tg://user?id={m.from_user.id}) **\n User ID: {m.chat.id} \n Suggest a Name \n {usr_sent_name}**"
                     )  
                 await m.reply_text(
-                        text="your suggested name sent to @DeekshithSH",
+                        text="Thank You for suggesting a name \n your suggested name sent to @DeekshithSH",
                         parse_mode="markdown",
                         disable_web_page_preview=True,
                         quote=True
