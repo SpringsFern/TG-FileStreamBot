@@ -18,7 +18,7 @@
 <br>
 
 #### Demo Bot:  
-<a href="https://telegram.me/FxStreamBot"><img src="https://img.shields.io/badge/Demo-Telegram%20Bot-blue.svg?logo=telegram"></a>
+<a href="https://telegram.me/DirectLinkGenerator_Bot"><img src="https://img.shields.io/badge/Demo-Telegram%20Bot-blue.svg?logo=telegram"></a>
 
 <hr>
 

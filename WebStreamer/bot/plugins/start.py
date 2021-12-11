@@ -32,7 +32,7 @@ ABOUT_TEXT = """
 <b>🔹GitHub : <a href='https://GitHub.com/DeekshithSH'>Fᴏʟʟᴏᴡ</a></b>\n
 <b>🔸Sᴏᴜʀᴄᴇ : <a href='https://github.com/DeekshithSH/FileStreamBot'>Cʟɪᴄᴋ Hᴇʀᴇ</a></b>\n
 <b>🔹This Bot is Fork of : <a href='https://github.com/avipatilpro/FileStreamBot'>File Stream Bot</a></b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 11-Dec-21 ] 09:56 PM</b>
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 11-Dec-21 ] 09:57 PM</b>
 """
 
 HELP_CMD_TEXT = """

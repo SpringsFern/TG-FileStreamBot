@@ -19,8 +19,8 @@ HTML_PAGE="""<!DOCTYPE html>
 
 HTML_PAGE2="""<br>
         Maintained By: <a href='https://telegram.me/DeekshithSH'>Deekshith SH</a>,<br>
-        Source Code: <a href='https://github.com/avipatilpro/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
-        My Source Code: <a href='https://github.com/DeekshithSH/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
+        Source Code: <a href='https://github.com/DeekshithSH/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
+        Fork of Source Code: <a href='https://github.com/avipatilpro/FileStreamBot'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a>,<br>
         <a href="/status">Status</a>
    </body>
 </html>"""
