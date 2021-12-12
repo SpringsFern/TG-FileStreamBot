@@ -146,7 +146,7 @@ Bot also Supported with Channels. Just add bot Channel as Admin. If any new file
 ### Commands Available for all user
 
 **`/start`** <br>
-<img src="https://deekshithsh.github.io/FileStreamBot/start.gif" width="400" />
+![start](https://deekshithsh.github.io/FileStreamBot/start.gif)
 
 **`/help`** <br>
 ![help](https://deekshithsh.github.io/FileStreamBot/help.gif)
