@@ -157,7 +157,7 @@ Bot also Supported with Channels. Just add bot Channel as Admin. If any new file
 
 ### Commands Available only for Owner
 
-`/status` <br>
+##### `/status` <br>
 ![status](https://deekshithsh.github.io/FileStreamBot/ban.gif)
 
 `/ban` <br>
