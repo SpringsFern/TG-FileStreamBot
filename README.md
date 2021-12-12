@@ -145,28 +145,28 @@ Bot also Supported with Channels. Just add bot Channel as Admin. If any new file
 
 ### Commands Available for all user
 
-`/start` : To check if the bot is alive or not.
+`/start` <br>
 ![start](https://deekshithsh.github.io/FileStreamBot/start.gif)
 
-`/help` : Show Help Message
+`/help` <br>
 ![help](https://deekshithsh.github.io/FileStreamBot/help.gif)
 
-`/about` : Show About Message
+`/about` <br>
 ![about](https://deekshithsh.github.io/FileStreamBot/about.gif)
 
 
 ### Commands Available only for Owner
 
-`/status`
+`/status` <br>
 ![status](https://deekshithsh.github.io/FileStreamBot/ban.gif)
 
-`/ban`
+`/ban` <br>
 ![ban](https://deekshithsh.github.io/FileStreamBot/ban.gif)
 
-`/unban`
+`/unban` <br>
 ![unban](https://deekshithsh.github.io/FileStreamBot/unban.gif)
 
-`/broadcast` : reply to a message with `/broadcast` command and the message will be send to all users
+`/broadcast` : reply to a message with `/broadcast` command and the message will be send to all users <br>
 ![broadcast](https://deekshithsh.github.io/FileStreamBot/broadcast.gif)
 
 </details>
