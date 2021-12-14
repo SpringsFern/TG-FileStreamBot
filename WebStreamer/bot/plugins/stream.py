@@ -18,7 +18,7 @@ msg_text ="""
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n
-<b> Use [CloudFlare DNS](https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1) if see a Application error message"""
+<b> Use ![CloudFlare DNS](https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1) if see a Application error message"""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(b, m: Message,):
