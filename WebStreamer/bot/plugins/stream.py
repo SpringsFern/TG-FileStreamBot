@@ -21,99 +21,100 @@ msg_text ="""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(b, m: Message,):
-    if not await db.is_user_exist(m.from_user.id):
-        await db.add_user(m.from_user.id)
+    if await db.is_user_banned(m.from_user.id):
         await b.send_message(
-            Var.BIN_CHANNEL,
-            f"Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ : \n\nNᴀᴍᴇ : [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!"
-        )
-    if Var.UPDATES_CHANNEL != "None":
-        try:
-            user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
-            if user.status == "kicked":
+                chat_id=m.chat.id,
+                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                parse_mode="markdown",
+                disable_web_page_preview=True
+            )
+        await b.send_message(
+                Var.BIN_CHANNEL,
+                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
+            )
+    else:
+        if not await db.is_user_exist(m.from_user.id):
+            await db.add_user(m.from_user.id)
+            await b.send_message(
+                Var.BIN_CHANNEL,
+                f"Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ : \n\nNᴀᴍᴇ : [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!"
+            )
+        if Var.UPDATES_CHANNEL != "None":
+            try:
+                user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
+                if user.status == "kicked":
+                    await b.send_message(
+                        chat_id=m.chat.id,
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ.__\n\n  **Cᴏɴᴛᴀᴄᴛ Dᴇᴠᴇʟᴏᴘᴇʀ @DeekshithSH Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
+                    )
+                    return
+            except UserNotParticipant:
                 await b.send_message(
                     chat_id=m.chat.id,
-                    text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ.__\n\n  **Cᴏɴᴛᴀᴄᴛ Dᴇᴠᴇʟᴏᴘᴇʀ @DeekshithSH Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                    parse_mode="markdown",
-                    disable_web_page_preview=True
+                    text="""<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜꜱᴇ ᴍᴇ 🔐</i>""",
+                    reply_markup=InlineKeyboardMarkup(
+                        [[ InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}") ]]
+                    ),
+                    parse_mode="HTML"
                 )
                 return
-        except UserNotParticipant:
-            await b.send_message(
-                chat_id=m.chat.id,
-                text="""<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜꜱᴇ ᴍᴇ 🔐</i>""",
-                reply_markup=InlineKeyboardMarkup(
-                    [[ InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}") ]]
-                ),
-                parse_mode="HTML"
-            )
-            return
-        except Exception:
-            await b.send_message(
-                chat_id=m.chat.id,
-                text="**Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍʏ ʙᴏss** @DeekshithSH",
-                parse_mode="markdown",
-                disable_web_page_preview=True)
-            return
-    else:
-        if await db.is_user_banned(m.from_user.id):
-            await b.send_message(
+            except Exception:
+                await b.send_message(
                     chat_id=m.chat.id,
-                    text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                    text="**Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍʏ ʙᴏss** @DeekshithSH",
                     parse_mode="markdown",
-                    disable_web_page_preview=True
-                )
-            await b.send_message(
-                    Var.BIN_CHANNEL,
-                    f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
-                )
-    try:
-        if await db.is_user_banned(m.from_user.id):
-            await b.send_message(
-                    chat_id=m.chat.id,
-                    text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                    parse_mode="markdown",
-                    disable_web_page_preview=True
-                )
-            await b.send_message(
-                    Var.BIN_CHANNEL,
-                    f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
-                )
-        else:
-            log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
-            stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-                "http://{}:{}/{}".format(Var.FQDN,
-                                        Var.PORT,
-                                        log_msg.message_id)
-            file_size = None
-            if m.video:
-                file_size = f"{humanbytes(m.video.file_size)}"
-            elif m.document:
-                file_size = f"{humanbytes(m.document.file_size)}"
-            elif m.audio:
-                file_size = f"{humanbytes(m.audio.file_size)}"
+                    disable_web_page_preview=True)
+                return
+            
+        try:
+            if await db.is_user_banned(m.from_user.id):
+                await b.send_message(
+                        chat_id=m.chat.id,
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
+                    )
+                await b.send_message(
+                        Var.BIN_CHANNEL,
+                        f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
+                    )
+            else:
+                log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
+                stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+                    "http://{}:{}/{}".format(Var.FQDN,
+                                            Var.PORT,
+                                            log_msg.message_id)
+                file_size = None
+                if m.video:
+                    file_size = f"{humanbytes(m.video.file_size)}"
+                elif m.document:
+                    file_size = f"{humanbytes(m.document.file_size)}"
+                elif m.audio:
+                    file_size = f"{humanbytes(m.audio.file_size)}"
+        
+                file_name = None
+                if m.video:
+                    file_name = f"{m.video.file_name}"
+                elif m.document:
+                    file_name = f"{m.document.file_name}"
+                elif m.audio:
+                    file_name = f"{m.audio.file_name}"
+        
     
-            file_name = None
-            if m.video:
-                file_name = f"{m.video.file_name}"
-            elif m.document:
-                file_name = f"{m.document.file_name}"
-            elif m.audio:
-                file_name = f"{m.audio.file_name}"
-    
-
-            await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
-            await m.reply_text(
-                text=msg_text.format(file_name, file_size, stream_link),
-                parse_mode="HTML", 
-                disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
-                quote=True
-            )
-    except FloodWait as e:
-        print(f"Sleeping for {str(e.x)}s")
-        await asyncio.sleep(e.x)
-        await b.send_message(chat_id=Var.BIN_CHANNEL, text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**𝚄𝚜𝚎𝚛 𝙸𝙳 :** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="Markdown")
+                await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
+                await m.reply_text(
+                    text=msg_text.format(file_name, file_size, stream_link),
+                    parse_mode="HTML", 
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                    quote=True
+                )
+        except FloodWait as e:
+            print(f"Sleeping for {str(e.x)}s")
+            await asyncio.sleep(e.x)
+            await b.send_message(chat_id=Var.BIN_CHANNEL, text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**𝚄𝚜𝚎𝚛 𝙸𝙳 :** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="Markdown")
 
 
 @StreamBot.on_message(filters.channel & (filters.document | filters.video) & ~filters.edited)
