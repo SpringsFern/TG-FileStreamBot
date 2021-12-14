@@ -1,5 +1,5 @@
 {
-  "name": "Avi-FileStreamBot",
+  "name": "FileStreamBot",
   "description": "A Pyrogram Telegram bot to Stream Telegram files to web. @Avishkarpatil",
   "keywords": [
       "telegram",
