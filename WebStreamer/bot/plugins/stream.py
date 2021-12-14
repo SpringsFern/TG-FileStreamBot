@@ -17,7 +17,8 @@ msg_text ="""
 <b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
+<b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n
+<b> Use [CloudFlare DNS](https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1) if see a Application error message"""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(b, m: Message,):
@@ -67,7 +68,7 @@ async def private_receive_handler(b, m: Message,):
                     parse_mode="markdown",
                     disable_web_page_preview=True)
                 return
-            
+
         try:
             if await db.is_user_banned(m.from_user.id):
                 await b.send_message(
@@ -93,7 +94,7 @@ async def private_receive_handler(b, m: Message,):
                     file_size = f"{humanbytes(m.document.file_size)}"
                 elif m.audio:
                     file_size = f"{humanbytes(m.audio.file_size)}"
-        
+
                 file_name = None
                 if m.video:
                     file_name = f"{m.video.file_name}"
@@ -101,8 +102,8 @@ async def private_receive_handler(b, m: Message,):
                     file_name = f"{m.document.file_name}"
                 elif m.audio:
                     file_name = f"{m.audio.file_name}"
-        
-    
+
+
                 await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
                 await m.reply_text(
                     text=msg_text.format(file_name, file_size, stream_link),
