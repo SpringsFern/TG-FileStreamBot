@@ -10,6 +10,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
+        self.beta = self.db.beta
 
 # ----------------------add ,check or remove user----------------------
     def new_user(self, id):
@@ -60,4 +61,27 @@ class Database:
 
     async def total_banned_users_count(self):
         count = await self.black.count_documents({})
+        return count
+
+# ----------------------Add or remove user from Beta----------------------
+
+    def beta_user(self, id):
+        return dict(
+            id=id,
+            beta_join_date=datetime.date.today().isoformat()
+        )
+
+    async def add_user_beta(self, id):
+        user = self.beta_user(id)
+        await self.beta.insert_one(user)
+
+    async def remove_user_beta(self, id):
+        await self.beta.delete_one({'id': int(id)})
+
+    async def is_user_in_beta(self, id):
+        user = await self.beta.find_one({'id': int(id)})
+        return True if user else False
+
+    async def total_beta_users_count(self):
+        count = await self.beta.count_documents({})
         return count
