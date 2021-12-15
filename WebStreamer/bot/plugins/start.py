@@ -24,11 +24,11 @@ HELP_TEXT = """
 <u>🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u>\n
 <b>🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ ʟᴇᴀᴅꜱ ᴛᴏ ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴ ʏᴏᴜ.</b>\n
 <i>Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ (ᴏʀ) ʀᴇᴘᴏʀᴛ ʙᴜɢꜱ</i> <b>: <a href='https://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>
-<i>Lost your File Download Link <a href='https://t.me/DeekshithSH'>Contact Me</a>"""
+<i>Lost your File Download Link <a href='https://t.me/DeekshithSH'>Contact Me</a></i>"""
 
 ABOUT_TEXT = """
-<b>⚜ Mʏ ɴᴀᴍᴇ : Direct Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.4</b>\n
+<b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.5</b>\n
 <b>🔹GitHub : <a href='https://GitHub.com/DeekshithSH'>Fᴏʟʟᴏᴡ</a></b>\n
 <b>🔸Sᴏᴜʀᴄᴇ : <a href='https://github.com/DeekshithSH/FileStreamBot'>Cʟɪᴄᴋ Hᴇʀᴇ</a></b>\n
 <b>🔹This Bot is Fork of : <a href='https://github.com/avipatilpro/FileStreamBot'>File Stream Bot</a></b>\n
@@ -43,7 +43,7 @@ HELP_CMD_TEXT = """
 /start<br>
 /about<br>
 /help<br>
-/name
+/echo
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
@@ -336,3 +336,70 @@ async def start(b, m):
                             disable_web_page_preview=True,
                             quote=True
                           )  
+                
+@StreamBot.on_message(filters.command('echo') & filters.private & ~filters.edited)
+async def start(b, m):
+    if await db.is_user_banned(m.from_user.id):
+        await b.send_message(
+                chat_id=m.chat.id,
+                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                parse_mode="markdown",
+                disable_web_page_preview=True
+            )
+        await b.send_message(
+                Var.BIN_CHANNEL,
+                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
+            )
+    else:
+        if not await db.is_user_exist(m.from_user.id):
+            await db.add_user(m.from_user.id)
+            await b.send_message(
+                Var.BIN_CHANNEL,
+                f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ:** \n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{m.from_user.first_name}](tg://user?id={m.from_user.id}) __Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!__"
+            )
+        usr_sent_msg = m.text.split("/echo ")[-1]
+        if not usr_sent_msg == "/echo":
+            if Var.UPDATES_CHANNEL != "None":
+                try:
+                    user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
+                    if user.status == "kicked":
+                        await b.send_message(
+                            chat_id=m.chat.id,
+                            text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                            parse_mode="markdown",
+                            disable_web_page_preview=True
+                        )
+                        return
+                except UserNotParticipant:
+                    await b.send_message(
+                        chat_id=m.chat.id,
+                        text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
+                        reply_markup=InlineKeyboardMarkup(
+                            [[
+                                InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
+                                ]]
+                        ),
+                        parse_mode="HTML"
+                    )
+                    return
+                except Exception:
+                    await b.send_message(
+                        chat_id=m.chat.id,
+                        text="<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='http://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
+                        parse_mode="HTML",
+                        disable_web_page_preview=True)
+                    return
+     
+            await m.reply_text(
+                    text=usr_sent_msg,
+                    parse_mode="markdown",
+                    disable_web_page_preview=True,
+                    quote=True
+                  )
+        else:
+            await m.reply_text(
+                            text="resend your message back with /echo command \n eg: /echo Hi",
+                            parse_mode="markdown",
+                            disable_web_page_preview=True,
+                            quote=True
+                          )
