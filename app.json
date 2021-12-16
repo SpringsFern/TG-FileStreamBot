@@ -52,6 +52,10 @@
           "required": false
           
       },
+      "FORCE_UPDATES_CHANNEL": {
+        "description": "If Set to True User Need to Join Your Update Channel to Use Your Bot",
+        "value": "False"
+      },
       "SLEEP_THRESHOLD": {
           "description": "Floodwait Sleep timer. Read the readme for more info about this var",
           "required": false
