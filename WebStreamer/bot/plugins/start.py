@@ -51,20 +51,26 @@ START_BUTTONS = InlineKeyboardMarkup(
         InlineKeyboardButton('Hᴇʟᴘ', callback_data='help'),
         InlineKeyboardButton('Aʙᴏᴜᴛ', callback_data='about'),
         InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close')
+        ],
+        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')
         ]]
     )
 HELP_BUTTONS = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('Hᴏᴍᴇ', callback_data='home'),
         InlineKeyboardButton('Aʙᴏᴜᴛ', callback_data='about'),
-        InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close')
+        InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close'),
+        ],
+        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')
         ]]
     )
 ABOUT_BUTTONS = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('Hᴏᴍᴇ', callback_data='home'),
         InlineKeyboardButton('Hᴇʟᴘ', callback_data='help'),
-        InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close')
+        InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close'),
+        ],
+        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')
         ]]
     )
 
@@ -114,7 +120,7 @@ async def start(b, m):
             )
         usr_cmd = m.text.split("_")[-1]
         if usr_cmd == "/start":
-            if Var.UPDATES_CHANNEL != "None":
+            if Var.FORCE_UPDATES_CHANNEL:
                 try:
                     user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
                     if user.status == "kicked":
@@ -171,7 +177,7 @@ async def start(b ,m):
                 Var.BIN_CHANNEL,
                 f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ:** \n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{m.from_user.first_name}](tg://user?id={m.from_user.id}) __Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!__"
             )
-        if Var.UPDATES_CHANNEL != "None":
+        if Var.FORCE_UPDATES_CHANNEL:
             try:
                 user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
                 if user.status == "kicked":
@@ -230,7 +236,7 @@ async def start(b, m):
             )
         usr_cmd = m.text.split("_")[-1]
         if usr_cmd == "/help":
-            if Var.UPDATES_CHANNEL != "None":
+            if Var.FORCE_UPDATES_CHANNEL:
                 try:
                     user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
                     if user.status == "kicked":
@@ -288,7 +294,7 @@ async def start(b, m):
             )
         usr_sent_name = m.text.split("/name ")[-1]
         if not usr_sent_name == "/name":
-            if Var.UPDATES_CHANNEL != "None":
+            if Var.FORCE_UPDATES_CHANNEL:
                 try:
                     user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
                     if user.status == "kicked":
@@ -359,7 +365,7 @@ async def start(b, m):
             )
         usr_sent_msg = m.text.split("/echo ")[-1]
         if not usr_sent_msg == "/echo":
-            if Var.UPDATES_CHANNEL != "None":
+            if Var.FORCE_UPDATES_CHANNEL:
                 try:
                     user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
                     if user.status == "kicked":

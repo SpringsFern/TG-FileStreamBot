@@ -28,5 +28,11 @@ class Var(object):
     URL = "https://{}/".format(FQDN) if ON_HEROKU or NO_PORT else \
         "http://{}:{}/".format(FQDN, PORT)
     DATABASE_URL = str(getenv('DATABASE_URL'))
-    UPDATES_CHANNEL = str(getenv('UPDATES_CHANNEL', None))
+    UPDATES_CHANNEL = str(getenv('UPDATES_CHANNEL', 'TeleXBots'))
+
+    if getenv('FORCE_UPDATES_CHANNEL') == "True":
+        FORCE_UPDATES_CHANNEL = True
+    else:
+        FORCE_UPDATES_CHANNEL = False
+
     BANNED_CHANNELS = list(set(int(x) for x in str(getenv("BANNED_CHANNELS", "-1001362659779")).split()))
