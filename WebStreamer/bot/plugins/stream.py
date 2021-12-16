@@ -40,7 +40,7 @@ async def private_receive_handler(b, m: Message,):
                 Var.BIN_CHANNEL,
                 f"Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ : \n\nNᴀᴍᴇ : [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!"
             )
-        if Var.UPDATES_CHANNEL != "None":
+        if Var.FORCE_UPDATES_CHANNEL:
             try:
                 user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
                 if user.status == "kicked":
