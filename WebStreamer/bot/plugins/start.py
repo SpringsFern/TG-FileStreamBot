@@ -21,29 +21,21 @@ HELP_TEXT = """
 <i>- I ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ᴇxᴛᴇʀɴᴀʟ ᴅɪʀᴇᴄᴛ ᴅᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ !.</i>
 <i>- Aᴅᴅ Mᴇ ɪɴ ʏᴏᴜʀ Cʜᴀɴɴᴇʟ Fᴏʀ Dɪʀᴇᴄᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋs Bᴜᴛᴛᴏɴ (add in channel not group. this bot will don't work on group)</i>
 <i>- Tʜɪs Pᴇʀᴍᴇᴀɴᴛ Lɪɴᴋ Wɪᴛʜ Fᴀsᴛᴇsᴛ Sᴘᴇᴇᴅ</i>\n
+
+<i>- you will get two links, one for download and the another is Download Page Link</i>\n
+<I>  if first link is not working then Download from Download Page Link<i>\n
+
 <u>🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u>\n
 <b>🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ ʟᴇᴀᴅꜱ ᴛᴏ ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴ ʏᴏᴜ.</b>\n
-<i>Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ (ᴏʀ) ʀᴇᴘᴏʀᴛ ʙᴜɢꜱ</i> <b>: <a href='https://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>
-<i>Lost your File Download Link <a href='https://t.me/DeekshithSH'>Contact Me</a></i>"""
+<i>Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ (ᴏʀ) ʀᴇᴘᴏʀᴛ ʙᴜɢꜱ</i> <b>: <a href='https://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>"""
 
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.5</b>\n
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.</b>\n
 <b>🔹GitHub : <a href='https://GitHub.com/DeekshithSH'>Fᴏʟʟᴏᴡ</a></b>\n
 <b>🔸Sᴏᴜʀᴄᴇ : <a href='https://github.com/DeekshithSH/FileStreamBot'>Cʟɪᴄᴋ Hᴇʀᴇ</a></b>\n
 <b>🔹This Bot is Fork of : <a href='https://github.com/avipatilpro/FileStreamBot'>File Stream Bot</a></b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 11-Dec-21 ] 09:57 PM</b>
-"""
-
-HELP_CMD_TEXT = """
-<i>👋 Hᴇʏ,</i>{}\n
-<i>Send Me a File and</i>
-<i>I can Generate Direct Download Links For Telegram Files</i>\n
-<u>Available Commands"</u><br>
-/start<br>
-/about<br>
-/help<br>
-/echo
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 19-Dec-21 ] 06:53 PM</b>
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
@@ -213,9 +205,8 @@ async def start(b ,m):
         reply_markup=ABOUT_BUTTONS
             )
 
-
-@StreamBot.on_message(filters.command('help') & filters.private & ~filters.edited)
-async def start(b, m):
+@StreamBot.on_message(filters.private & filters.command(["help"]))
+async def start(b ,m):
     if await db.is_user_banned(m.from_user.id):
         await b.send_message(
                 chat_id=m.chat.id,
@@ -226,7 +217,7 @@ async def start(b, m):
         await b.send_message(
                 Var.BIN_CHANNEL,
                 f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
-            )
+             )
     else:
         if not await db.is_user_exist(m.from_user.id):
             await db.add_user(m.from_user.id)
@@ -234,43 +225,41 @@ async def start(b, m):
                 Var.BIN_CHANNEL,
                 f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ:** \n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{m.from_user.first_name}](tg://user?id={m.from_user.id}) __Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!__"
             )
-        usr_cmd = m.text.split("_")[-1]
-        if usr_cmd == "/help":
-            if Var.FORCE_UPDATES_CHANNEL:
-                try:
-                    user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
-                    if user.status == "kicked":
-                        await b.send_message(
-                            chat_id=m.chat.id,
-                            text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                            parse_mode="markdown",
-                            disable_web_page_preview=True
-                        )
-                        return
-                except UserNotParticipant:
+        if Var.FORCE_UPDATES_CHANNEL:
+            try:
+                user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
+                if user.status == "kicked":
                     await b.send_message(
                         chat_id=m.chat.id,
-                        text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
-                        reply_markup=InlineKeyboardMarkup(
-                            [[
-                                InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
-                                ]]
-                        ),
-                        parse_mode="HTML"
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
                     )
                     return
-                except Exception:
-                    await b.send_message(
-                        chat_id=m.chat.id,
-                        text="<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='http://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
-                        parse_mode="HTML",
-                        disable_web_page_preview=True)
-                    return
-            await m.reply_text(
-                text=HELP_CMD_TEXT.format(m.from_user.mention),
-                parse_mode="HTML",
-                disable_web_page_preview=True,
-                )                              
+            except UserNotParticipant:
+                await b.send_message(
+                    chat_id=m.chat.id,
+                    text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
+                    reply_markup=InlineKeyboardMarkup(
+                        [[
+                            InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
+                            ]]
+                    ),
+                    parse_mode="HTML"
+                )
+                return
+            except Exception:
+                await b.send_message(
+                    chat_id=m.chat.id,
+                    text="<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='http://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
+                    parse_mode="HTML",
+                    disable_web_page_preview=True)
+                return
+        await m.reply_text(
+        text=HELP_TEXT.format(m.from_user.mention),
+        disable_web_page_preview=True,
+        reply_markup=HELP_BUTTONS
+            )
 
 @StreamBot.on_message(filters.command('name') & filters.private & ~filters.edited)
 async def start(b, m):
