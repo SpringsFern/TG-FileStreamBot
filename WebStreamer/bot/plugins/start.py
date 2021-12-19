@@ -21,17 +21,16 @@ HELP_TEXT = """
 <i>- I ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ᴇxᴛᴇʀɴᴀʟ ᴅɪʀᴇᴄᴛ ᴅᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ !.</i>
 <i>- Aᴅᴅ Mᴇ ɪɴ ʏᴏᴜʀ Cʜᴀɴɴᴇʟ Fᴏʀ Dɪʀᴇᴄᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋs Bᴜᴛᴛᴏɴ (add in channel not group. this bot will don't work on group)</i>
 <i>- Tʜɪs Pᴇʀᴍᴇᴀɴᴛ Lɪɴᴋ Wɪᴛʜ Fᴀsᴛᴇsᴛ Sᴘᴇᴇᴅ</i>\n
-
-<i>- you will get two links, one for download and the another is Download Page Link</i>\n
+<i>- you will get two links, one for download and the another for Download Page</i>\n
 <I>  if first link is not working then Download from Download Page Link<i>\n
-
+<b>- Try Using <a href="https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1">CloudFlare DNS</a> if see a Application error message</b>
 <u>🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u>\n
 <b>🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ ʟᴇᴀᴅꜱ ᴛᴏ ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴ ʏᴏᴜ.</b>\n
 <i>Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ (ᴏʀ) ʀᴇᴘᴏʀᴛ ʙᴜɢꜱ</i> <b>: <a href='https://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>"""
 
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.</b>\n
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.2</b>\n
 <b>🔹GitHub : <a href='https://GitHub.com/DeekshithSH'>Fᴏʟʟᴏᴡ</a></b>\n
 <b>🔸Sᴏᴜʀᴄᴇ : <a href='https://github.com/DeekshithSH/FileStreamBot'>Cʟɪᴄᴋ Hᴇʀᴇ</a></b>\n
 <b>🔹This Bot is Fork of : <a href='https://github.com/avipatilpro/FileStreamBot'>File Stream Bot</a></b>\n
