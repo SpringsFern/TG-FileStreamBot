@@ -18,7 +18,16 @@ msg_text ="""
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n
-<b> Use <a href="https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1">CloudFlare DNS</a> if see a Application error message"""
+<b>Try Using <a href="https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1">CloudFlare DNS</a> if see a Application error message"""
+
+msgs_text ="""
+<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
+<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
+<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
+<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
+<b>🌐 Download Page :</b> <i>{}</i>\n
+<b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n
+<b>Try Using <a href="https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1">CloudFlare DNS</a> if see a Application error message"""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(b, m: Message,):
@@ -87,6 +96,9 @@ async def private_receive_handler(b, m: Message,):
                     "http://{}:{}/{}".format(Var.FQDN,
                                             Var.PORT,
                                             log_msg.message_id)
+                if Var.PAGE_LINK:
+                    page_link = "https://{}/?id={}".format(Var.PAGE_LINK, log_msg.message_id)
+
                 file_size = None
                 if m.video:
                     file_size = f"{humanbytes(m.video.file_size)}"
@@ -105,13 +117,22 @@ async def private_receive_handler(b, m: Message,):
 
 
                 await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
-                await m.reply_text(
-                    text=msg_text.format(file_name, file_size, stream_link),
-                    parse_mode="HTML", 
-                    disable_web_page_preview=True,
-                    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
-                    quote=True
-                )
+                if Var.PAGE_LINK:
+                    await m.reply_text(
+                        text=msgs_text.format(file_name, file_size, stream_link, page_link),
+                        parse_mode="HTML", 
+                        disable_web_page_preview=True,
+                        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                        quote=True
+                    )
+                else:
+                    await m.reply_text(
+                        text=msg_text.format(file_name, file_size, stream_link),
+                        parse_mode="HTML", 
+                        disable_web_page_preview=True,
+                        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                        quote=True
+                    )
         except FloodWait as e:
             print(f"Sleeping for {str(e.x)}s")
             await asyncio.sleep(e.x)
