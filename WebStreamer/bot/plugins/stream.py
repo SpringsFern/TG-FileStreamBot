@@ -113,7 +113,7 @@ async def private_receive_handler(b, m: Message,):
                 elif m.audio:
                     file_name = f"{m.audio.file_name}"
 
-
+                await db.user_data(m.from_user.id, log_msg.message_id, file_name, file_size)
                 await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
                 if Var.PAGE_LINK:
                     await m.reply_text(

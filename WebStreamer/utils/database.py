@@ -10,7 +10,8 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
-        self.beta = self.db.beta
+        self.db2 = self._client["UserID"]
+
 
 # ----------------------add ,check or remove user----------------------
     def new_user(self, id):
@@ -28,6 +29,7 @@ class Database:
 
     async def is_user_exist(self, id):
         user = await self.col.find_one({'id': int(id)})
+
         return True if user else False
 
     async def total_users_count(self):
@@ -65,23 +67,15 @@ class Database:
 
 # ----------------------Add or remove user from Beta----------------------
 
-    def beta_user(self, id):
+    def sent_data(self, id, message_id , filename, filesize):
         return dict(
-            id=id,
-            beta_join_date=datetime.date.today().isoformat()
+            message_id=message_id,
+            file_name=filename,
+            file_size=filesize,
+            sent_date=datetime.date.today().isoformat()
         )
 
-    async def add_user_beta(self, id):
-        user = self.beta_user(id)
-        await self.beta.insert_one(user)
-
-    async def remove_user_beta(self, id):
-        await self.beta.delete_one({'id': int(id)})
-
-    async def is_user_in_beta(self, id):
-        user = await self.beta.find_one({'id': int(id)})
-        return True if user else False
-
-    async def total_beta_users_count(self):
-        count = await self.beta.count_documents({})
-        return count
+    async def user_data(self, id, message_id , filename, filesize):
+        self.add = self.db2[str(id)]
+        user_data = self.sent_data(id, message_id , filename, filesize)
+        await self.add.insert_one(user_data)
