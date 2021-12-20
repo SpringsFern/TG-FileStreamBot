@@ -30,11 +30,17 @@ HELP_TEXT = """
 
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.2</b>\n
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3</b>\n
 <b>🔹GitHub : <a href='https://GitHub.com/DeekshithSH'>Fᴏʟʟᴏᴡ</a></b>\n
 <b>🔸Sᴏᴜʀᴄᴇ : <a href='https://github.com/DeekshithSH/FileStreamBot'>Cʟɪᴄᴋ Hᴇʀᴇ</a></b>\n
 <b>🔹This Bot is Fork of : <a href='https://github.com/avipatilpro/FileStreamBot'>File Stream Bot</a></b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 19-Dec-21 ] 06:53 PM</b>
+<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 20-Dec-21 ] 07:14 PM</b>
+"""
+
+SETTINGS_TEXT = """
+<b>Settings</b>
+<b><i>🔸[Beta]</i></b>
+<i>🔹please edit Telegram Link Type, by clicking on the button below</i>
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
@@ -43,8 +49,8 @@ START_BUTTONS = InlineKeyboardMarkup(
         InlineKeyboardButton('Aʙᴏᴜᴛ', callback_data='about'),
         InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close')
         ],
-        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')
-        ]]
+        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')]
+        ]
     )
 HELP_BUTTONS = InlineKeyboardMarkup(
         [[
@@ -52,8 +58,8 @@ HELP_BUTTONS = InlineKeyboardMarkup(
         InlineKeyboardButton('Aʙᴏᴜᴛ', callback_data='about'),
         InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close'),
         ],
-        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')
-        ]]
+        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')]
+        ]
     )
 ABOUT_BUTTONS = InlineKeyboardMarkup(
         [[
@@ -61,7 +67,17 @@ ABOUT_BUTTONS = InlineKeyboardMarkup(
         InlineKeyboardButton('Hᴇʟᴘ', callback_data='help'),
         InlineKeyboardButton('Cʟᴏsᴇ', callback_data='close'),
         ],
-        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')
+        [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')]
+        ]
+    )
+SETTINGS_BUTTONS = InlineKeyboardMarkup(
+        [[
+        InlineKeyboardButton('Permanent Link', callback_data='24link')
+        ]]
+    )
+SETTINGS_BUTTONS24 = InlineKeyboardMarkup(
+        [[
+        InlineKeyboardButton('24 Hour Link', callback_data='permanentlink')
         ]]
     )
 
@@ -84,6 +100,27 @@ async def cb_data(bot, update):
             text=ABOUT_TEXT,
             disable_web_page_preview=True,
             reply_markup=ABOUT_BUTTONS
+        )
+    elif update.data == "settings":
+        await update.message.edit_text(
+            text=SETTINGS_TEXT,
+            disable_web_page_preview=True,
+            reply_markup=SETTINGS_BUTTONS
+        )
+    elif update.data == "24link":
+        if not await db.is_user_in_24hour(update.from_user.id):
+            await db.add_user_in_24(update.from_user.id)
+            await update.message.edit_text(
+                text=SETTINGS_TEXT,
+                disable_web_page_preview=True,
+                reply_markup=SETTINGS_BUTTONS24
+            )
+    elif update.data == "permanentlink":
+        await db.remove_user_from_24(update.from_user.id)
+        await update.message.edit_text(
+            text=SETTINGS_TEXT,
+            disable_web_page_preview=True,
+            reply_markup=SETTINGS_BUTTONS
         )
     else:
         await update.message.delete()
@@ -260,6 +297,71 @@ async def start(b ,m):
         reply_markup=HELP_BUTTONS
             )
 
+@StreamBot.on_message(filters.private & filters.command("settings"))
+async def start(b, m):
+    if await db.is_user_banned(m.from_user.id):
+        await b.send_message(
+                chat_id=m.chat.id,
+                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                parse_mode="markdown",
+                disable_web_page_preview=True
+            )
+        await b.send_message(
+                Var.BIN_CHANNEL,
+                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
+             )
+    else:
+        if not await db.is_user_exist(m.from_user.id):
+            await db.add_user(m.from_user.id)
+            await b.send_message(
+                Var.BIN_CHANNEL,
+                f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ:** \n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{m.from_user.first_name}](tg://user?id={m.from_user.id}) __Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!__"
+            )
+        if Var.FORCE_UPDATES_CHANNEL:
+            try:
+                user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
+                if user.status == "kicked":
+                    await b.send_message(
+                        chat_id=m.chat.id,
+                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        parse_mode="markdown",
+                        disable_web_page_preview=True
+                    )
+                    return
+            except UserNotParticipant:
+                await b.send_message(
+                    chat_id=m.chat.id,
+                    text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
+                    reply_markup=InlineKeyboardMarkup(
+                        [[
+                            InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
+                            ]]
+                    ),
+                    parse_mode="HTML"
+                )
+                return
+            except Exception:
+                await b.send_message(
+                    chat_id=m.chat.id,
+                    text="<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='http://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
+                    parse_mode="HTML",
+                    disable_web_page_preview=True)
+                return
+        if await db.is_user_in_24hour(m.from_user.id):
+            await m.reply_text(
+                text=SETTINGS_TEXT,
+                parse_mode="HTML",
+                disable_web_page_preview=True,
+                reply_markup=SETTINGS_BUTTONS24
+                  )
+        else:
+            await m.reply_text(
+                text=SETTINGS_TEXT,
+                parse_mode="HTML",
+                disable_web_page_preview=True,
+                reply_markup=SETTINGS_BUTTONS
+                )
+
 @StreamBot.on_message(filters.command('name') & filters.private & ~filters.edited)
 async def start(b, m):
     if await db.is_user_banned(m.from_user.id):
@@ -326,73 +428,6 @@ async def start(b, m):
         else:
             await m.reply_text(
                             text="you can suggest me a name with /name command \n eg: /name Direct Link Generator",
-                            parse_mode="markdown",
-                            disable_web_page_preview=True,
-                            quote=True
-                          )  
-                
-@StreamBot.on_message(filters.command('echo') & filters.private & ~filters.edited)
-async def start(b, m):
-    if await db.is_user_banned(m.from_user.id):
-        await b.send_message(
-                chat_id=m.chat.id,
-                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                parse_mode="markdown",
-                disable_web_page_preview=True
-            )
-        await b.send_message(
-                Var.BIN_CHANNEL,
-                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
-            )
-    else:
-        if not await db.is_user_exist(m.from_user.id):
-            await db.add_user(m.from_user.id)
-            await b.send_message(
-                Var.BIN_CHANNEL,
-                f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ:** \n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{m.from_user.first_name}](tg://user?id={m.from_user.id}) __Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!__"
-            )
-        usr_sent_msg = m.text.split("/echo ")[-1]
-        if not usr_sent_msg == "/echo":
-            if Var.FORCE_UPDATES_CHANNEL:
-                try:
-                    user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
-                    if user.status == "kicked":
-                        await b.send_message(
-                            chat_id=m.chat.id,
-                            text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                            parse_mode="markdown",
-                            disable_web_page_preview=True
-                        )
-                        return
-                except UserNotParticipant:
-                    await b.send_message(
-                        chat_id=m.chat.id,
-                        text="<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ 🔐</i>",
-                        reply_markup=InlineKeyboardMarkup(
-                            [[
-                                InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}")
-                                ]]
-                        ),
-                        parse_mode="HTML"
-                    )
-                    return
-                except Exception:
-                    await b.send_message(
-                        chat_id=m.chat.id,
-                        text="<i>Sᴏᴍᴇᴛʜɪɴɢ ᴡʀᴏɴɢ ᴄᴏɴᴛᴀᴄᴛ ᴍʏ ᴅᴇᴠᴇʟᴏᴘᴇʀ</i> <b><a href='http://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>",
-                        parse_mode="HTML",
-                        disable_web_page_preview=True)
-                    return
-     
-            await m.reply_text(
-                    text=usr_sent_msg,
-                    parse_mode="markdown",
-                    disable_web_page_preview=True,
-                    quote=True
-                  )
-        else:
-            await m.reply_text(
-                            text="resend your message back with /echo command \n eg: /echo Hi",
                             parse_mode="markdown",
                             disable_web_page_preview=True,
                             quote=True

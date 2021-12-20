@@ -27,6 +27,13 @@ msgs_text ="""
 <b>🌐 Download Page :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
 
+msg24_text ="""
+<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
+<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
+<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
+<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
+<b>🚸 Nᴏᴛᴇ : This Link Will Expire in 24 Hours</b>\n"""
+
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(b, m: Message,):
     if await db.is_user_banned(m.from_user.id):
@@ -90,10 +97,18 @@ async def private_receive_handler(b, m: Message,):
                     )
             else:
                 log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
-                stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-                    "http://{}:{}/{}".format(Var.FQDN,
-                                            Var.PORT,
-                                            log_msg.message_id)
+                if not await db.is_user_in_24hour(m.from_user.id):
+                    stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+                        "http://{}:{}/{}".format(Var.FQDN,
+                                                Var.PORT,
+                                                log_msg.message_id)
+                else:
+                    stream_link = "https://{}/24/{}/{}".format(Var.FQDN, m.chat.id, m.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+                        "http://{}:{}/24/{}/{}".format(Var.FQDN,
+                                                Var.PORT,
+                                                m.chat.id,
+                                                m.message_id)
+
                 if Var.PAGE_LINK:
                     page_link = "https://{}/?id={}".format(Var.PAGE_LINK, log_msg.message_id)
 
@@ -115,7 +130,16 @@ async def private_receive_handler(b, m: Message,):
 
                 await db.user_data(m.from_user.id, log_msg.message_id, file_name, file_size)
                 await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
-                if Var.PAGE_LINK:
+                
+                if await db.is_user_in_24hour(m.from_user.id):
+                    await m.reply_text(
+                        text=msg24_text.format(file_name, file_size, stream_link),
+                        parse_mode="HTML", 
+                        disable_web_page_preview=True,
+                        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                        quote=True
+                    )
+                elif Var.PAGE_LINK:
                     await m.reply_text(
                         text=msgs_text.format(file_name, file_size, stream_link, page_link),
                         parse_mode="HTML", 
