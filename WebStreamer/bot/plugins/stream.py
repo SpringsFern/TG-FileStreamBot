@@ -32,7 +32,7 @@ msg24_text ="""
 <b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🚸 Nᴏᴛᴇ : This Link Will Expire in 24 Hours</b>\n"""
+<b>🚸 Nᴏᴛᴇ : Don't Know when This Link Will Expire</b>\n"""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(b, m: Message,):
@@ -96,13 +96,14 @@ async def private_receive_handler(b, m: Message,):
                         f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
                     )
             else:
-                log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
                 if not await db.is_user_in_24hour(m.from_user.id):
+                    log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
                     stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
                         "http://{}:{}/{}".format(Var.FQDN,
                                                 Var.PORT,
                                                 log_msg.message_id)
                 else:
+                    log_msg = await m.forward(chat_id=Var.BIN_CHANNEL24)
                     stream_link = "https://{}/24/{}/{}".format(Var.FQDN, m.chat.id, m.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
                         "http://{}:{}/24/{}/{}".format(Var.FQDN,
                                                 Var.PORT,
