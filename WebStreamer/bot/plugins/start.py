@@ -20,10 +20,10 @@ HELP_TEXT = """
 <i>- Sᴇɴᴅ ᴍᴇ ᴀɴʏ ꜰɪʟᴇ (ᴏʀ) ᴍᴇᴅɪᴀ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.</i>
 <i>- I ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ᴇxᴛᴇʀɴᴀʟ ᴅɪʀᴇᴄᴛ ᴅᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ !.</i>
 <i>- Aᴅᴅ Mᴇ ɪɴ ʏᴏᴜʀ Cʜᴀɴɴᴇʟ Fᴏʀ Dɪʀᴇᴄᴛ Dᴏᴡɴʟᴏᴀᴅ Lɪɴᴋs Bᴜᴛᴛᴏɴ (add in channel not group. this bot will don't work on group)</i>
-<i>- Tʜɪs Pᴇʀᴍᴇᴀɴᴛ Lɪɴᴋ Wɪᴛʜ Fᴀsᴛᴇsᴛ Sᴘᴇᴇᴅ</i>\n
-<i>- you will get two links, one for download and the another for Download Page</i>\n
-<I>  if first link is not working then Download from Download Page Link<i>\n
-<b>- Try Using <a href="https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1">CloudFlare DNS</a> if see a Application error message</b>
+<i>- Tʜɪs Pᴇʀᴍᴇᴀɴᴛ Lɪɴᴋ Wɪᴛʜ Fᴀsᴛᴇsᴛ Sᴘᴇᴇᴅ</i>
+<i>- you will get two links, one for download and the another for Download Page</i>
+<I>  if first link is not working then Download from Download Page Link<i>
+<b>- Try Using <a href="https://developers.cloudflare.com/1.1.1.1/setup-1.1.1.1">CloudFlare DNS</a> if see a Application error message</b>\n
 <u>🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u>\n
 <b>🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ ʟᴇᴀᴅꜱ ᴛᴏ ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴ ʏᴏᴜ.</b>\n
 <i>Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ (ᴏʀ) ʀᴇᴘᴏʀᴛ ʙᴜɢꜱ</i> <b>: <a href='https://t.me/DeekshithSH'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>"""
@@ -31,16 +31,14 @@ HELP_TEXT = """
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3</b>\n
-<b>🔹GitHub : <a href='https://GitHub.com/DeekshithSH'>Fᴏʟʟᴏᴡ</a></b>\n
-<b>🔸Sᴏᴜʀᴄᴇ : <a href='https://github.com/DeekshithSH/FileStreamBot'>Cʟɪᴄᴋ Hᴇʀᴇ</a></b>\n
-<b>🔹This Bot is Fork of : <a href='https://github.com/avipatilpro/FileStreamBot'>File Stream Bot</a></b>\n
-<b>🔸Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 20-Dec-21 ] 07:14 PM</b>
+<b>>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 20-Dec-21 ] 07:14 PM</b>
 """
 
 SETTINGS_TEXT = """
 <b>Settings</b>
 <b><i>🔸[Beta]</i></b>
-<i>🔹please edit Telegram Link Type, by clicking on the button below</i>
+<b>🔹Nᴏᴛᴇ :I Don't Know when "24 Hour Link" Link Will Expire</b>
+<i>🔸please edit Telegram Link Type, by clicking on the button below</i>
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
