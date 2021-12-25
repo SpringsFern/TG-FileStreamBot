@@ -347,7 +347,7 @@ def start(b, m):
     else:
         b.send_message(
             chat_id=m.chat.id,
-            text="abcd",
+            text="Send me YouTube Link\nEg:/ytdl https://www.youtube.com/watch?v=BaW_jenozKc",
             parse_mode="markdown",
             disable_web_page_preview=True
         )
