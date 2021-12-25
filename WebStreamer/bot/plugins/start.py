@@ -1,5 +1,6 @@
 # © @Avishkarpatil [ Telegram ]
 
+from pyrogram.client import Client
 import yt_dlp
 from WebStreamer.utils.mimetype import isMediaFile
 from typing import Text
@@ -511,6 +512,7 @@ def start(b, m):
 
         # ℹ️ See docstring of yt_dlp.YoutubeDL for a description of the options
         ydl_opts = {
+            'format': format_selector,
             'postprocessors': [{
                 # Embed metadata in video using ffmpeg.
                 # ℹ️ See yt_dlp.postprocessor.FFmpegMetadataPP for the arguments it accepts
@@ -539,6 +541,13 @@ def start(b, m):
             filename2=filename.split(".")[0]
             mediatype=isMediaFile(filename)
 
+            def progress(current, total):
+                b.edit_message_text(
+                    message_id=snt_msg.message_id,
+                    chat_id=m.chat.id,
+                    text=f"{current * 100 / total:.1f}% uploaded"
+                    )   
+
             try:
                 if mediatype == 'audio':
                     b.send_audio(
@@ -551,6 +560,7 @@ def start(b, m):
                     b.send_video(
                         chat_id=m.chat.id,
                         video=filename,
+                        progress=progress,
                         # caption=filename,
                         supports_streaming=True,
                         reply_to_message_id=snt_msg.message_id
@@ -569,7 +579,7 @@ def start(b, m):
                         chat_id=m.chat.id,
                         text="🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸\n{}\n🔹Uploading File to Telegram".format(ytdlwarn)
                     )
-                    b.send_video(
+                    Client.send_video(
                         chat_id=m.chat.id,
                         video="{}.mkv".format(filename2),
                         supports_streaming=False,
