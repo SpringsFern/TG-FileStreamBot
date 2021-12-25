@@ -1,5 +1,6 @@
 # © @Avishkarpatil [ Telegram ]
 
+from typing import Text
 from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var
 from WebStreamer.utils.human_readable import humanbytes
@@ -430,3 +431,10 @@ async def start(b, m):
                             disable_web_page_preview=True,
                             quote=True
                           )
+@StreamBot.on_message(filters.private)
+async def start(b ,m):
+    if m.text in ["Hello", "Hi"]:
+        await b.send_message(
+            chat_id=m.chat.id,
+            text="""Hello {}\n<i>- Sᴇɴᴅ ᴍᴇ ᴀɴʏ ꜰɪʟᴇ (ᴏʀ) ᴍᴇᴅɪᴀ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.</i>""".format(m.from_user.mention)
+        )
