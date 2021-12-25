@@ -17,7 +17,7 @@ from pyrogram.types import Message
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 broadcast_ids = {}
 
-
+print("admin.py started")
 @StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
 async def sts(c: Client, m: Message):
     total_users = await db.total_users_count()
