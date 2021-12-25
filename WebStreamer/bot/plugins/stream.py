@@ -199,6 +199,7 @@ async def channel_receive_handler(bot, broadcast):
 
 @StreamBot.on_message(filters.command('ytdl') & filters.private & ~filters.edited)
 def start(b, m):
+    print("ytdl")
     usr_cmd = m.text.split("/ytdl ")[-1]
     if not usr_cmd == "/ytdl":
         snt_msg=m.reply_text(
