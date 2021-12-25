@@ -32,7 +32,7 @@ HELP_TEXT = """
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3</b>\n
-<b>>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 20-Dec-21 ] 07:14 PM</b>
+<b>>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 25-Dec-21 ] 06:55 PM</b>
 """
 
 SETTINGS_TEXT = """
