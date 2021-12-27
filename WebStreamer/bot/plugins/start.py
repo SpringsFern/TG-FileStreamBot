@@ -41,9 +41,7 @@ ABOUT_TEXT = """
 
 SETTINGS_TEXT = """
 <b>Settings</b>
-<b><i>🔸[Beta]</i></b>
-<b>🔹Nᴏᴛᴇ :I Don't Know when "24 Hour Link" Link Will Expire</b>
-<i>🔸please edit Telegram Link Type, by clicking on the button below</i>
+<i>🔸You Can edit Telegram Link Type, by clicking on the button below</i>
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
@@ -80,7 +78,7 @@ SETTINGS_BUTTONS = InlineKeyboardMarkup(
     )
 SETTINGS_BUTTONS24 = InlineKeyboardMarkup(
         [[
-        InlineKeyboardButton('24 Hour Link', callback_data='permanentlink')
+        InlineKeyboardButton('Second Link', callback_data='permanentlink')
         ]]
     )
 
