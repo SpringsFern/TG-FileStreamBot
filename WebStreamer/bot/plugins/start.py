@@ -1,5 +1,6 @@
 # © @Avishkarpatil [ Telegram ]
 
+from pyrogram import client
 from pyrogram.client import Client
 import yt_dlp
 from WebStreamer.utils.mimetype import isMediaFile
@@ -441,6 +442,7 @@ def start(b, m):
         snt_msg=m.reply_text(
             text=usr_cmd
         )
+        log_msg=b.send_message(text=f"**ʟɪɴᴋ :** {usr_cmd}\n**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`", chat_id=Var.BIN_CHANNEL24, disable_web_page_preview=True, parse_mode="Markdown")
         class MyLogger:
             def debug(self, msg):
                 # For compatibility with youtube-dl, both debug and info are passed into debug
@@ -589,6 +591,7 @@ def start(b, m):
                         chat_id=m.chat.id,
                         text=ytdlwarn
                     )
+                    log_msg.reply_text(text="{ytdlwarn}\n#ytdlp-error")
 
     else:
         b.send_message(

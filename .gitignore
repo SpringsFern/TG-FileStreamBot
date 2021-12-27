@@ -88,6 +88,7 @@ celerybeat-schedule
 
 # Environments
 .env
+.env2
 .venv
 env/
 venv/
