@@ -600,16 +600,3 @@ def start(b, m):
             parse_mode="markdown",
             disable_web_page_preview=True
         )
-
-@StreamBot.on_message(filters.private)
-async def start(b ,m):
-    if m.text in ["Hello", "Hi"]:
-        await b.send_message(
-            chat_id=m.chat.id,
-            text="""Hello {}\n<i>- Sᴇɴᴅ ᴍᴇ ᴀɴʏ ꜰɪʟᴇ (ᴏʀ) ᴍᴇᴅɪᴀ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.</i>""".format(m.from_user.mention)
-        )
-    else:
-        await b.send_message(
-            chat_id=m.chat.id,
-            text="""Only Hi And Hello Keyword Supported \n{}\n<i>- Sᴇɴᴅ ᴍᴇ ᴀɴʏ ꜰɪʟᴇ (ᴏʀ) ᴍᴇᴅɪᴀ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.</i>""".format(m.from_user.mention)
-        )
