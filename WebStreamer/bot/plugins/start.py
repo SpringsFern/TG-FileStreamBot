@@ -579,7 +579,7 @@ def start(b, m):
                         chat_id=m.chat.id,
                         text="🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸\n{}\n🔹Uploading File to Telegram".format(ytdlwarn)
                     )
-                    Client.send_video(
+                    b.send_video(
                         chat_id=m.chat.id,
                         video="{}.mkv".format(filename2),
                         supports_streaming=False,
