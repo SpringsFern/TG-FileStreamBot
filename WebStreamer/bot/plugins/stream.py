@@ -2,7 +2,6 @@
 
 import asyncio
 from WebStreamer.bot import StreamBot
-from WebStreamer.bot.plugins.start import AGREE_BUTTONS
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.vars import Var
@@ -10,6 +9,10 @@ from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
+
+AGREE_BUTTONS = InlineKeyboardMarkup(
+        [[InlineKeyboardButton("I Agree", callback_data='agree')]]
+    )
 
 print("stream.py started")
 msg_text ="""

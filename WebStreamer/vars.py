@@ -3,8 +3,6 @@
 from os import getenv, environ
 from dotenv import load_dotenv
 
-from WebStreamer.bot.plugins.start import AGREE_TEXT
-
 load_dotenv()
 
 

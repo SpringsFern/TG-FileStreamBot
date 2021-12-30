@@ -26,33 +26,32 @@ def start(b, m):
         parse_mode="markdown",
         disable_web_page_preview=True
     )
-@StreamBot.on_message(filters.private & filters.text & ~filters.edited & ~filters.command(["start","about","help","status","ban","unban","ytdl","broadcast","remove"]))
-def start(b, m):
-    if "1" == "2":
-        return
-    # if db.is_user_banned(m.from_user.id):
-    #     b.send_message(
-    #             chat_id=m.chat.id,
-    #             text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-    #             parse_mode="markdown",
-    #             disable_web_page_preview=True
-    #         )
-    # elif not db.is_user_agreed(m.from_user.id):
-    #     b.send_message(
-    #             chat_id=m.chat.id,
-    #             text=Var.AGREE_TEXT,
-    #             parse_mode="markdown",
-    #             disable_web_page_preview=True,
-    #             reply_markup=AGREE_BUTTONS
-    #         )
+@StreamBot.on_message(filters.private & filters.text & ~filters.edited & ~filters.command(["start","about","help","status","ban","unban","ytdl","ban","unban","remove","rem"]))
+async def start(b, m):
+    if await db.is_user_banned(m.from_user.id):
+        await b.send_message(
+                chat_id=m.chat.id,
+                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                parse_mode="markdown",
+                disable_web_page_preview=True
+            )
+    elif not await db.is_user_agreed(m.from_user.id):
+        await b.send_message(
+                chat_id=m.chat.id,
+                text=Var.AGREE_TEXT,
+                parse_mode="markdown",
+                disable_web_page_preview=True,
+                reply_markup=AGREE_BUTTONS
+            )
     else:
         usr_text=m.text
+        print(usr_text)
         res=urlparse(usr_text)
         if not res.netloc:
             if res.path:
                 res=urlparse("http://"+usr_text)
         if res.netloc in ["www.youtube.com", "m.youtube.com", "youtu.be", "youtube.com"]:
-            snt_msg=m.reply_text(
+            snt_msg=await m.reply_text(
                 text=usr_text,
                 reply_to_message_id=m.message_id,
             )
@@ -73,8 +72,8 @@ def start(b, m):
                     ytdlwarn=msg
                     pass
                 
-                def error(self, msg):
-                    b.edit_message_text(
+                async def error(self, msg):
+                    await b.edit_message_text(
                         message_id=snt_msg.message_id,
                         chat_id=m.chat.id,
                         text="{}\nsend me urls supported by yt-dlp\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md".format(msg.split(".")[0])
@@ -158,8 +157,8 @@ def start(b, m):
                 filename2=filename.split(".")[0]
                 mediatype=isMediaFile(filename)
 
-                def progress(current, total):
-                    b.edit_message_text(
+                async def progress(current, total):
+                    await b.edit_message_text(
                         message_id=snt_msg.message_id,
                         chat_id=m.chat.id,
                         text=f"{current * 100 / total:.1f}% uploaded"
@@ -167,14 +166,14 @@ def start(b, m):
 
                 try:
                     if mediatype == 'audio':
-                        b.send_audio(
+                        await b.send_audio(
                             chat_id=m.chat.id,
                             audio=filename,
                             # caption=filename,
                             reply_to_message_id=m.message_id,
                         )
                     elif mediatype == 'video':
-                        b.send_video(
+                        await b.send_video(
                             chat_id=m.chat.id,
                             video=filename,
                             progress=progress,
@@ -183,21 +182,21 @@ def start(b, m):
                             reply_to_message_id=m.message_id,
                         )
                     elif mediatype == 'image':
-                        b.send_photo(
+                        await b.send_photo(
                             chat_id=m.chat.id,
                             photo=filename,
                             # caption=filename,
                             reply_to_message_id=m.message_id,
                         )
                 except:
-                    log_msg=b.send_message(text=f"**ʟɪɴᴋ :** {usr_text}\n**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`", chat_id=Var.BIN_CHANNEL24, disable_web_page_preview=True, parse_mode="Markdown")
+                    log_msg=await b.send_message(text=f"**ʟɪɴᴋ :** {usr_text}\n**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`", chat_id=Var.BIN_CHANNEL24, disable_web_page_preview=True, parse_mode="Markdown")
                     if ytdlwarn == 'Requested formats are incompatible for merge and will be merged into mkv.':
-                        b.edit_message_text(
+                        await b.edit_message_text(
                             message_id=snt_msg.message_id,
                             chat_id=m.chat.id,
                             text="🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸\n{}\n🔹Uploading File to Telegram".format(ytdlwarn)
                         )
-                        b.send_video(
+                        await b.send_video(
                             chat_id=m.chat.id,
                             video="{}.mkv".format(filename2),
                             supports_streaming=False,
@@ -205,16 +204,16 @@ def start(b, m):
                             reply_to_message_id=m.message_id,
                         )
                     else:
-                        b.send_text(
+                        await b.send_text(
                             chat_id=m.chat.id,
                             text=ytdlwarn
                         )
-                        log_msg.reply_text(text="{}\n#ytdlp-error".format(ytdlwarn))
+                        await log_msg.reply_text(text="{}\n#ytdlp-error".format(ytdlwarn))
         else:
             try:
-                snt_msg=m.reply_text(
+                snt_msg=await m.reply_text(
                 text=usr_text,
-                reply_to_message_id=m.message_id,
+                reply_to_message_id=await m.message_id,
                 )
                 class MyLogger:
                     def debug(self, msg):
@@ -225,30 +224,30 @@ def start(b, m):
                         else:
                             self.info(msg)
 
-                    def info(self, msg):
+                    async def info(self, msg):
                         num=datetime.now().strftime("%H:%M:%S:%f")
-                        b.edit_message_text(
+                        await b.edit_message_text(
                             message_id=snt_msg.message_id,
                             chat_id=m.chat.id,
                             text=f"{num}| {msg}"
                             )
 
-                    def warning(self, msg):
+                    async def warning(self, msg):
                         global ytdlwarn
                         ytdlwarn=msg
                         pass
                     
-                    def error(self, msg):
-                        b.edit_message_text(
+                    async def error(self, msg):
+                        await b.edit_message_text(
                             message_id=snt_msg.message_id,
                             chat_id=m.chat.id,
                             text="{}\nsend me urls supported by yt-dlp\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md".format(msg.split(".")[0])
                             )
 
                 # ℹ️ See "progress_hooks" in the docstring of yt_dlp.YoutubeDL
-                def my_hook(d):
+                async def my_hook(d):
                     if res['status'] == 'finished':
-                        b.edit_message_text(
+                        await b.edit_message_text(
                             message_id=snt_msg.message_id,
                             chat_id=m.chat.id,
                             text="Download Finished \nNow Uploading to Telegram"
@@ -258,13 +257,13 @@ def start(b, m):
                 # ℹ️ See docstring of yt_dlp.YoutubeDL for a description of the options
 
                 ydl_opts = {
-                    # 'postprocessors': [{
-                    #     # Embed metadata in video using ffmpeg.
-                    #     # ℹ️ See yt_dlp.postprocessor.FFmpegMetadataPP for the arguments it accepts
-                    #     'key': 'FFmpegMetadata',
-                    #     'add_chapters': True,
-                    #     'add_metadata': True,
-                    # }],
+                    'postprocessors': [{
+                        # Embed metadata in video using ffmpeg.
+                        # ℹ️ See yt_dlp.postprocessor.FFmpegMetadataPP for the arguments it accepts
+                        'key': 'FFmpegMetadata',
+                        'add_chapters': True,
+                        'add_metadata': True,
+                    }],
                     'logger': MyLogger(),
                     'outtmpl': 'Files/%(title)s-%(id)s.%(ext)s',
                     'restrictfilenames': True
@@ -285,8 +284,8 @@ def start(b, m):
                     filename2=filename.split(".")[0]
                     mediatype=isMediaFile(filename)
 
-                    def progress(current, total):
-                        b.edit_message_text(
+                    async def progress(current, total):
+                        await b.edit_message_text(
                             message_id=snt_msg.message_id,
                             chat_id=m.chat.id,
                             text=f"{current * 100 / total:.1f}% uploaded"
@@ -294,14 +293,14 @@ def start(b, m):
 
                     try:
                         if mediatype == 'audio':
-                            b.send_audio(
+                            await b.send_audio(
                                 chat_id=m.chat.id,
                                 audio=filename,
                                 caption=filename.split("/")[-1],
                                 reply_to_message_id=m.message_id,
                             )
                         elif mediatype == 'video':
-                            b.send_video(
+                            await b.send_video(
                                 chat_id=m.chat.id,
                                 video=filename,
                                 progress=progress,
@@ -310,21 +309,21 @@ def start(b, m):
                                 reply_to_message_id=m.message_id,
                             )
                         elif mediatype == 'image':
-                            b.send_photo(
+                            await b.send_photo(
                                 chat_id=m.chat.id,
                                 photo=filename,
                                 caption=filename.split("/")[-1],
                                 reply_to_message_id=m.message_id,
                             )
                     except:
-                        log_msg=b.send_message(text=f"**ʟɪɴᴋ :** {usr_text}\n**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`", chat_id=Var.BIN_CHANNEL24, disable_web_page_preview=True, parse_mode="Markdown")
+                        log_msg=await b.send_message(text=f"**ʟɪɴᴋ :** {usr_text}\n**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`", chat_id=Var.BIN_CHANNEL24, disable_web_page_preview=True, parse_mode="Markdown")
                         if ytdlwarn == 'Requested formats are incompatible for merge and will be merged into mkv.':
-                            b.edit_message_text(
+                            await b.edit_message_text(
                                 message_id=snt_msg.message_id,
                                 chat_id=m.chat.id,
                                 text="🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸\n{}\n🔹Uploading File to Telegram".format(ytdlwarn)
                             )
-                            b.send_video(
+                            await b.send_video(
                                 chat_id=m.chat.id,
                                 video="{}.mkv".format(filename2),
                                 supports_streaming=False,
@@ -332,13 +331,13 @@ def start(b, m):
                                 reply_to_message_id=m.message_id,
                             )
                         else:
-                            b.send_text(
+                            await b.send_text(
                                 chat_id=m.chat.id,
                                 text=ytdlwarn
                             )
-                            log_msg.reply_text(text="{}\n#ytdlp-error".format(ytdlwarn))
+                            await log_msg.reply_text(text="{}\n#ytdlp-error".format(ytdlwarn))
             except:
-                b.send_text(
+                await b.send_text(
                     chat_id=m.chat.id,
                     text="Error"
                 )
