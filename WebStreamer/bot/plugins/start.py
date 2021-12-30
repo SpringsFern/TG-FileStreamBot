@@ -18,7 +18,7 @@ db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 print("start.py started")
 START_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
-<i>I'm Telegram Files Streaming BOt As Well Direct Links Generator</i>\n
+<i>I'm Telegram Files Streaming Bot As Well Direct Links Generator</i>\n
 <i>👤 Total Users: {}</i>\n
 <i>Cʟɪᴄᴋ ᴏɴ Hᴇʟᴘ ᴛᴏ ɢᴇᴛ ᴍᴏʀᴇ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</i>\n
 <i><u>𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u></i>
