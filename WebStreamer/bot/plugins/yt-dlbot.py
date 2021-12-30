@@ -13,10 +13,6 @@ from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-AGREE_BUTTONS = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("I Agree", callback_data='agree')]]
-    )
-
 print("yt-dlbot.py started")
 @StreamBot.on_message(filters.command('ytdl') & filters.private & ~filters.edited)
 def start(b, m):
@@ -36,14 +32,6 @@ def start(b, m):
     #             text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
     #             parse_mode="markdown",
     #             disable_web_page_preview=True
-    #         )
-    # elif not db.is_user_agreed(m.from_user.id):
-    #     b.send_message(
-    #             chat_id=m.chat.id,
-    #             text=Var.AGREE_TEXT,
-    #             parse_mode="markdown",
-    #             disable_web_page_preview=True,
-    #             reply_markup=AGREE_BUTTONS
     #         )
     else:
         usr_text=m.text
