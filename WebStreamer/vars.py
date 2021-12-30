@@ -3,6 +3,8 @@
 from os import getenv, environ
 from dotenv import load_dotenv
 
+from WebStreamer.bot.plugins.start import AGREE_TEXT
+
 load_dotenv()
 
 
@@ -39,3 +41,6 @@ class Var(object):
         FORCE_UPDATES_CHANNEL = False
 
     BANNED_CHANNELS = list(set(int(x) for x in str(getenv("BANNED_CHANNELS", "-1001362659779")).split()))
+    AGREE_TEXT= """If you want to use the bot you need to agree to the following rules
+🔸I Don't Use The Bot to Host [Pirated](https://dictionary.cambridge.org/dictionary/english/pirate) or [Illegal](https://dictionary.cambridge.org/dictionary/english/illegal) Content
+🔹I Don't Use The Bot for [Piracy](https://dictionary.cambridge.org/dictionary/english/piracy)"""

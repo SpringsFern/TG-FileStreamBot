@@ -10,6 +10,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
+        self.agreed = self.db.agreed
         self.hour = self.db.hour
         self.db2 = self._client["UserID"]
 
@@ -24,6 +25,14 @@ class Database:
     async def add_user(self, id):
         user = self.new_user(id)
         await self.col.insert_one(user)
+
+    async def agree_to_use(self, id):
+        user = self.new_user(id)
+        await self.agreed.insert_one(user)
+
+    async def is_user_agreed(self, id):
+        user = await self.agreed.find_one({'id': int(id)})
+        return True if user else False
     
     async def remove_user(self, id):
         await self.col.delete_one({'id': int(id)})

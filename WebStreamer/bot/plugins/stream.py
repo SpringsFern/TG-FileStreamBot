@@ -2,6 +2,7 @@
 
 import asyncio
 from WebStreamer.bot import StreamBot
+from WebStreamer.bot.plugins.start import AGREE_BUTTONS
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.vars import Var
@@ -46,6 +47,14 @@ async def private_receive_handler(b, m: Message,):
                 Var.BIN_CHANNEL,
                 f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
             )
+    elif not await db.is_user_agreed(m.from_user.id):
+        await b.send_message(
+            chat_id=m.chat.id,
+            text=Var.AGREE_TEXT,
+            parse_mode="markdown",
+            disable_web_page_preview=True,
+            reply_markup=AGREE_BUTTONS
+        )
     else:
         if not await db.is_user_exist(m.from_user.id):
             await db.add_user(m.from_user.id)
