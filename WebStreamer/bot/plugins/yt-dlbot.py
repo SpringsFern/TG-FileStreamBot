@@ -18,7 +18,7 @@ print("yt-dlbot.py started")
 def start(b, m):
     b.send_message(
         chat_id=m.chat.id,
-        text="Hi\nyou can now Directly send urls supported by yt-dlp\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md\nEg: https://www.youtube.com/watch?v=BaW_jenozKc",
+        text="Hi\nyou can now Directly send urls supported by yt-dlp\nOnly Tested YouTube URL\n\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md\nEg: https://www.youtube.com/watch?v=BaW_jenozKc",
         parse_mode="markdown",
         disable_web_page_preview=True
     )
@@ -65,7 +65,7 @@ def start(b, m):
                     b.edit_message_text(
                         message_id=snt_msg.message_id,
                         chat_id=m.chat.id,
-                        text="{}\nsend me urls supported by yt-dlp\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md".format(msg.split(".")[0])
+                        text="{}\n--------------------------\nsend me urls supported by yt-dlp\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md".format(msg.split(".")[0])
                         )
 
             # ℹ️ See "progress_hooks" in the docstring of yt_dlp.YoutubeDL
@@ -147,10 +147,11 @@ def start(b, m):
                 mediatype=isMediaFile(filename)
 
                 def progress(current, total):
+                    num=datetime.now().strftime("%H:%M:%S:%f")
                     b.edit_message_text(
                         message_id=snt_msg.message_id,
                         chat_id=m.chat.id,
-                        text=f"{current * 100 / total:.1f}% uploaded"
+                        text=f"{num} | {current * 100 / total:.1f}% uploaded"
                         )   
 
                 try:
@@ -230,7 +231,7 @@ def start(b, m):
                         b.edit_message_text(
                             message_id=snt_msg.message_id,
                             chat_id=m.chat.id,
-                            text="{}\nsend me urls supported by yt-dlp\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md".format(msg.split(".")[0])
+                            text="{}\nsend me urls supported by yt-dlp\nOnly Tested YouTube URL\n\nhttps://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md".format(msg.split(".")[0])
                             )
 
                 # ℹ️ See "progress_hooks" in the docstring of yt_dlp.YoutubeDL
@@ -326,7 +327,7 @@ def start(b, m):
                             )
                             log_msg.reply_text(text="{}\n#ytdlp-error".format(ytdlwarn))
             except:
-                b.send_text(
+                b.send_message(
                     chat_id=m.chat.id,
                     text="Error"
                 )
