@@ -29,8 +29,8 @@ HELP_TEXT = """
 
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3</b>\n
-<b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 25-Dec-21 ] 06:55 PM</b>
+<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3.1</b>\n
+<b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 1-Jan-22 ] 10:47 PM</b>
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
