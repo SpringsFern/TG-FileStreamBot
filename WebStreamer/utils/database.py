@@ -10,8 +10,6 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
-        self.agreed = self.db.agreed
-        self.hour = self.db.hour
         self.db2 = self._client["UserID"]
 
 
@@ -25,14 +23,6 @@ class Database:
     async def add_user(self, id):
         user = self.new_user(id)
         await self.col.insert_one(user)
-
-    async def agree_to_use(self, id):
-        user = self.new_user(id)
-        await self.agreed.insert_one(user)
-
-    async def is_user_agreed(self, id):
-        user = await self.agreed.find_one({'id': int(id)})
-        return True if user else False
     
     async def remove_user(self, id):
         await self.col.delete_one({'id': int(id)})
@@ -89,21 +79,3 @@ class Database:
         self.add = self.db2[str(id)]
         user_data = self.sent_data(id, message_id , filename, filesize)
         await self.add.insert_one(user_data)
-
-# ----------------------Add or remove user from 24 Link----------------------
-
-    async def is_user_in_24hour(self, id):
-        user = await self.hour.find_one({'id': int(id)})
-        return True if user else False
-
-    def new_user_in_24(self, id):
-        return dict(
-            id=id
-        )
-
-    async def add_user_in_24(self, id):
-        user = self.new_user_in_24(id)
-        await self.hour.insert_one(user)
-
-    async def remove_user_from_24(self, id):
-        await self.hour.delete_one({'id': int(id)})

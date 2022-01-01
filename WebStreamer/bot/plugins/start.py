@@ -163,6 +163,8 @@ async def start(b ,m):
         reply_markup=HELP_BUTTONS
             )
 
+# ----------------------------- optional -------------------------------------------------------
+
 SETTINGS_TEXT = """
 <b>Settings</b>
 <i>🔸No Settings Available</i>
