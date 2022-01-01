@@ -33,11 +33,6 @@ ABOUT_TEXT = """
 <b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 25-Dec-21 ] 06:55 PM</b>
 """
 
-SETTINGS_TEXT = """
-<b>Settings</b>
-<i>🔸No Settings Available</i>
-"""
-
 START_BUTTONS = InlineKeyboardMarkup(
         [[
         InlineKeyboardButton('Hᴇʟᴘ', callback_data='help'),
@@ -167,6 +162,11 @@ async def start(b ,m):
         disable_web_page_preview=True,
         reply_markup=HELP_BUTTONS
             )
+
+SETTINGS_TEXT = """
+<b>Settings</b>
+<i>🔸No Settings Available</i>
+"""
 
 @StreamBot.on_message(filters.private & filters.command("settings"))
 async def start(b, m):
