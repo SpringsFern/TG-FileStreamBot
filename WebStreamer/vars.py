@@ -14,10 +14,6 @@ class Var(object):
     SLEEP_THRESHOLD = int(getenv('SLEEP_THRESHOLD', '60'))
     WORKERS = int(getenv('WORKERS', '4'))
     BIN_CHANNEL = int(getenv('BIN_CHANNEL'))
-    if getenv('BIN_CHANNEL24'):
-        BIN_CHANNEL24 = int(getenv('BIN_CHANNEL24'))
-    else:
-        BIN_CHANNEL24 = int(getenv('BIN_CHANNEL'))
     PORT = int(getenv('PORT', 8080))
     BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
     OWNER_ID = int(getenv('OWNER_ID', '1445283714'))
@@ -35,10 +31,5 @@ class Var(object):
         "http://{}:{}/".format(FQDN, PORT)
     DATABASE_URL = str(getenv('DATABASE_URL'))
     UPDATES_CHANNEL = str(getenv('UPDATES_CHANNEL', 'TeleXBots'))
-
-    if getenv('FORCE_UPDATES_CHANNEL') == "True":
-        FORCE_UPDATES_CHANNEL = True
-    else:
-        FORCE_UPDATES_CHANNEL = False
 
     BANNED_CHANNELS = list(set(int(x) for x in str(getenv("BANNED_CHANNELS", "-1001362659779")).split()))

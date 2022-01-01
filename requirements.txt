@@ -9,4 +9,3 @@ apscheduler
 requests
 jinja2
 aiohttp_jinja2
-https://github.com/yt-dlp/yt-dlp/archive/master.zip
