@@ -80,7 +80,7 @@ async def cb_data(bot, update):
             disable_web_page_preview=True,
             reply_markup=ABOUT_BUTTONS
         )
-        await update.message.delete()
+    await update.message.delete()
 
 
 @StreamBot.on_message(filters.command('start') & filters.private & ~filters.edited)
