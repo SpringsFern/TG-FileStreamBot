@@ -1,6 +1,8 @@
 # (c) @Avishkarpatil
 
 import asyncio
+
+from pyrogram.types.messages_and_media import video
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
@@ -27,13 +29,6 @@ msgs_text ="""
 <b>🌐 Download Page :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
 
-msg24_text ="""
-<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
-<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
-<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
-<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🚸 Nᴏᴛᴇ : Don't Know when This Link Will Expire</b>\n"""
-
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(b, m: Message,):
     if await db.is_user_banned(m.from_user.id):
@@ -54,145 +49,61 @@ async def private_receive_handler(b, m: Message,):
                 Var.BIN_CHANNEL,
                 f"Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ : \n\nNᴀᴍᴇ : [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!"
             )
-        if Var.FORCE_UPDATES_CHANNEL:
-            try:
-                user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
-                if user.status == "kicked":
-                    await b.send_message(
-                        chat_id=m.chat.id,
-                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ.__\n\n  **Cᴏɴᴛᴀᴄᴛ Dᴇᴠᴇʟᴏᴘᴇʀ @DeekshithSH Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                        parse_mode="markdown",
-                        disable_web_page_preview=True
-                    )
-                    return
-            except UserNotParticipant:
-                await b.send_message(
-                    chat_id=m.chat.id,
-                    text="""<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜꜱᴇ ᴍᴇ 🔐</i>""",
-                    reply_markup=InlineKeyboardMarkup(
-                        [[ InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}") ]]
-                    ),
-                    parse_mode="HTML"
-                )
-                return
-            except Exception:
-                await b.send_message(
-                    chat_id=m.chat.id,
-                    text="**Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍʏ ʙᴏss** @DeekshithSH",
-                    parse_mode="markdown",
-                    disable_web_page_preview=True)
-                return
-
         try:
-            if await db.is_user_banned(m.from_user.id):
-                await b.send_message(
-                        chat_id=m.chat.id,
-                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                        parse_mode="markdown",
-                        disable_web_page_preview=True
-                    )
-                await b.send_message(
-                        Var.BIN_CHANNEL,
-                        f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
-                    )
-            else:
-                if not await db.is_user_in_24hour(m.from_user.id):
-                    log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
-                    stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-                        "http://{}:{}/{}".format(Var.FQDN,
-                                                Var.PORT,
-                                                log_msg.message_id)
-                else:
-                    log_msg = await m.forward(chat_id=Var.BIN_CHANNEL24)
-                    stream_link = "https://{}/24/{}/{}".format(Var.FQDN, m.chat.id, m.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-                        "http://{}:{}/24/{}/{}".format(Var.FQDN,
-                                                Var.PORT,
-                                                m.chat.id,
-                                                m.message_id)
+            # Forwarding Message to Bin Channel
+            log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
 
-                if Var.PAGE_LINK:
-                    page_link = "https://{}/?id={}".format(Var.PAGE_LINK, log_msg.message_id)
+            stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+                "http://{}:{}/{}".format(Var.FQDN,
+                                        Var.PORT,
+                                        log_msg.message_id)
 
-                file_size = None
-                if m.video:
-                    file_size = f"{humanbytes(m.video.file_size)}"
-                elif m.document:
-                    file_size = f"{humanbytes(m.document.file_size)}"
-                elif m.audio:
-                    file_size = f"{humanbytes(m.audio.file_size)}"
+            file_size = None
+            if m.video:
+                file_size = f"{humanbytes(m.video.file_size)}"
+                media_type="video"
+            elif m.document:
+                file_size = f"{humanbytes(m.document.file_size)}"
+                media_type="document"
+            elif m.audio:
+                file_size = f"{humanbytes(m.audio.file_size)}"
+                media_type="audio"
 
-                file_name = None
-                if m.video:
-                    file_name = f"{m.video.file_name}"
-                elif m.document:
-                    file_name = f"{m.document.file_name}"
-                elif m.audio:
-                    file_name = f"{m.audio.file_name}"
-
-                await db.user_data(m.from_user.id, log_msg.message_id, file_name, file_size)
-                await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
+            # Stream Page Link If Link is Available
+            if Var.PAGE_LINK:
+                page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, log_msg.message_id, media_type)
                 
-                if await db.is_user_in_24hour(m.from_user.id):
-                    await m.reply_text(
-                        text=msg24_text.format(file_name, file_size, stream_link),
-                        parse_mode="HTML", 
-                        disable_web_page_preview=True,
-                        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
-                        quote=True
-                    )
-                elif Var.PAGE_LINK:
-                    await m.reply_text(
-                        text=msgs_text.format(file_name, file_size, stream_link, page_link),
-                        parse_mode="HTML", 
-                        disable_web_page_preview=True,
-                        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
-                        quote=True
-                    )
-                else:
-                    await m.reply_text(
-                        text=msg_text.format(file_name, file_size, stream_link),
-                        parse_mode="HTML", 
-                        disable_web_page_preview=True,
-                        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
-                        quote=True
-                    )
+            file_name = None
+            if m.video:
+                file_name = f"{m.video.file_name}"
+            elif m.document:
+                file_name = f"{m.document.file_name}"
+            elif m.audio:
+                file_name = f"{m.audio.file_name}"
+
+            # adding Download Link to Mongodb only message_id
+            await db.user_data(m.from_user.id, log_msg.message_id, file_name, file_size)
+            # Replying to File Sent by Bot to Bin Channel
+            await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
+            
+            # Sending Download Link, File Size, File Name to User
+            if Var.PAGE_LINK:
+                await m.reply_text(
+                    text=msgs_text.format(file_name, file_size, stream_link, page_link),
+                    parse_mode="HTML", 
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                    quote=True
+                )
+            else:
+                await m.reply_text(
+                    text=msg_text.format(file_name, file_size, stream_link),
+                    parse_mode="HTML", 
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                    quote=True
+                )
         except FloodWait as e:
             print(f"Sleeping for {str(e.x)}s")
             await asyncio.sleep(e.x)
             await b.send_message(chat_id=Var.BIN_CHANNEL, text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**𝚄𝚜𝚎𝚛 𝙸𝙳 :** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="Markdown")
-
-
-@StreamBot.on_message(filters.channel & (filters.document | filters.video) & ~filters.edited)
-async def channel_receive_handler(bot, broadcast):
-    if int(broadcast.chat.id) in Var.BANNED_CHANNELS:
-        await bot.leave_chat(broadcast.chat.id)
-        return
-    try:
-        log_msg = await broadcast.forward(chat_id=Var.BIN_CHANNEL)
-        stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    log_msg.message_id)
-        await log_msg.reply_text(
-            text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** {stream_link}",
-            # text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/FxStreamBot?start=DeekshithSH_{str(log_msg.message_id)}",
-            quote=True,
-            parse_mode="Markdown"
-        )
-        await bot.edit_message_reply_markup(
-            chat_id=broadcast.chat.id,
-            message_id=broadcast.message_id,
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=stream_link)]])
-            # [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/FxStreamBot?start=DeekshithSH_{str(log_msg.message_id)}")]])
-        )
-    except FloodWait as w:
-        print(f"Sleeping for {str(w.x)}s")
-        await asyncio.sleep(w.x)
-        await bot.send_message(chat_id=Var.BIN_CHANNEL,
-                             text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(w.x)}s from {broadcast.chat.title}\n\n**Cʜᴀɴɴᴇʟ ID:** `{str(broadcast.chat.id)}`",
-                             disable_web_page_preview=True, parse_mode="Markdown")
-    except Exception as e:
-        await bot.send_message(chat_id=Var.BIN_CHANNEL, text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`", disable_web_page_preview=True, parse_mode="Markdown")
-        print(f"Cᴀɴ'ᴛ Eᴅɪᴛ Bʀᴏᴀᴅᴄᴀsᴛ Mᴇssᴀɢᴇ!\nEʀʀᴏʀ: {e}")
-
