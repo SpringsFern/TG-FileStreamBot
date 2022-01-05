@@ -18,7 +18,8 @@ async def root_route_handler(request):
                               "maintained_by": "Deekshith SH",
                               "uptime": get_readable_time(time.time() - StartTime),
                               "telegram_bot": '@'+(await StreamBot.get_me()).username})
-
+@routes.get("/{message_id}/{name}")
+@routes.get("/{message_id}/")
 @routes.get("/{message_id}")
 async def stream_handler(request):
     try:
@@ -27,18 +28,6 @@ async def stream_handler(request):
     except ValueError as e:
         logging.error(e)
         raise web.HTTPNotFound
-
-# Add Your Bot to a Channel and download url will be like http://yourdomain/24/your_channel_or_chat_id/message_id
-@routes.get("/24/{channel_id}/{message_id}")
-async def stream_handler(request):
-    try:
-        message_id = int(request.match_info['message_id'])
-        channel_id = int(request.match_info['channel_id'])
-        return await media_streamer(request, channel_id, message_id)
-    except ValueError as e:
-        logging.error(e)
-        raise web.HTTPNotFound
-
 
 async def media_streamer(request, channel_id: int, message_id: int):
     range_header = request.headers.get('Range', 0)
