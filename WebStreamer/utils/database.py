@@ -10,7 +10,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
-        self.db2 = self._client["UserID"]
+        # self.db2 = self._client["UserID"]
 
 
 # ----------------------add ,check or remove user----------------------
@@ -67,15 +67,15 @@ class Database:
 
 # ----------------------Add users File Data----------------------
 
-    def sent_data(self, id, message_id , filename, filesize):
-        return dict(
-            message_id=message_id,
-            file_name=filename,
-            file_size=filesize,
-            sent_date=datetime.date.today().isoformat()
-        )
+    # def sent_data(self, id, message_id , filename, filesize):
+    #     return dict(
+    #         message_id=message_id,
+    #         file_name=filename,
+    #         file_size=filesize,
+    #         sent_date=datetime.date.today().isoformat()
+    #     )
 
-    async def user_data(self, id, message_id , filename, filesize):
-        self.add = self.db2[str(id)]
-        user_data = self.sent_data(id, message_id , filename, filesize)
-        await self.add.insert_one(user_data)
+    # async def user_data(self, id, message_id , filename, filesize):
+    #     self.add = self.db2[str(id)]
+    #     user_data = self.sent_data(id, message_id , filename, filesize)
+    #     await self.add.insert_one(user_data)
