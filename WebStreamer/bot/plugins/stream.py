@@ -6,7 +6,7 @@ from pyrogram.types.messages_and_media import video
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
-from WebStreamer.utils.mimetype.py import isMediaFile
+from WebStreamer.utils.mimetype import isMediaFile
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
