@@ -163,7 +163,7 @@ async def start(b ,m):
         reply_markup=HELP_BUTTONS
             )
 
-# ----------------------------- optional -------------------------------------------------------
+# ----------------------------- optional You can Remove Bellow Line -------------------------------------------------------
 
 SETTINGS_TEXT = """
 <b>Settings</b>
