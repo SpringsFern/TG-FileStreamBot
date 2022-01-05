@@ -6,6 +6,7 @@ from pyrogram.types.messages_and_media import video
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
+from WebStreamer.utils.mimetype.py import isMediaFile
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
@@ -61,18 +62,11 @@ async def private_receive_handler(b, m: Message,):
             file_size = None
             if m.video:
                 file_size = f"{humanbytes(m.video.file_size)}"
-                media_type="video"
             elif m.document:
                 file_size = f"{humanbytes(m.document.file_size)}"
-                media_type="document"
             elif m.audio:
                 file_size = f"{humanbytes(m.audio.file_size)}"
-                media_type="audio"
 
-            # Stream Page Link If Link is Available
-            if Var.PAGE_LINK:
-                page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, log_msg.message_id, media_type)
-                
             file_name = None
             if m.video:
                 file_name = f"{m.video.file_name}"
@@ -81,6 +75,11 @@ async def private_receive_handler(b, m: Message,):
             elif m.audio:
                 file_name = f"{m.audio.file_name}"
 
+            # Stream Page Link If Link is Available
+            if Var.PAGE_LINK:
+                media_type=isMediaFile(file_name)
+                page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, log_msg.message_id, media_type)
+                
             # adding Download Link to Mongodb only message_id
             await db.user_data(m.from_user.id, log_msg.message_id, file_name, file_size)
             # Replying to File Sent by Bot to Bin Channel
