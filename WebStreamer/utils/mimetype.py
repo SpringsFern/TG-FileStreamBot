@@ -6,8 +6,6 @@ def isMediaFile(fileName):
 
     if mimestart != None:
         mimestart = mimestart.split('/')[0]
-
-        if mimestart in ['audio', 'video', 'image']:
-            return mimestart
-    
-    return False
+        return mimestart
+    else:
+        return "None"
