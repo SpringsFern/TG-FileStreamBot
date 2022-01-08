@@ -1,10 +1,27 @@
 import mimetypes
-mimetypes.init()
+import urllib.parse
 
 def mimetype(filename):
+    mimetypes.init()
     mimestart = mimetypes.guess_type(filename)[0]
 
     if mimestart != None:
         mimestart = mimestart.split('/')[0]
 
         return mimestart
+    else:
+        return "None"
+
+def get_media_file_name(m):
+    media = m.video or m.document or m.audio
+    if media and media.file_name:
+        return urllib.parse.quote_plus(media.file_name)
+    else:
+        return "None"
+
+def get_media_file_size(m):
+    media = m.video or m.audio or m.document
+    if media and media.file_size:
+        return media.file_size
+    else:
+        return "None"

@@ -1,8 +1,8 @@
-import urllib.parse
 from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
+from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import UserNotParticipant
@@ -83,22 +83,6 @@ async def cb_data(bot, update):
         )
     else:
         await update.message.delete()
-
-def get_media_file_size(m):
-    media = m.video or m.audio or m.document
-    if media and media.file_size:
-        return media.file_size
-    else:
-        return None
-
-
-def get_media_file_name(m):
-    media = m.video or m.document or m.audio
-    if media and media.file_name:
-        return urllib.parse.quote_plus(media.file_name)
-    else:
-        return None
-
 
 @StreamBot.on_message(filters.command('start') & filters.private & ~filters.edited)
 async def start(b, m):
@@ -190,7 +174,7 @@ async def start(b, m):
             except Exception:
                 await b.send_message(
                     chat_id=m.chat.id,
-                    text="**Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍᴇ** [Aᴠɪsʜᴋᴀʀ Pᴀᴛɪʟ](https://t.me/DeekshithSH).",
+                    text="**Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍᴇ** [ ᴄʟɪᴄᴋ ʜᴇʀᴇ ](https://t.me/DeekshithSH).",
                     parse_mode="markdown",
                     disable_web_page_preview=True)
                 return
@@ -277,7 +261,7 @@ async def help_handler(bot, message):
         except Exception:
             await bot.send_message(
                 chat_id=message.chat.id,
-                text="__Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍᴇ__ [Aᴠɪsʜᴋᴀʀ Pᴀᴛɪʟ](https://t.me/DeekshithSH).",
+                text="__Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍᴇ__ [ ᴄʟɪᴄᴋ ʜᴇʀᴇ ](https://t.me/DeekshithSH).",
                 parse_mode="markdown",
                 disable_web_page_preview=True)
             return

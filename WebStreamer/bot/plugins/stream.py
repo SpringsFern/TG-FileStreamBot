@@ -2,11 +2,10 @@
 
 
 import asyncio
-import urllib.parse
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
-from WebStreamer.utils.mimetype import mimetype
+from WebStreamer.utils.mimetype import mimetype, get_media_file_name, get_media_file_size
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
@@ -28,23 +27,7 @@ msgs_text ="""
 <b>🌐 Download Page :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
 
-def get_media_file_size(m):
-    media = m.video or m.audio or m.document
-    if media and media.file_size:
-        return media.file_size
-    else:
-        return "None"
-
-
-def get_media_file_name(m):
-    media = m.video or m.document or m.audio
-    if media and media.file_name:
-        return urllib.parse.quote_plus(media.file_name)
-    else:
-        return "None"
-
-
-@StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio | filters.regex("https://t.me/")) & ~filters.edited, group=4)
+@StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(c: Client, m: Message):
     # Check The User is Banned or Not
     if await db.is_user_banned(m.from_user.id):
@@ -65,45 +48,9 @@ async def private_receive_handler(c: Client, m: Message):
             Var.BIN_CHANNEL,
             f"Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ : \n\nNᴀᴍᴇ : [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!"
         )
-    if Var.FORCE_UPDATES_CHANNEL:
-        try:
-            user = await c.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
-            if user.status == "kicked":
-                await c.send_message(
-                    chat_id=m.chat.id,
-                    text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ.__\n\n  **Cᴏɴᴛᴀᴄᴛ Dᴇᴠᴇʟᴏᴘᴇʀ @DeekshithSH Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                    parse_mode="markdown",
-                    disable_web_page_preview=True
-                )
-                return
-        except UserNotParticipant:
-            await c.send_message(
-                chat_id=m.chat.id,
-                text="""<i>Jᴏɪɴ ᴍʏ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜꜱᴇ ᴍᴇ 🔐</i>""",
-                reply_markup=InlineKeyboardMarkup(
-                    [[ InlineKeyboardButton("Jᴏɪɴ ɴᴏᴡ 🔓", url=f"https://t.me/{Var.UPDATES_CHANNEL}") ]]
-                ),
-                parse_mode="HTML"
-            )
-            return
-        except Exception:
-            await c.send_message(
-                chat_id=m.chat.id,
-                text="**Sᴏᴍᴇᴛʜɪɴɢ ᴡᴇɴᴛ Wʀᴏɴɢ. Cᴏɴᴛᴀᴄᴛ ᴍʏ ʙᴏss** @DeekshithSH",
-                parse_mode="markdown",
-                disable_web_page_preview=True)
-            return
+
     try:
-        if m.text:
-            try:
-                from_chat_id=str(m.text.split("/")[3])
-                message_ids=int(m.text.split("/")[4])
-                log_msg=await c.forward_messages(chat_id=Var.BIN_CHANNEL, from_chat_id=from_chat_id, message_ids=message_ids)
-            except:
-                await c.send_message(chat_id=m.chat.id, text="⚠️This is a private channel or not a valid link and I can't access it")
-                return
-        else:
-            log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
+        log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
         file_name = get_media_file_name(log_msg)
         file_size = humanbytes(get_media_file_size(log_msg))
 
@@ -146,10 +93,10 @@ async def channel_receive_handler(bot, broadcast):
         return
     try:
         log_msg = await broadcast.forward(chat_id=Var.BIN_CHANNEL)
-        stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    log_msg.message_id)
+        # stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+        #     "http://{}:{}/{}".format(Var.FQDN,
+        #                             Var.PORT,
+        #                             log_msg.message_id)
         await log_msg.reply_text(
             text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/{(await bot.get_me()).username}?start=AvishkarPatil_{str(log_msg.message_id)}",
             # text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/FxStreamBot?start=AvishkarPatil_{str(log_msg.message_id)}",
