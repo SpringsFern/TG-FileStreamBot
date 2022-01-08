@@ -84,7 +84,11 @@
       "SESSION_NAME": {
           "description": " Session Name for Bot [ Add AvishkarPatil ]",
           "required": false
-      }
+      },
+      "PING_INTERVAL": {
+        "description": "Add Ping Interval Default Is 500",
+        "required": false
+    }
   },
   "buildpacks": [{
       "url": "heroku/python"

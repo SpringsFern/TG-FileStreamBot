@@ -19,7 +19,7 @@ class Var(object):
     OWNER_ID = int(getenv('OWNER_ID', '797848243'))
     NO_PORT = bool(getenv('NO_PORT', False))
     PAGE_LINK = getenv('PAGE_LINK', None)
-    PING_INTERVAL = int(getenv('PING_INTERVAL'))
+    PING_INTERVAL = int(getenv('PING_INTERVAL', '500'))
     APP_NAME = None
     if 'DYNO' in environ:
         ON_HEROKU = True
