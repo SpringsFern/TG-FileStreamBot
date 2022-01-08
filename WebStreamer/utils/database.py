@@ -10,8 +10,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
-        # self.db2 = self._client["UserID"]
-
+        self.db2 = self._client["UserID"]
 
 # ----------------------add ,check or remove user----------------------
     def new_user(self, id):
@@ -23,13 +22,9 @@ class Database:
     async def add_user(self, id):
         user = self.new_user(id)
         await self.col.insert_one(user)
-    
-    async def remove_user(self, id):
-        await self.col.delete_one({'id': int(id)})
 
     async def is_user_exist(self, id):
         user = await self.col.find_one({'id': int(id)})
-
         return True if user else False
 
     async def total_users_count(self):
@@ -66,16 +61,18 @@ class Database:
         return count
 
 # ----------------------Add users File Data----------------------
+# if youdon't want to add user Link to DB remove Below Lines and
+# await db.user_data(m.from_user.id, log_msg.message_id, file_name, file_size) line from stream.py
 
-    # def sent_data(self, id, message_id , filename, filesize):
-    #     return dict(
-    #         message_id=message_id,
-    #         file_name=filename,
-    #         file_size=filesize,
-    #         sent_date=datetime.date.today().isoformat()
-    #     )
+    def sent_data(self, id, message_id , filename, filesize):
+        return dict(
+            message_id=message_id,
+            file_name=filename,
+            file_size=filesize,
+            sent_date=datetime.date.today().isoformat()
+        )
 
-    # async def user_data(self, id, message_id , filename, filesize):
-    #     self.add = self.db2[str(id)]
-    #     user_data = self.sent_data(id, message_id , filename, filesize)
-    #     await self.add.insert_one(user_data)
+    async def user_data(self, id, message_id , filename, filesize):
+        self.add = self.db2[str(id)]
+        user_data = self.sent_data(id, message_id , filename, filesize)
+        await self.add.insert_one(user_data)

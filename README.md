@@ -62,7 +62,7 @@ then goto the <a href="#mandatory-vars">variables tab</a> for more info on setti
 
 
 <details>
-  <summary><b>Host it on VPS Locally :</b></summary>
+  <summary><b>Host it Locally :</b></summary>
 
 
 ```py
@@ -173,3 +173,4 @@ Bot also Supported with Channels. Just add bot Channel as Admin. If any new file
 
 
 - [Avishkarpatil](https://telegram.me/Avishkarpatil)
+- [DeekshithSH](https://telegram.me/DeekshithSH)

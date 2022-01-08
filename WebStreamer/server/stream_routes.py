@@ -1,4 +1,5 @@
-import time
+# Avishkar Patil | AbirHasan2005
+
 import math
 import logging
 import secrets
@@ -6,32 +7,35 @@ import mimetypes
 from ..vars import Var
 from aiohttp import web
 from ..bot import StreamBot
-from WebStreamer import StartTime
 from ..utils.custom_dl import TGCustomYield, chunk_size, offset_fix
-from ..utils.time_format import get_readable_time
 
 routes = web.RouteTableDef()
 
+
 @routes.get("/", allow_head=True)
 async def root_route_handler(request):
+    bot_details = await StreamBot.get_me()
     return web.json_response({"status": "running",
-                              "maintained_by": "Deekshith SH",
-                              "uptime": get_readable_time(time.time() - StartTime),
-                              "telegram_bot": '@'+(await StreamBot.get_me()).username})
-@routes.get("/{message_id}/{name}")
-@routes.get("/{message_id}/")
+                              "maintained_by": "DeekshithSH",
+                              "server_permission": "Open",
+                              "Telegram_Bot": '@'+bot_details.username})
+
+
 @routes.get("/{message_id}")
+@routes.get("/{message_id}/")
+@routes.get(r"/{message_id:\d+}/{name}")
 async def stream_handler(request):
     try:
         message_id = int(request.match_info['message_id'])
-        return await media_streamer(request, Var.BIN_CHANNEL, message_id)
+        return await media_streamer(request, message_id)
     except ValueError as e:
         logging.error(e)
         raise web.HTTPNotFound
 
-async def media_streamer(request, channel_id: int, message_id: int):
+
+async def media_streamer(request, message_id: int):
     range_header = request.headers.get('Range', 0)
-    media_msg = await StreamBot.get_messages(channel_id, message_id)
+    media_msg = await StreamBot.get_messages(Var.BIN_CHANNEL, message_id)
     file_properties = await TGCustomYield().generate_file_properties(media_msg)
     file_size = file_properties.file_size
 

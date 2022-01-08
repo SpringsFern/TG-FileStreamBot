@@ -1,4 +1,4 @@
-# (c)  @Avishkarpatil | @AbirHasan2005
+# (c)  @Avishkarpatil
 
 import os
 import time
@@ -7,7 +7,7 @@ import random
 import asyncio
 import aiofiles
 import datetime
-from WebStreamer.utils.broadcast_helper import send_msg, send_msgs
+from WebStreamer.utils.broadcast_helper import send_msg
 from WebStreamer.utils.database import Database
 from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var
@@ -16,7 +16,7 @@ from pyrogram.types import Message
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 broadcast_ids = {}
 
-print("admin.py started")
+
 @StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
 async def sts(c: Client, m: Message):
     total_users = await db.total_users_count()
@@ -32,7 +32,7 @@ async def sts(b, m: Message):
             await m.reply_text(text=f"`{id}`** is Banned** ", parse_mode="Markdown", quote=True)
             await b.send_message(
                 chat_id=id,
-                text="**Your Banned to Use The Bot \n Reason: 18+ ᴄᴏɴᴛᴇɴᴛꜱ**",
+                text="**Your Banned to Use The Bot**",
                 parse_mode="markdown",
                 disable_web_page_preview=True
             )
@@ -59,7 +59,6 @@ async def sts(b, m: Message):
             await m.reply_text(text=f"**can't unban **`{id}`** something went wrong** ", parse_mode="Markdown", quote=True)
     else:
         await m.reply_text(text=f"`{id}`** is not Banned** ", parse_mode="Markdown", quote=True)
-
 
 @StreamBot.on_message(filters.command("broadcast") & filters.private & filters.user(Var.OWNER_ID) & filters.reply & ~filters.edited)
 async def broadcast_(c, m):
