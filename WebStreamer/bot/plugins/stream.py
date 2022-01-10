@@ -5,7 +5,7 @@ import asyncio
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
-from WebStreamer.utils.mimetype import mimetype, get_media_file_name, get_media_file_size
+from WebStreamer.utils.mimetype import mimetype, get_media_file_name, get_media_file_size, get_media_mime_type
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
@@ -83,7 +83,8 @@ async def private_receive_handler(c: Client, m: Message):
         file_size = humanbytes(get_media_file_size(log_msg))
 
         if Var.PAGE_LINK:
-            media_type=mimetype(file_name)
+            media_type = get_media_mime_type(log_msg)
+            # media_type=mimetype(file_name)
             page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, log_msg.message_id, media_type)
         stream_link = "https://{}/{}/{}".format(Var.FQDN, log_msg.message_id, file_name) if Var.ON_HEROKU or Var.NO_PORT else \
             "http://{}:{}/{}/{}".format(Var.FQDN,
