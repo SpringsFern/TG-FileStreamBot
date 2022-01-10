@@ -31,6 +31,7 @@ def get_media_mime_type(m):
     media = m.video or m.audio or m.document
     if media and media.mime_type:
         # mime_type=media.mime_type.split('/')[0]
-        return media.mime_type
+        mimetype=media.mime_type.replace("/", "-")
+        return mimetype
     else:
         return "None"
