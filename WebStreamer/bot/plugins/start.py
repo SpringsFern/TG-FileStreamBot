@@ -182,11 +182,10 @@ async def start(b, m):
         file_name = get_media_file_name(get_msg)
         file_size = humanbytes(get_media_file_size(get_msg))
 
-        stream_link = "https://{}/{}/{}".format(Var.FQDN, get_msg.message_id, file_name) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/{}/{}".format(Var.FQDN,
+        stream_link = "https://{}/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+            "http://{}:{}/{}".format(Var.FQDN,
                                      Var.PORT,
-                                     get_msg.message_id,
-                                     file_name)
+                                     get_msg.message_id)
 
         msg_text ="""
 <i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n

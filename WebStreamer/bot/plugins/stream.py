@@ -24,7 +24,7 @@ msgs_text ="""
 <b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🌐 Download Page :</b> <i>{}</i>\n
+<b>🌐 Stream Page :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
@@ -86,11 +86,10 @@ async def private_receive_handler(c: Client, m: Message):
             media_type = get_media_mime_type(log_msg)
             # media_type=mimetype(file_name)
             page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, log_msg.message_id, media_type)
-        stream_link = "https://{}/{}/{}".format(Var.FQDN, log_msg.message_id, file_name) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/{}/{}".format(Var.FQDN,
+        stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+            "http://{}:{}/{}".format(Var.FQDN,
                                     Var.PORT,
-                                    log_msg.message_id,
-                                    file_name)
+                                    log_msg.message_id)
 
         await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
         if Var.PAGE_LINK:

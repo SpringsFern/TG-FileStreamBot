@@ -10,7 +10,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
-        self.db2 = self._client["UserID"]
+        # self.db2 = self._client["UserID"]
 
 # ----------------------add ,check or remove user----------------------
     def new_user(self, id):
