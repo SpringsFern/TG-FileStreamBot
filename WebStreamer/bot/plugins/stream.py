@@ -5,7 +5,7 @@ import asyncio
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
-from WebStreamer.utils.mimetype import mimetype, get_media_file_name, get_media_file_size, get_media_mime_type
+from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
