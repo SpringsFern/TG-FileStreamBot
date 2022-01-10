@@ -2,7 +2,7 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
-from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size
+from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import UserNotParticipant
@@ -195,12 +195,33 @@ async def start(b, m):
 <b>🚸 Nᴏᴛᴇ : Lɪɴᴋ ᴇxᴘɪʀᴇᴅ ɪɴ 24 ʜᴏᴜʀꜱ</b>\n
 <i>🍃 Bᴏᴛ Mᴀɪɴᴛᴀɪɴᴇᴅ Bʏ :</i> <b>@DeekshithSH</b>
 """
-
-        await m.reply_text(
-            text=msg_text.format(file_name, file_size, stream_link),
-            parse_mode="HTML",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]])
-        )
+        msgs_text ="""
+<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
+<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
+<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
+<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
+<b>🌐 Stream Page :</b> <i>{}</i>\n
+<b>🚸 Nᴏᴛᴇ : Lɪɴᴋ ᴇxᴘɪʀᴇᴅ ɪɴ 24 ʜᴏᴜʀꜱ</b>\n
+<i>🍃 Bᴏᴛ Mᴀɪɴᴛᴀɪɴᴇᴅ Bʏ :</i> <b>@DeekshithSH</b>
+"""
+        if Var.PAGE_LINK:
+            media_type = get_media_mime_type(get_msg)
+            page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, get_msg.message_id, media_type)
+            await m.reply_text(
+                text=msgs_text.format(file_name, file_size, stream_link, page_link),
+                parse_mode="HTML", 
+                disable_web_page_preview=True,
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                quote=True
+            )
+        else:
+            await m.reply_text(
+                text=msg_text.format(file_name, file_size, stream_link),
+                parse_mode="HTML", 
+                disable_web_page_preview=True,
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                quote=True
+            )
 
 
 
