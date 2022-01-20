@@ -24,7 +24,7 @@ msgs_text ="""
 <b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🌐 Stream Page :</b> <i>{}</i>\n
+<b>🌐 Stream Link :</b> <i>{}</i>\n
 <b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
@@ -97,7 +97,10 @@ async def private_receive_handler(c: Client, m: Message):
                 text=msgs_text.format(file_name, file_size, stream_link, page_link),
                 parse_mode="HTML", 
                 disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)],
+                [InlineKeyboardButton("🔄 Refresh Link", url=f"https://t.me/{(await c.get_me()).username}?start=msgid_{log_msg.message_id}")]
+                ]),
                 quote=True
             )
         else:
@@ -105,7 +108,10 @@ async def private_receive_handler(c: Client, m: Message):
                 text=msg_text.format(file_name, file_size, stream_link),
                 parse_mode="HTML", 
                 disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+                reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)],
+                [InlineKeyboardButton("🔄 Refresh Link", url=f"https://t.me/{(await c.get_me()).username}?start=msgid_{log_msg.message_id}")]
+                ]),
                 quote=True
             )
     except FloodWait as e:
