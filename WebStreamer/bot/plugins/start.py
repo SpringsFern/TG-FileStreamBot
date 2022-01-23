@@ -1,5 +1,5 @@
 from WebStreamer.bot import StreamBot
-from WebStreamer.vars import Var
+from WebStreamer.vars import Var, Strings
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
@@ -186,28 +186,11 @@ async def start(b, m):
                                      Var.PORT,
                                      get_msg.message_id)
 
-        msg_text ="""
-<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
-<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
-<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
-<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🚸 Nᴏᴛᴇ : Lɪɴᴋ ᴇxᴘɪʀᴇᴅ ɪɴ 24 ʜᴏᴜʀꜱ</b>\n
-<i>🍃 Bᴏᴛ Mᴀɪɴᴛᴀɪɴᴇᴅ Bʏ :</i> <b>@DeekshithSH</b>
-"""
-        msgs_text ="""
-<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
-<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
-<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
-<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🌐 Stream Link :</b> <i>{}</i>\n
-<b>🚸 Nᴏᴛᴇ : Lɪɴᴋ ᴇxᴘɪʀᴇᴅ ɪɴ 24 ʜᴏᴜʀꜱ</b>\n
-<i>🍃 Bᴏᴛ Mᴀɪɴᴛᴀɪɴᴇᴅ Bʏ :</i> <b>@DeekshithSH</b>
-"""
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(get_msg)
             page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, get_msg.message_id, media_type)
             await m.reply_text(
-                text=msgs_text.format(file_name, file_size, stream_link, page_link),
+                text=Strings.msgs_text.format(file_name, file_size, stream_link, page_link),
                 parse_mode="HTML", 
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup([
@@ -218,7 +201,7 @@ async def start(b, m):
             )
         else:
             await m.reply_text(
-                text=msg_text.format(file_name, file_size, stream_link),
+                text=Strings.msg_text.format(file_name, file_size, stream_link),
                 parse_mode="HTML", 
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup([

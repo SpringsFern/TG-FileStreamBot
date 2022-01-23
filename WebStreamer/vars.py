@@ -39,3 +39,19 @@ class Var(object):
         FORCE_UPDATES_CHANNEL = False
 
     BANNED_CHANNELS = list(set(int(x) for x in str(getenv("BANNED_CHANNELS", "-1001296894100")).split()))
+
+class Strings:
+    msgs_text ="""
+<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
+<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
+<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
+<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
+<b>🌐 Stream Link :</b> <i>{}</i>\n
+<b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
+
+    msg_text ="""
+<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
+<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
+<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
+<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
+<b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""

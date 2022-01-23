@@ -6,26 +6,11 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
-from WebStreamer.vars import Var
+from WebStreamer.vars import Var, Strings
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
-
-msg_text ="""
-<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
-<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
-<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
-<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
-
-msgs_text ="""
-<i><u>𝗬𝗼𝘂𝗿 𝗟𝗶𝗻𝗸 𝗚𝗲𝗻𝗲𝗿𝗮𝘁𝗲𝗱 !</u></i>\n
-<b>📂 Fɪʟᴇ ɴᴀᴍᴇ :</b> <i>{}</i>\n
-<b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
-<b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
-<b>🌐 Stream Link :</b> <i>{}</i>\n
-<b>🚸 Nᴏᴛᴇ : Tʜɪs ᴘᴇʀᴍᴀɴᴇɴᴛ Lɪɴᴋ, Nᴏᴛ Exᴘɪʀᴇᴅ</b>\n"""
 
 @StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(c: Client, m: Message):
@@ -94,7 +79,7 @@ async def private_receive_handler(c: Client, m: Message):
         await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
         if Var.PAGE_LINK:
             await m.reply_text(
-                text=msgs_text.format(file_name, file_size, stream_link, page_link),
+                text=Strings.msgs_text.format(file_name, file_size, stream_link, page_link),
                 parse_mode="HTML", 
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup([
@@ -105,7 +90,7 @@ async def private_receive_handler(c: Client, m: Message):
             )
         else:
             await m.reply_text(
-                text=msg_text.format(file_name, file_size, stream_link),
+                text=Strings.msg_text.format(file_name, file_size, stream_link),
                 parse_mode="HTML", 
                 disable_web_page_preview=True,
                 reply_markup=InlineKeyboardMarkup([
@@ -153,4 +138,3 @@ async def channel_receive_handler(bot, broadcast):
     except Exception as e:
         await bot.send_message(chat_id=Var.BIN_CHANNEL, text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`", disable_web_page_preview=True, parse_mode="Markdown")
         print(f"Cᴀɴ'ᴛ Eᴅɪᴛ Bʀᴏᴀᴅᴄᴀsᴛ Mᴇssᴀɢᴇ!\nEʀʀᴏʀ: {e}")
-
