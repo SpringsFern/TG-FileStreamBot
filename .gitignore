@@ -115,3 +115,7 @@ dmypy.json
 
 #session files
 *.session
+*.session-journal
+
+# 
+..bfg-report
