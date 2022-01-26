@@ -1,10 +1,11 @@
+from xmlrpc import client
 from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var, Strings
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
-from pyrogram import filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram import filters, Client
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from pyrogram.errors import UserNotParticipant
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
@@ -327,3 +328,11 @@ async def start(b, m):
         chat_id=m.chat.id,
         text=f"Your ID is: {m.chat.id}"
     )
+@StreamBot.on_message(filters.text & filters.private & ~filters.edited)
+async def text(b: Client, m: Message):
+    chat_id = m.text.split("/")[3]
+    print(chat_id)
+    message_ids=m.text.split("/")[4]
+    print(message_ids)
+    get_msg = await b.get_messages(chat_id=int(chat_id), message_ids=int(message_ids))
+    print(get_msg)
