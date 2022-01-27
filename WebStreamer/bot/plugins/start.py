@@ -328,11 +328,3 @@ async def start(b, m):
         chat_id=m.chat.id,
         text=f"Your ID is: {m.chat.id}"
     )
-@StreamBot.on_message(filters.text & filters.private & ~filters.edited)
-async def text(b: Client, m: Message):
-    chat_id = m.text.split("/")[3]
-    print(chat_id)
-    message_ids=m.text.split("/")[4]
-    print(message_ids)
-    get_msg = await b.get_messages(chat_id=int(chat_id), message_ids=int(message_ids))
-    print(get_msg)

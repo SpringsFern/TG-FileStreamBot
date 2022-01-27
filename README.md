@@ -169,7 +169,7 @@ Bot also Supported with Channels. Just add bot Channel as Admin. If any new file
 **`/broadcast`** : reply to a message with `/broadcast` command and the message will be send to all users <br>
 ![broadcast](https://deekshithsh.github.io/FileStreamBot/broadcast.gif)
 
-</details>
+<!-- </details>
 
 - [Avishkarpatil](https://telegram.me/Avishkarpatil)
-- [DeekshithSH](https://telegram.me/DeekshithSH)
+- [DeekshithSH](https://telegram.me/DeekshithSH) -->
