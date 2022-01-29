@@ -190,27 +190,17 @@ async def start(b, m):
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(get_msg)
             page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, get_msg.message_id, media_type)
-            await m.reply_text(
-                text=Strings.msgs_text.format(file_name, file_size, stream_link, page_link),
-                parse_mode="HTML", 
-                disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)],
-                [InlineKeyboardButton("🔄 Refresh Link", url=f"https://t.me/{(await b.get_me()).username}?start=msgid_{get_msg.message_id}")]
-                ]),
-                quote=True
-            )
+            stream_text=Strings.msgs_text.format(file_name, file_size, stream_link, page_link)
         else:
-            await m.reply_text(
-                text=Strings.msg_text.format(file_name, file_size, stream_link),
-                parse_mode="HTML", 
-                disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)],
-                [InlineKeyboardButton("🔄 Refresh Link", url=f"https://t.me/{(await b.get_me()).username}?start=msgid_{get_msg.message_id}")]
-                ]),
-                quote=True
-            )
+            stream_text=Strings.msg_text.format(file_name, file_size, stream_link)
+
+        await m.reply_text(
+            text=stream_text,
+            parse_mode="HTML", 
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+            quote=True
+        )
 
 
 
