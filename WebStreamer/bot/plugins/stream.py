@@ -130,8 +130,6 @@ async def channel_receive_handler(bot, broadcast):
 
 @StreamBot.on_message(filters.group & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(c: Client, m: Message):
-    print("Hi")
-    print(m)
     try:
         log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
         file_name = get_media_file_name(log_msg)
