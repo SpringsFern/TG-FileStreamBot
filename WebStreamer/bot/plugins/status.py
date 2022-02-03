@@ -5,7 +5,7 @@ from WebStreamer import StartTime
 from WebStreamer.vars import Var
 
 
-@StreamBot.on_message(filters.private & filters.command("status") &  ~filters.edited)
+@StreamBot.on_message(filters.private & filters.command("server") &  ~filters.edited)
 async def stats(bot, update):
     currentTime = readable_time((time.time() - StartTime))
     total, used, free = shutil.disk_usage('.')
