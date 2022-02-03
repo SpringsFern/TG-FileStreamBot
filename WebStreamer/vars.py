@@ -31,7 +31,7 @@ class Var(object):
     URL = "https://{}/".format(FQDN) if ON_HEROKU or NO_PORT else \
         "http://{}:{}/".format(FQDN, PORT)
     DATABASE_URL = str(getenv('DATABASE_URL'))
-    UPDATES_CHANNEL = str(getenv('UPDATES_CHANNEL', "TeleXBots"))
+    UPDATES_CHANNEL = str(getenv('UPDATES_CHANNEL', "aredirect"))
 
     if getenv('FORCE_UPDATES_CHANNEL') == "True":
         FORCE_UPDATES_CHANNEL = True
