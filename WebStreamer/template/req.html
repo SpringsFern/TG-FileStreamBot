@@ -1,0 +1,75 @@
+<!-- https://github.com/Code-X-Mania/Filestreambot-pro/blob/main/Code_X_Mania/template/req.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta property="og:image" content="https://i.ibb.co/M8S0Zzj/live-streaming.png" itemprop="thumbnailUrl">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>%s</title>
+    	<!-- Google font -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.9/plyr.css" />
+    
+        									 
+<style>
+      marquee{
+      font-size: 30px;
+      font-weight: 800;
+      color: #c9c9c9;
+      font-family: 'Josefin Sans', sans-serif;
+      }
+      body {
+      background-color: #222;
+      background-color: rgb(26, 25, 25);
+      }
+    </style>
+</head>
+
+<body>
+	
+    <header>
+        <marquee bgcolor="#1a1919"
+<div class="toogle"></div>
+        <div id="file-name">
+            %s
+        </div>
+</marquee>
+    </header>
+
+    <div class="container">
+        <tag src="%s" class="player"></tag>
+    </div>
+
+    <footer>
+	    <center><h4>Video not playing ? possibly because your browser or the player doesn't support codec please download and watch :D</h4></center><p>
+    </footer>
+    <script src="https://cdn.plyr.io/3.6.9/plyr.js"></script>
+	<script>
+        const controls = [
+              'play-large',
+              'rewind',
+              'play', 
+              'fast-forward', 
+              'progress', 
+              'current-time',
+              'duration',
+              'mute',
+              'volume',
+              'captions',
+              'settings',
+              'pip',
+              'airplay',
+              'download',
+              'fullscreen'
+            ];
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = Plyr.setup('.player', { controls });
+        });
+
+        const body = document.querySelector('body');
+        const footer = document.querySelector('footer');
+        const toogle = document.querySelector('.toogle');
+    </script>
+</body>
+</html>

@@ -182,23 +182,25 @@ async def start(b, m):
         file_name = get_media_file_name(get_msg)
         file_size = humanbytes(get_media_file_size(get_msg))
 
-        stream_link = "https://{}/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/{}".format(Var.FQDN,
-                                     Var.PORT,
-                                     get_msg.message_id)
+        stream_link = "https://{}/download/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+            "http://{}:{}/download/{}".format(Var.FQDN,
+                                    Var.PORT,
+                                    get_msg.message_id)
 
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(get_msg)
             page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, get_msg.message_id, media_type)
-            stream_text=Strings.msgs_text.format(file_name, file_size, stream_link, page_link)
         else:
-            stream_text=Strings.msg_text.format(file_name, file_size, stream_link)
+            page_link = "https://{}/watch/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
+            "http://{}:{}/watch/{}".format(Var.FQDN,
+                                    Var.PORT,
+                                    get_msg.message_id)
 
         await m.reply_text(
-            text=stream_text,
+            text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
             parse_mode="HTML", 
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
             quote=True
         )
 
