@@ -1,11 +1,11 @@
-from xmlrpc import client
+import random
 from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var, Strings
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
 from pyrogram import filters, Client
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery
 from pyrogram.errors import UserNotParticipant
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
@@ -30,7 +30,7 @@ HELP_TEXT = """
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3.1</b>\n
-<b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 1-Jan-22 ] 10:47 PM</b>
+<b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 5-Feb-22 ] 4:28 PM</b>
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
@@ -60,9 +60,10 @@ ABOUT_BUTTONS = InlineKeyboardMarkup(
         [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')]
         ]
     )
+deldbtnmsg=["Your Already Deleted the Link", "You can't undo the Action", "You can Resend the File to Regenerate New Link", "Why Clicking me Your Link is Dead", ]
 
 @StreamBot.on_callback_query()
-async def cb_data(bot, update):
+async def cb_data(bot, update: CallbackQuery):
     if update.data == "home":
         await update.message.edit_text(
             text=START_TEXT.format(update.from_user.mention, await db.total_users_count()),
@@ -81,8 +82,55 @@ async def cb_data(bot, update):
             disable_web_page_preview=True,
             reply_markup=ABOUT_BUTTONS
         )
-    else:
+    elif update.data == "close":
         await update.message.delete()
+    elif update.data == "msgdeleted":
+        await update.answer(random.choice(deldbtnmsg), show_alert=True)
+    else:
+        usr_cmd = update.data.split("_")
+        if usr_cmd[0] == "msgdelconf":
+            await update.message.edit_text(
+            text=update.message.text,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("✔️", callback_data=f"msgdelyes_{usr_cmd[1]}"), InlineKeyboardButton("✖️", callback_data=f"msgdelno_{usr_cmd[1]}")]])
+        )
+        elif usr_cmd[0] == "msgdelno":
+            page_link = "https://{}/watch/{}".format(Var.FQDN, usr_cmd[1]) if Var.ON_HEROKU or Var.NO_PORT else \
+            "http://{}:{}/watch/{}".format(Var.FQDN,
+                                    Var.PORT,
+                                    usr_cmd[1])
+            stream_link = "https://{}/download/{}".format(Var.FQDN, usr_cmd[1]) if Var.ON_HEROKU or Var.NO_PORT else \
+            "http://{}:{}/download/{}".format(Var.FQDN,
+                                    Var.PORT,
+                                    usr_cmd[1])
+            await update.message.edit_text(
+            text=update.message.text,
+            disable_web_page_preview=True,
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
+            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf_{usr_cmd[1]}")]])
+        )
+        elif usr_cmd[0] == "msgdelyes":
+            try:
+                await bot.delete_messages(
+                    chat_id=Var.BIN_CHANNEL,
+                    message_ids=int(usr_cmd[1])
+                )
+                await update.message.edit_text(
+                text=update.message.text,
+                disable_web_page_preview=True,
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Link Deleted", callback_data="msgdeleted")]])
+                )
+            except Exception as e:
+                print(e)
+                await update.message.reply_text(
+                    text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`\nYou can get Help from [Public Link Generator (Support)](https://t.me/PublicLinkGenerator)", disable_web_page_preview=True, parse_mode="Markdown",
+                )
+                await bot.send_message(
+                    chat_id=Var.BIN_CHANNEL,
+                    text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`\n#Delete_Link", disable_web_page_preview=True, parse_mode="Markdown",
+                )
+        else:
+            await update.message.delete()
 
 @StreamBot.on_message(filters.command('start') & filters.private & ~filters.edited)
 async def start(b, m):
@@ -200,7 +248,8 @@ async def start(b, m):
             text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
             parse_mode="HTML", 
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
+            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf_{get_msg.message_id}")]]),
             quote=True
         )
 
