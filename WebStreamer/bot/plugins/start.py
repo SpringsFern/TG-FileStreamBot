@@ -1,7 +1,4 @@
 import random
-from shutil import ExecError
-from turtle import up
-from xmlrpc import client
 from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var, Strings
 from WebStreamer.utils.human_readable import humanbytes
@@ -33,7 +30,7 @@ HELP_TEXT = """
 ABOUT_TEXT = """
 <b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
 <b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3.1</b>\n
-<b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 1-Jan-22 ] 10:47 PM</b>
+<b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 5-Feb-22 ] 4:28 PM</b>
 """
 
 START_BUTTONS = InlineKeyboardMarkup(
