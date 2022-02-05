@@ -87,7 +87,8 @@ async def private_receive_handler(c: Client, m: Message):
             text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
             parse_mode="HTML", 
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
+            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf_{log_msg.message_id}")]]),
             quote=True
         )
     except FloodWait as e:
@@ -157,7 +158,7 @@ async def private_receive_handler(c: Client, m: Message):
             text=Strings.group_msgs_text.format(file_name, file_size, stream_link, page_link),
             parse_mode="HTML", 
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ɴᴏᴡ 📥", url=stream_link)]]),
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]]),
             quote=True
         )
     except FloodWait as e:
