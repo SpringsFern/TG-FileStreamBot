@@ -126,13 +126,11 @@ async def cb_data(bot, update: CallbackQuery):
             except Exception as e:
                 print(e)
                 await update.message.reply_text(
-                    text=e,
-                    disable_web_page_preview=True
+                    text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`\nYou can get Help from [Public Link Generator (Support)](https://t.me/PublicLinkGenerator)", disable_web_page_preview=True, parse_mode="Markdown",
                 )
                 await bot.send_message(
                     chat_id=Var.BIN_CHANNEL,
-                    text=e,
-                    disable_web_page_preview=True
+                    text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`\n#Delete_Link", disable_web_page_preview=True, parse_mode="Markdown",
                 )
         else:
             await update.message.delete()
