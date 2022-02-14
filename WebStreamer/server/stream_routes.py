@@ -22,6 +22,15 @@ async def root_route_handler(request):
                               "Telegram_Bot": '@'+bot_details.username})
 
 
+@routes.get("/favicon.ico")
+async def favicon(_):
+    try:
+        return web.FileResponse('WebStreamer/template/favicon.ico')
+    except Exception as e:
+        logging.error(e)
+        raise web.HTTPNotFound
+
+
 @routes.get("/watch/{message_id}")
 async def stream_handler(request):
     try:
