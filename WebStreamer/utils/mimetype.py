@@ -1,5 +1,8 @@
-import mimetypes
-import urllib.parse
+# import mimetypes
+# import urllib.parse
+
+from typing import Any
+from pyrogram.types import Message
 
 # def mimetype(filename):
 #     mimetypes.init()
@@ -12,26 +15,38 @@ import urllib.parse
 #     else:
 #         return "None"
 
-def get_media_file_name(m):
-    media = m.video or m.document or m.audio
-    if media and media.file_name:
-        return media.file_name
-        # return urllib.parse.quote_plus(media.file_name)
-    else:
-        return "None"
+def get_media_from_message(message: "Message") -> Any:
+    media_types = (
+        "audio",
+        "document",
+        "photo",
+        "sticker",
+        "animation",
+        "video",
+        "voice",
+        "video_note",
+    )
+    for attr in media_types:
+        media = getattr(message, attr, None)
+        if media:
+            return media
+
+def get_media_file_name(media_msg: Message) -> str:
+    media = get_media_from_message(media_msg)
+    return getattr(media, "file_name", "None")
 
 def get_media_file_size(m):
-    media = m.video or m.audio or m.document
-    if media and media.file_size:
-        return media.file_size
-    else:
-        return "None"
+    media = get_media_from_message(m)
+    return getattr(media, "file_size", "None")
 
 def get_media_mime_type(m):
-    media = m.video or m.audio or m.document
-    if media and media.mime_type:
-        # mime_type=media.mime_type.split('/')[0]
-        mimetype=media.mime_type
-        return mimetype
-    else:
-        return "None/unknown"
+    media = get_media_from_message(m)
+    return getattr(media, "mime_type", "None/unknown")
+
+def get_media_file_unique_id(m):
+    media = get_media_from_message(m)
+    return getattr(media, "file_unique_id", "")
+
+def get_hash(media_msg: Message) -> str:
+    media = get_media_from_message(media_msg)
+    return getattr(media, "file_unique_id", "")[:6]

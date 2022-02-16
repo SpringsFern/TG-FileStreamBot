@@ -5,14 +5,28 @@ import asyncio
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
-from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
+from urllib.parse import quote_plus
+from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type
 from WebStreamer.vars import Var, Strings
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-@StreamBot.on_message(filters.private & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
+@StreamBot.on_message(
+    filters.private
+    & (
+        filters.document
+        | filters.video
+        | filters.audio
+        | filters.animation
+        | filters.voice
+        | filters.video_note
+        | filters.photo
+        | filters.sticker
+    ),
+    group=4,
+)
 async def private_receive_handler(c: Client, m: Message):
     # Check The User is Banned or Not
     if await db.is_user_banned(m.from_user.id):
@@ -67,28 +81,21 @@ async def private_receive_handler(c: Client, m: Message):
         file_name = get_media_file_name(log_msg)
         file_size = humanbytes(get_media_file_size(log_msg))
 
-        stream_link = "https://{}/download/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/download/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    log_msg.message_id)
+        stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
 
         await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(log_msg)
-            page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, log_msg.message_id, media_type)
+            page_link = f"https://{Var.PAGE_LINK}/?id={log_msg.message_id}&type={media_type}"
         else:
-            page_link = "https://{}/watch/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/watch/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    log_msg.message_id)
-            
+            page_link = f"{Var.URL}watch/{log_msg.message_id}"
 
         await m.reply_text(
             text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
             parse_mode="HTML", 
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
-            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf_{log_msg.message_id}")]]),
+            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{log_msg.message_id}_{get_media_file_unique_id(log_msg)}")]]),
             quote=True
         )
     except FloodWait as e:
@@ -109,7 +116,7 @@ async def channel_receive_handler(bot, broadcast):
         #                             Var.PORT,
         #                             log_msg.message_id)
         await log_msg.reply_text(
-            text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/{(await bot.get_me()).username}?start=msgid_{str(log_msg.message_id)}",
+            text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/{(await bot.get_me()).username}?start=msgid_{str(log_msg.message_id)}_{get_media_file_unique_id(log_msg)}",
             # text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/FxStreamBot?start=msgid_{str(log_msg.message_id)}",
             quote=True,
             parse_mode="Markdown"
@@ -118,7 +125,7 @@ async def channel_receive_handler(bot, broadcast):
             chat_id=broadcast.chat.id,
             message_id=broadcast.message_id,
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/{(await bot.get_me()).username}?start=msgid_{str(log_msg.message_id)}")]])
+                [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/{(await bot.get_me()).username}?start=msgid_{str(log_msg.message_id)}_{get_media_file_unique_id(log_msg)}")]])
             # [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/FxStreamBot?start=msgid_{str(log_msg.message_id)}")]])
         )
     except FloodWait as w:
@@ -139,20 +146,14 @@ async def private_receive_handler(c: Client, m: Message):
         file_name = get_media_file_name(log_msg)
         file_size = humanbytes(get_media_file_size(log_msg))
 
-        stream_link = "https://{}/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    log_msg.message_id)
+        stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
 
-        await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** {m.chat.title}\n**Group ɪᴅ :** `{m.chat.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
+        await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(log_msg)
-            page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, log_msg.message_id, media_type)
+            page_link = f"https://{Var.PAGE_LINK}/?id={log_msg.message_id}&type={media_type}"
         else:
-            page_link = "https://{}/watch/{}".format(Var.FQDN, log_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/watch/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    log_msg.message_id)
+            page_link = f"{Var.URL}watch/{log_msg.message_id}"
 
         await m.reply_text(
             text=Strings.group_msgs_text.format(file_name, file_size, stream_link, page_link),

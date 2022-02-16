@@ -1,9 +1,10 @@
 import random
+from urllib.parse import quote_plus
 from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var, Strings
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
-from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_mime_type
+from WebStreamer.utils.mimetype import get_hash, get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type
 from pyrogram import filters, Client
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery
 from pyrogram.errors import UserNotParticipant
@@ -89,37 +90,38 @@ async def cb_data(bot, update: CallbackQuery):
     else:
         usr_cmd = update.data.split("_")
         if usr_cmd[0] == "msgdelconf":
+            await update.answer("Sorry on 16-02-2022 i changed How Delete Link Button Work | Added file_unique_id to verify User Requested file is same or not", show_alert=True)
+        elif usr_cmd[0] == "msgdelconf2":
             await update.message.edit_text(
             text=update.message.text,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("✔️", callback_data=f"msgdelyes_{usr_cmd[1]}"), InlineKeyboardButton("✖️", callback_data=f"msgdelno_{usr_cmd[1]}")]])
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("✔️", callback_data=f"msgdelyes_{usr_cmd[1]}_{usr_cmd[2]}"), InlineKeyboardButton("✖️", callback_data=f"msgdelno_{usr_cmd[1]}_{usr_cmd[2]}")]])
         )
         elif usr_cmd[0] == "msgdelno":
-            page_link = "https://{}/watch/{}".format(Var.FQDN, usr_cmd[1]) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/watch/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    usr_cmd[1])
-            stream_link = "https://{}/download/{}".format(Var.FQDN, usr_cmd[1]) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/download/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    usr_cmd[1])
+            page_link = f"{Var.URL}watch/{usr_cmd[1]}"
+
+            stream_link = f"{Var.URL}{usr_cmd[1]}"
             await update.message.edit_text(
             text=update.message.text,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
-            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf_{usr_cmd[1]}")]])
+            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{usr_cmd[1]}_{usr_cmd[2]}")]])
         )
         elif usr_cmd[0] == "msgdelyes":
             try:
-                await bot.delete_messages(
-                    chat_id=Var.BIN_CHANNEL,
-                    message_ids=int(usr_cmd[1])
-                )
-                await update.message.edit_text(
-                text=update.message.text,
-                disable_web_page_preview=True,
-                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Link Deleted", callback_data="msgdeleted")]])
-                )
+                resp = await bot.get_messages(Var.BIN_CHANNEL, usr_cmd[1])
+                if get_media_file_unique_id(resp) == str(usr_cmd[2]):
+                    await bot.delete_messages(
+                        chat_id=Var.BIN_CHANNEL,
+                        message_ids=int(usr_cmd[1])
+                    )
+                    await update.message.edit_text(
+                    text=update.message.text,
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Link Deleted", callback_data="msgdeleted")]])
+                    )
+                else:
+                    await update.answer("Message id and file_unique_id miss match", show_alert=True)
             except Exception as e:
                 print(e)
                 await update.message.reply_text(
@@ -194,6 +196,7 @@ async def start(b, m):
                                                                                        
                                                                             
     else:
+        usr_cmd=m.text.split("_")
         if Var.FORCE_UPDATES_CHANNEL:
             try:
                 user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
@@ -226,30 +229,24 @@ async def start(b, m):
                     parse_mode="markdown",
                     disable_web_page_preview=True)
                 return
-        get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd))
+        get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd[1]))
         file_name = get_media_file_name(get_msg)
         file_size = humanbytes(get_media_file_size(get_msg))
 
-        stream_link = "https://{}/download/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/download/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    get_msg.message_id)
+        stream_link = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
 
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(get_msg)
-            page_link = "https://{}/?id={}&type={}".format(Var.PAGE_LINK, get_msg.message_id, media_type)
+            page_link = f"https://{Var.PAGE_LINK}/?id={get_msg.message_id}&type={media_type}"
         else:
-            page_link = "https://{}/watch/{}".format(Var.FQDN, get_msg.message_id) if Var.ON_HEROKU or Var.NO_PORT else \
-            "http://{}:{}/watch/{}".format(Var.FQDN,
-                                    Var.PORT,
-                                    get_msg.message_id)
+            page_link = f"{Var.URL}watch/{get_msg.message_id}"
 
         await m.reply_text(
             text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
             parse_mode="HTML", 
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
-            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf_{get_msg.message_id}")]]),
+            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{get_msg.message_id}_{get_media_file_unique_id(get_msg)}")]]),
             quote=True
         )
 
