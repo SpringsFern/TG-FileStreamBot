@@ -234,7 +234,11 @@ async def start(b, m):
         file_name = get_media_file_name(get_msg)
         file_size = humanbytes(get_media_file_size(get_msg))
 
-        stream_link = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
+        settings, in_db = await db.Current_Settings_Link(m.from_user.id)
+        if in_db and not settings['LinkWithName']:
+            stream_link = f"{Var.URL}{get_msg.message_id}"
+        else:
+            stream_link = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
 
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(get_msg)
@@ -262,7 +266,7 @@ async def start(bot, update):
     )
 
 
-@StreamBot.on_message(filters.command('help') & filters.private & ~filters.edited)
+@StreamBot.on_message((filters.command('help') | filters.regex("📚Help")) & filters.private & ~filters.edited)
 async def help_handler(bot, message):
     # Check The User is Banned or Not
     if await db.is_user_banned(message.from_user.id):
@@ -321,37 +325,6 @@ async def help_handler(bot, message):
         )
 
 # ----------------------------- for me you can remove below line -------------------------------------------------------
-
-SETTINGS_TEXT = """
-<b>Settings</b>
-<i>🔸No Settings Available</i>
-"""
-
-@StreamBot.on_message(filters.private & filters.command("settings"))
-async def start(b, m):
-    if await db.is_user_banned(m.from_user.id):
-        await b.send_message(
-                chat_id=m.chat.id,
-                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
-                parse_mode="markdown",
-                disable_web_page_preview=True
-            )
-        await b.send_message(
-                Var.BIN_CHANNEL,
-                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \nUser ID: {m.chat.id}**"
-             )
-    else:
-        if not await db.is_user_exist(m.from_user.id):
-            await db.add_user(m.from_user.id)
-            await b.send_message(
-                Var.BIN_CHANNEL,
-                f"**Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ:** \n\n__Mʏ Nᴇᴡ Fʀɪᴇɴᴅ__ [{m.from_user.first_name}](tg://user?id={m.from_user.id}) __Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!__"
-            )
-        await m.reply_text(
-            text=SETTINGS_TEXT,
-            parse_mode="HTML",
-            disable_web_page_preview=True,
-              )
 
 @StreamBot.on_message(filters.command('getid') & filters.private & ~filters.edited)
 async def start(b, m):

@@ -10,6 +10,7 @@ class Database:
         self.db = self._client[database_name]
         self.col = self.db.users
         self.black = self.db.blacklist
+        self.settings = self.db.settings
         # self.db2 = self._client["UserID"]
 
 # ----------------------add ,check or remove user----------------------
@@ -76,3 +77,34 @@ class Database:
 #         self.add = self.db2[str(id)]
 #         user_data = self.sent_data(id, message_id , filename, filesize)
 #         await self.add.insert_one(user_data)
+
+
+# ----------------------Settings----------------------
+
+    def settings_temp(self, id):
+        return dict(
+            id=id,
+            LinkWithName=True
+        )
+
+    async def setttings_default(self, id):
+        user = self.settings_temp(id)
+        await self.settings.insert_one(user)
+
+    async def Settings_Link_WithName(self, id):
+        await self.settings.update_one({'id': int(id)},{
+          '$set': {
+            'LinkWithName': True
+          },
+        }, upsert=False)
+
+    async def Settings_Link_WithoutName(self, id):
+        await self.settings.update_one({'id': int(id)},{
+          '$set': {
+            'LinkWithName': False
+          },
+        }, upsert=False)
+
+    async def Current_Settings_Link(self, id):
+        user = await self.settings.find_one({'id': int(id)})
+        return user, True if user else False
