@@ -61,7 +61,7 @@ ABOUT_BUTTONS = InlineKeyboardMarkup(
         [InlineKeyboardButton("📢 Bot Channel", url=f'https://t.me/{Var.UPDATES_CHANNEL}')]
         ]
     )
-deldbtnmsg=["Your Already Deleted the Link", "You can't undo the Action", "You can Resend the File to Regenerate New Link", "Why Clicking me Your Link is Dead", ]
+deldbtnmsg=["Your Already Deleted the Link", "You can't undo the Action", "You can Resend the File to Regenerate New Link", "Why Clicking me Your Link is Dead", "This is Just a Button Showing that Your Link is Deleted"]
 
 @StreamBot.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
@@ -90,7 +90,7 @@ async def cb_data(bot, update: CallbackQuery):
     else:
         usr_cmd = update.data.split("_")
         if usr_cmd[0] == "msgdelconf":
-            await update.answer("Sorry on 16-02-2022 i changed How Delete Link Button Work | Added file_unique_id to verify User Requested file is same or not", show_alert=True)
+            await update.answer("Sorry i changed How Delete Link Button Work | Added file_unique_id to verify User Requested file is same or not", show_alert=True)
         elif usr_cmd[0] == "msgdelconf2":
             await update.message.edit_text(
             text=update.message.text,
@@ -109,8 +109,8 @@ async def cb_data(bot, update: CallbackQuery):
         )
         elif usr_cmd[0] == "msgdelyes":
             try:
-                resp = await bot.get_messages(Var.BIN_CHANNEL, usr_cmd[1])
-                if get_media_file_unique_id(resp) == str(usr_cmd[2]):
+                resp = await bot.get_messages(Var.BIN_CHANNEL, int(usr_cmd[1]))
+                if get_media_file_unique_id(resp) == usr_cmd[2]:
                     await bot.delete_messages(
                         chat_id=Var.BIN_CHANNEL,
                         message_ids=int(usr_cmd[1])
@@ -120,6 +120,8 @@ async def cb_data(bot, update: CallbackQuery):
                     disable_web_page_preview=True,
                     reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Link Deleted", callback_data="msgdeleted")]])
                     )
+                elif resp.empty:
+                    await update.answer("Sorry Your File is Missing from the Server", show_alert=True)
                 else:
                     await update.answer("Message id and file_unique_id miss match", show_alert=True)
             except Exception as e:
@@ -146,7 +148,7 @@ async def start(b, m):
             )
         await b.send_message(
                 Var.BIN_CHANNEL,
-                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
+                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \nUser ID: {m.chat.id}**"
              )
         return
     if not await db.is_user_exist(m.from_user.id):
@@ -273,7 +275,7 @@ async def help_handler(bot, message):
             )
         await bot.send_message(
                 Var.BIN_CHANNEL,
-                f"**Banned User** [{message.from_user.first_name}](tg://user?id={message.from_user.id}) **Trying to Access the bot \n User ID: {message.chat.id,}**"
+                f"**Banned User** [{message.from_user.first_name}](tg://user?id={message.from_user.id}) **Trying to Access the bot \nUser ID: {message.chat.id}**"
              )
         return
     if not await db.is_user_exist(message.from_user.id):
@@ -337,7 +339,7 @@ async def start(b, m):
             )
         await b.send_message(
                 Var.BIN_CHANNEL,
-                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
+                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \nUser ID: {m.chat.id}**"
              )
     else:
         if not await db.is_user_exist(m.from_user.id):
@@ -351,18 +353,10 @@ async def start(b, m):
             parse_mode="HTML",
             disable_web_page_preview=True,
               )
-@StreamBot.on_message(filters.command('ytdl') & filters.private & ~filters.edited)
-async def start(b, m):
-    await b.send_message(
-        chat_id=m.chat.id,
-        text="Hi\nI Removed ytdl command You can use Other Bots\n@oitubebot",
-        parse_mode="markdown",
-        disable_web_page_preview=True
-    )
 
 @StreamBot.on_message(filters.command('getid') & filters.private & ~filters.edited)
 async def start(b, m):
     await b.send_message(
         chat_id=m.chat.id,
-        text=f"Your ID is: {m.chat.id}"
+        text=f"Your ID is: `{m.chat.id}`"
     )
