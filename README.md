@@ -3,7 +3,7 @@
   <a href="https://github.com/DeekshithSH/FileStreamBot">
     <img src="https://socialify.git.ci/DeekshithSH/FileStreamBot/image?description=1&descriptionEditable=Telegram%20File%20to%20Link%20Fastest%20Bot%20%2C%20also%20used%20for%20Movies%20streaming%20Generate%20Direct%20Links&font=KoHo&forks=1&logo=https%3A%2F%2Fi.ibb.co%2FZJzJ9Hq%2Flink-3x.png&pattern=Brick%20Wall&stargazers=1&theme=Dark" alt="Cover Image" width="550">
   </a>
-  
+
   <p align="center">
     A Telegram bot to all media and documents files to web link .<br>
     <br />
@@ -17,7 +17,7 @@
 
 <br>
 
-#### Demo Bot:  
+#### Demo Bot:
 <a href="https://telegram.me/DirectLinkGenerator_Bot"><img src="https://img.shields.io/badge/Demo-Telegram%20Bot-blue.svg?logo=telegram"></a>
 
 <hr>
@@ -57,7 +57,7 @@ Either you could locally host or deploy on [Heroku](https://heroku.com)
 Press the below button to Fast deploy on Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-  
+
 :warning: Don't deploy the main repository, because it has been blocked by Heroku, Instead make a fork and deploy it
 
 then goto the <a href="#mandatory-vars">variables tab</a> for more info on setting up environmental variables. </details>
@@ -134,7 +134,7 @@ DATABASE_URL=mongodb_uri
   <summary><b>How to Use :</b></summary>
 
 :warning: **Before using the  bot, don't forget to add the bot to the `BIN_CHANNEL` as an Admin**
- 
+
 `/start` : To check if the bot is alive or not.
 
 To get an instant stream link, just forward any media to the bot and boom, its fast af.

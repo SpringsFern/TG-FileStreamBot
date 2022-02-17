@@ -1,4 +1,4 @@
-# (c) @Avishkarpatil 
+# (c) @Avishkarpatil
 
 
 import asyncio
@@ -92,7 +92,7 @@ async def private_receive_handler(c: Client, m: Message):
 
         await m.reply_text(
             text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
-            parse_mode="HTML", 
+            parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
             [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{log_msg.message_id}_{get_media_file_unique_id(log_msg)}")]]),
@@ -157,7 +157,7 @@ async def private_receive_handler(c: Client, m: Message):
 
         await m.reply_text(
             text=Strings.group_msgs_text.format(file_name, file_size, stream_link, page_link),
-            parse_mode="HTML", 
+            parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]]),
             quote=True

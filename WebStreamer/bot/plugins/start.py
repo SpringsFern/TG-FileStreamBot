@@ -194,9 +194,9 @@ async def start(b, m):
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=START_BUTTONS
-              )                                                                         
-                                                                                       
-                                                                            
+            )
+
+
     else:
         usr_cmd=m.text.split("_")
         if Var.FORCE_UPDATES_CHANNEL:
@@ -218,7 +218,6 @@ async def start(b, m):
                         [[
                           InlineKeyboardButton("🤖 Jᴏɪɴ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ", url=f"https://t.me/{Var.UPDATES_CHANNEL}")],
                          [InlineKeyboardButton("🔄 Refresh / Try Again", url=f"https://t.me/{(await b.get_me()).username}?start=msgid_{usr_cmd}")
-                        
                         ]]
                     ),
                     parse_mode="markdown"
@@ -245,7 +244,7 @@ async def start(b, m):
 
         await m.reply_text(
             text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
-            parse_mode="HTML", 
+            parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
             [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{get_msg.message_id}_{get_media_file_unique_id(get_msg)}")]]),
