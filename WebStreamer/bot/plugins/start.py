@@ -214,6 +214,12 @@ async def start(b, m):
         file_name = get_media_file_name(get_msg)
         file_size = humanbytes(get_media_file_size(get_msg))
 
+        if Var.PAGE_LINK:
+            media_type = get_media_mime_type(get_msg)
+            page_link = f"https://{Var.PAGE_LINK}/?id={get_msg.message_id}&type={media_type}"
+        else:
+            page_link = f"{Var.URL}watch/{get_msg.message_id}"
+
         settings, in_db = await db.Current_Settings_Link(m.from_user.id)
         if in_db and settings['LinkWithBoth']:
             stream_link = f"{Var.URL}{get_msg.message_id}"
@@ -226,18 +232,12 @@ async def start(b, m):
             stream_link = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
             Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
 
-        if Var.PAGE_LINK:
-            media_type = get_media_mime_type(get_msg)
-            page_link = f"https://{Var.PAGE_LINK}/?id={get_msg.message_id}&type={media_type}"
-        else:
-            page_link = f"{Var.URL}watch/{get_msg.message_id}"
-
         await m.reply_text(
             text=Stream_Text,
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
-            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{get_msg.message_id}_{get_media_file_unique_id(get_msg)}")]]),
+            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{get_msg.message_id}_{usr_cmd[1]}")]]),
             quote=True
         )
 
