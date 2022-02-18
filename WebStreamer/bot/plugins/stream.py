@@ -98,14 +98,13 @@ async def private_receive_handler(c: Client, m: Message):
             stream_link = f"{Var.URL}{log_msg.message_id}"
             Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
         else:
-            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
             stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
+            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
 
         await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
 
         await m.reply_text(
-            text=Stream_Text,
-            # (file_name, file_size, stream_link, page_link),
+            text=Stream_Text
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
