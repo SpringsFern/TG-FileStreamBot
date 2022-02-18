@@ -84,7 +84,8 @@ class Database:
     def settings_temp(self, id):
         return dict(
             id=id,
-            LinkWithName=True
+            LinkWithName=True,
+            LinkWithBoth=False
         )
 
     async def setttings_default(self, id):
@@ -94,17 +95,26 @@ class Database:
     async def Settings_Link_WithName(self, id):
         await self.settings.update_one({'id': int(id)},{
           '$set': {
-            'LinkWithName': True
+            'LinkWithName': True,
+            'LinkWithBoth': False
           },
         }, upsert=False)
 
     async def Settings_Link_WithoutName(self, id):
         await self.settings.update_one({'id': int(id)},{
           '$set': {
-            'LinkWithName': False
+            'LinkWithName': False,
+            'LinkWithBoth': False
           },
         }, upsert=False)
 
     async def Current_Settings_Link(self, id):
         user = await self.settings.find_one({'id': int(id)})
         return user, True if user else False
+
+    async def Settings_Link_WithBoth(self, id):
+        await self.settings.update_one({'id': int(id)},{
+          '$set': {
+            'LinkWithBoth': True
+          },
+        }, upsert=False)

@@ -8,6 +8,7 @@ db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 SETTINGS_TEXT = """
 <b>Settings</b>
 <i>🔸Select an option from keyboard</i>
+<i>🔸 Settings Will Reset if a New Update comes for Settings</i>
 """
 SETTINGS_BTN=ReplyKeyboardMarkup(
         [
@@ -18,7 +19,8 @@ SETTINGS_BTN=ReplyKeyboardMarkup(
     )
 SETTINGS_LinkType_BTN=ReplyKeyboardMarkup(
         [
-            ["🔗With Name","🔗Without Name","🔗Current Type"]
+            ["🔗With Name","🔗Without Name"],
+            ["🔗With Both", "🔗Current Type"]
         ],
         resize_keyboard=True
     )
@@ -83,7 +85,7 @@ async def close_settings(b, m: Message):
         user, in_db = await db.Current_Settings_Link(m.from_user.id)
 
         await m.reply_text(
-        text=f"Link With FileName: `{user['LinkWithName']}`",
+        text=f"Generate Link with FileName",
         parse_mode="Markdown",
         disable_web_page_preview=True,
         reply_markup=ReplyKeyboardRemove(True)
@@ -107,7 +109,7 @@ async def close_settings(b, m):
         user, in_db = await db.Current_Settings_Link(m.from_user.id)
 
         await m.reply_text(
-        text=f"Link With FileName: `{user['LinkWithName']}`",
+        text=f"Generate Link without FileName",
         parse_mode="Markdown",
         disable_web_page_preview=True,
         reply_markup=ReplyKeyboardRemove(True)
@@ -127,8 +129,39 @@ async def close_settings(b, m):
         if not in_db:
             await m.reply_text(text="First Send /settings then use This Keyword")
             return
+        if in_db and settings['LinkWithBoth']:
+            text="New Link will Generate with and without FileName\nYou will get Two Download Link"
+        elif in_db and not settings['LinkWithName']:
+            text="Generate Link without FileName"
+        elif in_db and settings['LinkWithName']:
+            text="Generate Link with FileName"
+        else:
+            text="Generate Link with FileName"
         await m.reply_text(
-        text=f"Link With Name: `{settings['LinkWithName']}`",
+        text=text,
+        parse_mode="Markdown",
+        disable_web_page_preview=True,
+        reply_markup=ReplyKeyboardRemove(True)
+        )
+    except Exception as e:
+        await m.reply_text(
+        text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`\n#Settings",
+        disable_web_page_preview=True,
+        parse_mode="Markdown",
+        reply_markup=ReplyKeyboardRemove(True)
+        )
+
+@StreamBot.on_message(filters.private & filters.regex("🔗With Both") & ~filters.edited)
+async def link_type(b, m):
+    try:
+        user, in_db = await db.Current_Settings_Link(m.from_user.id)
+        if not in_db:
+            await m.reply_text(text="First Send /settings then use This Keyword")
+            return
+        await db.Settings_Link_WithBoth(m.from_user.id)
+        user, in_db = await db.Current_Settings_Link(m.from_user.id)
+        await m.reply_text(
+        text=f"New Link will Generate with and without FileName\nYou will get Two Download Link",
         parse_mode="Markdown",
         disable_web_page_preview=True,
         reply_markup=ReplyKeyboardRemove(True)

@@ -2,12 +2,13 @@
 
 
 import asyncio
+import WebStreamer.utils.Translation as Translation
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from urllib.parse import quote_plus
 from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type
-from WebStreamer.vars import Var, Strings
+from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
@@ -28,6 +29,7 @@ db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
     group=4,
 )
 async def private_receive_handler(c: Client, m: Message):
+    lang = getattr(Translation, m.from_user.language_code)
     # Check The User is Banned or Not
     if await db.is_user_banned(m.from_user.id):
         await c.send_message(
@@ -81,21 +83,29 @@ async def private_receive_handler(c: Client, m: Message):
         file_name = get_media_file_name(log_msg)
         file_size = humanbytes(get_media_file_size(log_msg))
 
-        settings, in_db = await db.Current_Settings_Link(m.from_user.id)
-        if in_db and not settings['LinkWithName']:
-            stream_link = f"{Var.URL}{log_msg.message_id}"
-        else:
-            stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
-
-        await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(log_msg)
             page_link = f"https://{Var.PAGE_LINK}/?id={log_msg.message_id}&type={media_type}"
         else:
             page_link = f"{Var.URL}watch/{log_msg.message_id}"
 
+        settings, in_db = await db.Current_Settings_Link(m.from_user.id)
+        if in_db and settings['LinkWithBoth']:
+            stream_link = f"{Var.URL}{log_msg.message_id}"
+            stream_link2 = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
+            Stream_Text=lang.msg_bothlink_text.format(file_name, file_size, stream_link, stream_link2, page_link)
+        elif in_db and not settings['LinkWithName']:
+            stream_link = f"{Var.URL}{log_msg.message_id}"
+            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
+        else:
+            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
+            stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
+
+        await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
+
         await m.reply_text(
-            text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
+            text=Stream_Text,
+            # (file_name, file_size, stream_link, page_link),
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
@@ -146,6 +156,7 @@ async def channel_receive_handler(bot, broadcast):
 @StreamBot.on_message(filters.group & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(c: Client, m: Message):
     try:
+        lang = getattr(Translation, m.from_user.language_code)
         log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
         file_name = get_media_file_name(log_msg)
         file_size = humanbytes(get_media_file_size(log_msg))
@@ -160,7 +171,7 @@ async def private_receive_handler(c: Client, m: Message):
             page_link = f"{Var.URL}watch/{log_msg.message_id}"
 
         await m.reply_text(
-            text=Strings.group_msgs_text.format(file_name, file_size, stream_link, page_link),
+            text=lang.group_msgs_text.format(file_name, file_size, stream_link, page_link),
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]]),

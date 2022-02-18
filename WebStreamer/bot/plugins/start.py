@@ -1,38 +1,16 @@
 import random
 from urllib.parse import quote_plus
 from WebStreamer.bot import StreamBot
-from WebStreamer.vars import Var, Strings
+from WebStreamer.vars import Var
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.mimetype import get_hash, get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type
 from pyrogram import filters, Client
+import WebStreamer.utils.Translation as Translation
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery
 from pyrogram.errors import UserNotParticipant
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
-
-START_TEXT = """
-<i>👋 Hᴇʏ,</i>{}\n
-<i>I'm Telegram Files Streaming Bot As Well Direct Links Generator</i>\n
-<i>👤 Total Users: {}</i>\n
-<i>Cʟɪᴄᴋ ᴏɴ Hᴇʟᴘ ᴛᴏ ɢᴇᴛ ᴍᴏʀᴇ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</i>\n
-<i><u>𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u></i>
-<b>🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ ʟᴇᴀᴅꜱ ᴛᴏ ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴ ʏᴏᴜ.</b>\n\n"""
-
-HELP_TEXT = """
-<i>- Sᴇɴᴅ ᴍᴇ ᴀɴʏ ꜰɪʟᴇ (ᴏʀ) ᴍᴇᴅɪᴀ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.</i>
-<i>- I ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ᴇxᴛᴇʀɴᴀʟ ᴅɪʀᴇᴄᴛ ᴅᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ !.</i>
-<i>- Tʜɪs Pᴇʀᴍᴇᴀɴᴛ Lɪɴᴋ Wɪᴛʜ Fᴀsᴛᴇsᴛ Sᴘᴇᴇᴅ</i>
-<i>  If First Link is not working then Download from Stream Link</i>
-<u>🔸 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u>\n
-<b>🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ ʟᴇᴀᴅꜱ ᴛᴏ ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴ ʏᴏᴜ.</b>\n
-<i>Cᴏɴᴛᴀᴄᴛ ᴅᴇᴠᴇʟᴏᴘᴇʀ (ᴏʀ) ʀᴇᴘᴏʀᴛ ʙᴜɢꜱ</i> <b>: <a href='https://t.me/PublicLinkGenerator'>[ ᴄʟɪᴄᴋ ʜᴇʀᴇ ]</a></b>"""
-
-ABOUT_TEXT = """
-<b>⚜ Mʏ ɴᴀᴍᴇ : Public Link Generator</b>\n
-<b>🔸Vᴇʀꜱɪᴏɴ : 3.0.3.1</b>\n
-<b>🔹Lᴀꜱᴛ ᴜᴘᴅᴀᴛᴇᴅ : [ 5-Feb-22 ] 4:28 PM</b>
-"""
 
 START_BUTTONS = InlineKeyboardMarkup(
         [[
@@ -65,21 +43,22 @@ deldbtnmsg=["Your Already Deleted the Link", "You can't undo the Action", "You c
 
 @StreamBot.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
+    lang = getattr(Translation, update.from_user.language_code)
     if update.data == "home":
         await update.message.edit_text(
-            text=START_TEXT.format(update.from_user.mention, await db.total_users_count()),
+            text=lang.START_TEXT.format(update.from_user.mention, await db.total_users_count()),
             disable_web_page_preview=True,
             reply_markup=START_BUTTONS
         )
     elif update.data == "help":
         await update.message.edit_text(
-            text=HELP_TEXT,
+            text=lang.HELP_TEXT,
             disable_web_page_preview=True,
             reply_markup=HELP_BUTTONS
         )
     elif update.data == "about":
         await update.message.edit_text(
-            text=ABOUT_TEXT,
+            text=lang.ABOUT_TEXT,
             disable_web_page_preview=True,
             reply_markup=ABOUT_BUTTONS
         )
@@ -138,6 +117,7 @@ async def cb_data(bot, update: CallbackQuery):
 
 @StreamBot.on_message(filters.command('start') & filters.private & ~filters.edited)
 async def start(b, m):
+    lang = getattr(Translation, m.from_user.language_code)
     # Check The User is Banned or Not
     if await db.is_user_banned(m.from_user.id):
         await b.send_message(
@@ -190,7 +170,7 @@ async def start(b, m):
                     disable_web_page_preview=True)
                 return
         await m.reply_text(
-            text=START_TEXT.format(m.from_user.mention, await db.total_users_count()),
+            text=lang.START_TEXT.format(m.from_user.mention, await db.total_users_count()),
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=START_BUTTONS
@@ -235,9 +215,15 @@ async def start(b, m):
         file_size = humanbytes(get_media_file_size(get_msg))
 
         settings, in_db = await db.Current_Settings_Link(m.from_user.id)
-        if in_db and not settings['LinkWithName']:
+        if in_db and settings['LinkWithBoth']:
             stream_link = f"{Var.URL}{get_msg.message_id}"
+            stream_link2 = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
+            Stream_Text=lang.msg_bothlink_text.format(file_name, file_size, stream_link, stream_link2, page_link)
+        elif in_db and not settings['LinkWithName']:
+            stream_link = f"{Var.URL}{get_msg.message_id}"
+            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
         else:
+            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
             stream_link = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
 
         if Var.PAGE_LINK:
@@ -247,7 +233,7 @@ async def start(b, m):
             page_link = f"{Var.URL}watch/{get_msg.message_id}"
 
         await m.reply_text(
-            text=Strings.msg_text.format(file_name, file_size, stream_link, page_link),
+            text=Stream_Text,
             parse_mode="HTML",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
@@ -259,8 +245,9 @@ async def start(b, m):
 
 @StreamBot.on_message(filters.private & filters.command(["about"]))
 async def start(bot, update):
+    lang = getattr(Translation, update.from_user.language_code)
     await update.reply_text(
-        text=ABOUT_TEXT.format(update.from_user.mention),
+        text=lang.ABOUT_TEXT.format(update.from_user.mention),
         disable_web_page_preview=True,
         reply_markup=ABOUT_BUTTONS
     )
@@ -268,6 +255,7 @@ async def start(bot, update):
 
 @StreamBot.on_message((filters.command('help') | filters.regex("📚Help")) & filters.private & ~filters.edited)
 async def help_handler(bot, message):
+    lang = getattr(Translation, message.from_user.language_code)
     # Check The User is Banned or Not
     if await db.is_user_banned(message.from_user.id):
         await bot.send_message(
@@ -318,7 +306,7 @@ async def help_handler(bot, message):
                 disable_web_page_preview=True)
             return
     await message.reply_text(
-        text=HELP_TEXT,
+        text=lang.HELP_TEXT,
         parse_mode="HTML",
         disable_web_page_preview=True,
         reply_markup=HELP_BUTTONS
