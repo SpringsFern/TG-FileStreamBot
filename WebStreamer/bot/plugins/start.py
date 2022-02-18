@@ -178,7 +178,6 @@ async def start(b, m):
 
 
     else:
-        usr_cmd=m.text.split("_")
         if Var.FORCE_UPDATES_CHANNEL:
             try:
                 user = await b.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
@@ -210,7 +209,7 @@ async def start(b, m):
                     parse_mode="markdown",
                     disable_web_page_preview=True)
                 return
-        get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd[1]))
+        get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd))
         file_name = get_media_file_name(get_msg)
         file_size = humanbytes(get_media_file_size(get_msg))
 
@@ -236,8 +235,7 @@ async def start(b, m):
             text=Stream_Text,
             parse_mode="HTML",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
-            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{get_msg.message_id}_{usr_cmd[1]}")]]),
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]]),
             quote=True
         )
 
