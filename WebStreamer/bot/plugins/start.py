@@ -43,7 +43,8 @@ deldbtnmsg=["Your Already Deleted the Link", "You can't undo the Action", "You c
 
 @StreamBot.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
-    lang = getattr(Translation, update.from_user.language_code)
+    # lang = getattr(Translation, update.from_user.language_code)
+    lang = getattr(Translation, "en")
     if update.data == "home":
         await update.message.edit_text(
             text=lang.START_TEXT.format(update.from_user.mention, await db.total_users_count()),
@@ -117,7 +118,8 @@ async def cb_data(bot, update: CallbackQuery):
 
 @StreamBot.on_message(filters.command('start') & filters.private & ~filters.edited)
 async def start(b, m):
-    lang = getattr(Translation, m.from_user.language_code)
+    # lang = getattr(Translation, m.from_user.language_code)
+    lang = getattr(Translation, "en")
     # Check The User is Banned or Not
     if await db.is_user_banned(m.from_user.id):
         await b.send_message(
@@ -243,7 +245,8 @@ async def start(b, m):
 
 @StreamBot.on_message(filters.private & filters.command(["about"]))
 async def start(bot, update):
-    lang = getattr(Translation, update.from_user.language_code)
+    # lang = getattr(Translation, update.from_user.language_code)
+    lang = getattr(Translation, "en")
     await update.reply_text(
         text=lang.ABOUT_TEXT.format(update.from_user.mention),
         disable_web_page_preview=True,
@@ -253,7 +256,8 @@ async def start(bot, update):
 
 @StreamBot.on_message((filters.command('help') | filters.regex("📚Help")) & filters.private & ~filters.edited)
 async def help_handler(bot, message):
-    lang = getattr(Translation, message.from_user.language_code)
+    # lang = getattr(Translation, message.from_user.language_code)
+    lang = getattr(Translation, "en")
     # Check The User is Banned or Not
     if await db.is_user_banned(message.from_user.id):
         await bot.send_message(

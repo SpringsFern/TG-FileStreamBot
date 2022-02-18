@@ -29,7 +29,8 @@ db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
     group=4,
 )
 async def private_receive_handler(c: Client, m: Message):
-    lang = getattr(Translation, m.from_user.language_code)
+    # lang = getattr(Translation, m.from_user.language_code)
+    lang = getattr(Translation, "en")
     # Check The User is Banned or Not
     if await db.is_user_banned(m.from_user.id):
         await c.send_message(
@@ -155,7 +156,8 @@ async def channel_receive_handler(bot, broadcast: Message):
 @StreamBot.on_message(filters.group & (filters.document | filters.video | filters.audio) & ~filters.edited, group=4)
 async def private_receive_handler(c: Client, m: Message):
     try:
-        lang = getattr(Translation, m.from_user.language_code)
+        # lang = getattr(Translation, m.from_user.language_code)
+        lang = getattr(Translation, "en")
         log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
         file_name = get_media_file_name(log_msg)
         file_size = humanbytes(get_media_file_size(log_msg))
