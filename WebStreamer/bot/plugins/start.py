@@ -223,8 +223,8 @@ async def start(b, m):
             stream_link = f"{Var.URL}{get_msg.message_id}"
             Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
         else:
-            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
             stream_link = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
+            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
 
         if Var.PAGE_LINK:
             media_type = get_media_mime_type(get_msg)
