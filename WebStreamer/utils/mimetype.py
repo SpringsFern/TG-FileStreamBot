@@ -33,7 +33,11 @@ def get_media_from_message(message: "Message") -> Any:
 
 def get_media_file_name(media_msg: Message) -> str:
     media = get_media_from_message(media_msg)
-    return getattr(media, "file_name", "None")
+    FileName=getattr(media, "file_name", "None")
+    if FileName:
+        return FileName
+    else:
+        return ""
 
 def get_media_file_size(m):
     media = get_media_from_message(m)
