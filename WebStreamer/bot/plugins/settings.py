@@ -1,3 +1,4 @@
+from WebStreamer.utils import Translation
 from WebStreamer.vars import Var
 from pyrogram.types import Message, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from pyrogram import Client, filters
@@ -5,11 +6,6 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-SETTINGS_TEXT = """
-<b>Settings</b>
-<i>🔸Select an option from keyboard</i>
-<i>🔸 Settings Will Reset if a New Update comes for Settings</i>
-"""
 SETTINGS_BTN=ReplyKeyboardMarkup(
         [
             ["🔗Link Type"],
@@ -27,16 +23,14 @@ SETTINGS_LinkType_BTN=ReplyKeyboardMarkup(
 
 @StreamBot.on_message(filters.private & filters.command("settings"))
 async def start(b: Client, m: Message):
+    # lang = getattr(Translation, m.from_user.language_code)
+    lang = getattr(Translation, "en")
     if await db.is_user_banned(m.from_user.id):
         await b.send_message(
                 chat_id=m.chat.id,
-                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                text=lang.ban_text,
                 parse_mode="markdown",
                 disable_web_page_preview=True
-            )
-        await b.send_message(
-                Var.BIN_CHANNEL,
-                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \nUser ID: {m.chat.id}**"
             )
         return
     if not await db.is_user_exist(m.from_user.id):
@@ -50,7 +44,7 @@ async def start(b: Client, m: Message):
         await db.setttings_default(m.from_user.id)
         await m.reply_text(text="Created Settings in DB")
     await m.reply_text(
-        text=SETTINGS_TEXT,
+        text=lang.SETTINGS_TEXT,
         parse_mode="HTML",
         disable_web_page_preview=True,
         reply_markup=SETTINGS_BTN
@@ -58,6 +52,8 @@ async def start(b: Client, m: Message):
 
 @StreamBot.on_message(filters.private & filters.regex("⚙️Close") & ~filters.edited)
 async def close_settings(b, m):
+    # lang = getattr(Translation, m.from_user.language_code)
+    lang = getattr(Translation, "en")
     await m.reply_text(
     text="Settings Closed",
     parse_mode="HTML",
@@ -67,6 +63,8 @@ async def close_settings(b, m):
 
 @StreamBot.on_message(filters.private & filters.regex("🔗Link Type") & ~filters.edited)
 async def close_settings(b, m):
+    # lang = getattr(Translation, m.from_user.language_code)
+    lang = getattr(Translation, "en")
     await m.reply_text(
     text="Select Link Type",
     parse_mode="HTML",
@@ -77,6 +75,8 @@ async def close_settings(b, m):
 @StreamBot.on_message(filters.private & filters.regex("🔗With Name") & ~filters.edited)
 async def close_settings(b, m: Message):
     try:
+        # lang = getattr(Translation, m.from_user.language_code)
+        lang = getattr(Translation, "en")
         user, in_db = await db.Current_Settings_Link(m.from_user.id)
         if not in_db:
             await m.reply_text(text="First Send /settings then use This Keyword")
@@ -101,6 +101,8 @@ async def close_settings(b, m: Message):
 @StreamBot.on_message(filters.private & filters.regex("🔗Without Name") & ~filters.edited)
 async def close_settings(b, m):
     try:
+        # lang = getattr(Translation, m.from_user.language_code)
+        lang = getattr(Translation, "en")
         user, in_db = await db.Current_Settings_Link(m.from_user.id)
         if not in_db:
             await m.reply_text(text="First Send /settings then use This Keyword")
@@ -125,6 +127,8 @@ async def close_settings(b, m):
 @StreamBot.on_message(filters.private & filters.regex("🔗Current Type") & ~filters.edited)
 async def close_settings(b, m):
     try:
+        # lang = getattr(Translation, m.from_user.language_code)
+        lang = getattr(Translation, "en")
         settings, in_db = await db.Current_Settings_Link(m.from_user.id)
         if not in_db:
             await m.reply_text(text="First Send /settings then use This Keyword")
@@ -154,6 +158,8 @@ async def close_settings(b, m):
 @StreamBot.on_message(filters.private & filters.regex("🔗With Both") & ~filters.edited)
 async def link_type(b, m):
     try:
+        # lang = getattr(Translation, m.from_user.language_code)
+        lang = getattr(Translation, "en")
         user, in_db = await db.Current_Settings_Link(m.from_user.id)
         if not in_db:
             await m.reply_text(text="First Send /settings then use This Keyword")

@@ -35,14 +35,10 @@ async def private_receive_handler(c: Client, m: Message):
     if await db.is_user_banned(m.from_user.id):
         await c.send_message(
                 chat_id=m.chat.id,
-                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                text=lang.ban_text,
                 parse_mode="markdown",
                 disable_web_page_preview=True
             )
-        await c.send_message(
-                Var.BIN_CHANNEL,
-                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \n User ID: {m.chat.id,}**"
-             )
         return
     if not await db.is_user_exist(m.from_user.id):
         await db.add_user(m.from_user.id)
@@ -56,7 +52,7 @@ async def private_receive_handler(c: Client, m: Message):
             if user.status == "kicked":
                 await c.send_message(
                     chat_id=m.chat.id,
-                    text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ.__\n\n  **Cᴏɴᴛᴀᴄᴛ Dᴇᴠᴇʟᴏᴘᴇʀ @DeekshithSH Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                    text=lang.ban_text,
                     parse_mode="markdown",
                     disable_web_page_preview=True
                 )

@@ -124,14 +124,10 @@ async def start(b, m):
     if await db.is_user_banned(m.from_user.id):
         await b.send_message(
                 chat_id=m.chat.id,
-                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                text=lang.ban_text,
                 parse_mode="markdown",
                 disable_web_page_preview=True
             )
-        await b.send_message(
-                Var.BIN_CHANNEL,
-                f"**Banned User** [{m.from_user.first_name}](tg://user?id={m.from_user.id}) **Trying to Access the bot \nUser ID: {m.chat.id}**"
-             )
         return
     if not await db.is_user_exist(m.from_user.id):
         await db.add_user(m.from_user.id)
@@ -147,7 +143,7 @@ async def start(b, m):
                 if user.status == "kicked":
                     await b.send_message(
                         chat_id=m.chat.id,
-                        text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                        text=lang.ban_text,
                         parse_mode="markdown",
                         disable_web_page_preview=True
                     )
@@ -186,7 +182,7 @@ async def start(b, m):
                 if user.status == "kicked":
                     await b.send_message(
                         chat_id=m.chat.id,
-                        text="**Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Qᴜɪᴄᴋʟʏ ᴄᴏɴᴛᴀᴄᴛ** @DeekshithSH",
+                        text=lang.ban_text,
                         parse_mode="markdown",
                         disable_web_page_preview=True
                     )
@@ -262,14 +258,10 @@ async def help_handler(bot, message):
     if await db.is_user_banned(message.from_user.id):
         await bot.send_message(
                 chat_id=message.chat.id,
-                text="__Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ__\n\n @DeekshithSH **Tʜᴇʏ Wɪʟʟ Hᴇʟᴘ Yᴏᴜ**",
+                text=lang.ban_text,
                 parse_mode="markdown",
                 disable_web_page_preview=True
             )
-        await bot.send_message(
-                Var.BIN_CHANNEL,
-                f"**Banned User** [{message.from_user.first_name}](tg://user?id={message.from_user.id}) **Trying to Access the bot \nUser ID: {message.chat.id}**"
-             )
         return
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id)
@@ -283,7 +275,7 @@ async def help_handler(bot, message):
             if user.status == "kicked":
                 await bot.send_message(
                     chat_id=message.chat.id,
-                    text="<i>Sᴏʀʀʏ Sɪʀ, Yᴏᴜ ᴀʀᴇ Bᴀɴɴᴇᴅ ᴛᴏ ᴜsᴇ ᴍᴇ. Cᴏɴᴛᴀᴄᴛ ᴛʜᴇ Dᴇᴠᴇʟᴏᴘᴇʀ</i>",
+                    text=lang.ban_text,
                     parse_mode="HTML",
                     disable_web_page_preview=True
                 )
