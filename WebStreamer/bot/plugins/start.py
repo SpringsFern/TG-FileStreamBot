@@ -4,7 +4,7 @@ from WebStreamer.bot import StreamBot
 from WebStreamer.vars import Var
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.utils.database import Database
-from WebStreamer.utils.mimetype import get_hash, get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type
+from WebStreamer.utils.file_properties import gen_link, get_hash, get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type
 from pyrogram import filters, Client
 import WebStreamer.utils.Translation as Translation
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery
@@ -78,14 +78,12 @@ async def cb_data(bot, update: CallbackQuery):
             reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("✔️", callback_data=f"msgdelyes_{usr_cmd[1]}_{usr_cmd[2]}"), InlineKeyboardButton("✖️", callback_data=f"msgdelno_{usr_cmd[1]}_{usr_cmd[2]}")]])
         )
         elif usr_cmd[0] == "msgdelno":
-            page_link = f"{Var.URL}watch/{usr_cmd[1]}"
-
-            stream_link = f"{Var.URL}{usr_cmd[1]}"
+            log_msg = await bot.get_messages(Var.BIN_CHANNEL, int(usr_cmd[1]))
+            Stream_Text, reply_markup, stream_link = await gen_link(log_msg, from_channel=False)
             await update.message.edit_text(
-            text=update.message.text,
+            text=Stream_Text,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
-            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{usr_cmd[1]}_{usr_cmd[2]}")]])
+            reply_markup=reply_markup
         )
         elif usr_cmd[0] == "msgdelyes":
             try:
@@ -208,32 +206,12 @@ async def start(b, m):
                     disable_web_page_preview=True)
                 return
         get_msg = await b.get_messages(chat_id=Var.BIN_CHANNEL, message_ids=int(usr_cmd))
-        file_name = get_media_file_name(get_msg)
-        file_size = humanbytes(get_media_file_size(get_msg))
-
-        if Var.PAGE_LINK:
-            media_type = get_media_mime_type(get_msg)
-            page_link = f"https://{Var.PAGE_LINK}/?id={get_msg.message_id}&type={media_type}"
-        else:
-            page_link = f"{Var.URL}watch/{get_msg.message_id}"
-
-        settings, in_db = await db.Current_Settings_Link(m.from_user.id)
-        if in_db and settings['LinkWithBoth']:
-            stream_link = f"{Var.URL}{get_msg.message_id}"
-            stream_link2 = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
-            Stream_Text=lang.msg_bothlink_text.format(file_name, file_size, stream_link, stream_link2, page_link)
-        elif in_db and not settings['LinkWithName']:
-            stream_link = f"{Var.URL}{get_msg.message_id}"
-            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
-        else:
-            stream_link = f"{Var.URL}{get_msg.message_id}/{quote_plus(get_media_file_name(m))}"
-            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
-
+        Stream_Text, reply_markup, stream_link = await gen_link(log_msg=get_msg, from_channel=True)
         await m.reply_text(
             text=Stream_Text,
             parse_mode="HTML",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]]),
+            reply_markup=reply_markup,
             quote=True
         )
 
@@ -305,12 +283,3 @@ async def help_handler(bot, message):
         disable_web_page_preview=True,
         reply_markup=HELP_BUTTONS
         )
-
-# ----------------------------- for me you can remove below line -------------------------------------------------------
-
-@StreamBot.on_message(filters.command('getid') & filters.private & ~filters.edited)
-async def start(b, m):
-    await b.send_message(
-        chat_id=m.chat.id,
-        text=f"Your ID is: `{m.chat.id}`"
-    )

@@ -2,12 +2,13 @@
 
 
 import asyncio
+import mimetypes
 import WebStreamer.utils.Translation as Translation
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from urllib.parse import quote_plus
-from WebStreamer.utils.mimetype import get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type
+from WebStreamer.utils.file_properties import get_media_file_name, get_media_file_size, get_media_file_unique_id, get_media_mime_type, gen_link
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
@@ -77,37 +78,17 @@ async def private_receive_handler(c: Client, m: Message):
 
     try:
         log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
-        file_name = get_media_file_name(log_msg)
-        file_size = humanbytes(get_media_file_size(log_msg))
-
-        if Var.PAGE_LINK:
-            media_type = get_media_mime_type(log_msg)
-            page_link = f"https://{Var.PAGE_LINK}/?id={log_msg.message_id}&type={media_type}"
-        else:
-            page_link = f"{Var.URL}watch/{log_msg.message_id}"
-
-        settings, in_db = await db.Current_Settings_Link(m.from_user.id)
-        if in_db and settings['LinkWithBoth']:
-            stream_link = f"{Var.URL}{log_msg.message_id}"
-            stream_link2 = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
-            Stream_Text=lang.msg_bothlink_text.format(file_name, file_size, stream_link, stream_link2, page_link)
-        elif in_db and not settings['LinkWithName']:
-            stream_link = f"{Var.URL}{log_msg.message_id}"
-            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
-        else:
-            stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_media_file_name(m))}"
-            Stream_Text=lang.stream_msg_text.format(file_name, file_size, stream_link, page_link)
-
+        Stream_Text, reply_markup, stream_link = await gen_link(log_msg, from_channel=False)
         await log_msg.reply_text(text=f"**RᴇQᴜᴇꜱᴛᴇᴅ ʙʏ :** [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**Uꜱᴇʀ ɪᴅ :** `{m.from_user.id}`\n**Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ :** {stream_link}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
 
         await m.reply_text(
             text=Stream_Text,
             parse_mode="HTML",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)],
-            [InlineKeyboardButton("❌ Delete Link", callback_data=f"msgdelconf2_{log_msg.message_id}_{get_media_file_unique_id(log_msg)}")]]),
+            reply_markup=reply_markup,
             quote=True
         )
+        print('reply_markup: ', type(reply_markup), '\nlog_msg: ', type(log_msg))
     except FloodWait as e:
         print(f"Sleeping for {str(e.x)}s")
         await asyncio.sleep(e.x)
