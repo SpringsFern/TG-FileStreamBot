@@ -1,14 +1,9 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
-import random
-from urllib.parse import quote_plus
 from WebStreamer.bot import StreamBot
-from WebStreamer.utils.file_properties import gen_link, get_media_file_unique_id
 from WebStreamer.vars import Var
-from pyrogram import filters, Client
+from pyrogram import filters
 from WebStreamer.utils.Translation import Language, BUTTON
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from pyrogram.errors import UserNotParticipant
 
 @StreamBot.on_message(filters.command('start') & filters.private & ~filters.edited)
 async def start(b, m):

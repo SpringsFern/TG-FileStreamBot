@@ -1,13 +1,12 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 
 import asyncio
-from WebStreamer.utils.Translation import Language
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.file_properties import gen_link
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
-from pyrogram.errors import FloodWait, UserNotParticipant
+from pyrogram.errors import FloodWait
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 @StreamBot.on_message(
@@ -64,8 +63,6 @@ async def channel_receive_handler(bot, broadcast: Message):
             message_id=broadcast.message_id,
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=stream_link)]])
-                # [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/{(await bot.get_me()).username}?start=msgid_{str(log_msg.message_id)}")]])
-            # [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/FxStreamBot?start=msgid_{str(log_msg.message_id)}")]])
         )
     except FloodWait as w:
         print(f"Sleeping for {str(w.x)}s")

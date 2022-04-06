@@ -57,10 +57,6 @@
         "BANNED_CHANNELS": {
             "description": "Put IDs of Banned Channels where bot will not work. You can add multiple IDs & separate with Space.",
             "required": false
-        },
-        "PAGE_LINK": {
-            "description": "Your stream link, Return message_id, hash, mime_type as get request",
-            "required": false
         }
     },
     "buildpacks": [{

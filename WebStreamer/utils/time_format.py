@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 def get_readable_time(seconds: int) -> str:
     count = 0

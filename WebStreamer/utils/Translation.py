@@ -1,6 +1,6 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 from WebStreamer.vars import Var
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message, CallbackQuery
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 class Language(object):

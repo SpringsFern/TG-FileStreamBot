@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 def humanbytes(size):
     # https://stackoverflow.com/a/49361727/4723940

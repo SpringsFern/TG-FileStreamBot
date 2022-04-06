@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 from WebStreamer.vars import Var
 from WebStreamer.bot import StreamBot

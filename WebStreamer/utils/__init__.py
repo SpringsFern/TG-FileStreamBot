@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 from .keepalive import ping_server
 from .config_parser import TokenParser
