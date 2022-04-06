@@ -4,13 +4,11 @@
 import asyncio
 from WebStreamer.utils.Translation import Language
 from WebStreamer.bot import StreamBot
-from WebStreamer.utils.database import Database
 from WebStreamer.utils.file_properties import gen_link
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 @StreamBot.on_message(
     filters.private
@@ -27,15 +25,6 @@ db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
     group=4,
 )
 async def private_receive_handler(c: Client, m: Message):
-    # lang = getattr(Language, m.from_user.language_code)
-    lang = getattr(Language, "en")
-    if not await db.is_user_exist(m.from_user.id):
-        await db.add_user(m.from_user.id)
-        await c.send_message(
-            Var.BIN_CHANNEL,
-            f"Nᴇᴡ Usᴇʀ Jᴏɪɴᴇᴅ : \n\nNᴀᴍᴇ : [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Sᴛᴀʀᴛᴇᴅ Yᴏᴜʀ Bᴏᴛ !!"
-        )
-
     try:
         log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
         reply_markup, Stream_Text, stream_link = await gen_link(m=m, log_msg=log_msg, from_channel=False)

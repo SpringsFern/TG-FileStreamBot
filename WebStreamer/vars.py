@@ -40,10 +40,8 @@ class Var(object):
             "s" if HAS_SSL else "", FQDN, "" if NO_PORT else ":" + str(PORT)
         )
 
-    DATABASE_URL = str(environ.get('DATABASE_URL'))
     UPDATES_CHANNEL = str(environ.get('UPDATES_CHANNEL', "aredirect"))
     PAGE_LINK = environ.get('PAGE_LINK', None)
     OWNER_ID = int(environ.get('OWNER_ID', '777000'))
-    SESSION_NAME = str(environ.get('SESSION_NAME', 'F2LxBot'))
 
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-1001296894100")).split()))

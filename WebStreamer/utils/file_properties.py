@@ -11,8 +11,6 @@ from WebStreamer.utils.Translation import Language
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.vars import Var
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from WebStreamer.utils.database import Database
-db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 async def parse_file_id(message: "Message") -> Optional[FileId]:
     media = get_media_from_message(message)
