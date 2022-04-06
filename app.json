@@ -54,10 +54,6 @@
             "required": false
   
         },
-        "FORCE_UPDATES_CHANNEL": {
-          "description": "Set to True, so every user have to Join update channel to use the bot.",
-          "value": false
-        },
         "OWNER_ID": {
             "description": "Your Telegram User ID"
         },

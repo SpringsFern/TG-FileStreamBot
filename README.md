@@ -149,8 +149,6 @@ you may also add as many as bots you want. (max limit is not tested yet)
 
 `UPDATES_CHANNEL` : Update Channel shown with Start Text
 
-`FORCE_UPDATES_CHANNEL` : Set to True, so every user have to Join update channel to use the bot.
-
 ## How to use the bot
 
 :warning: **Before using the  bot, don't forget to add all the bots (multi-client ones too) to the `BIN_CHANNEL` as an admin**

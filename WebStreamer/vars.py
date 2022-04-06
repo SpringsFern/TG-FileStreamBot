@@ -45,7 +45,5 @@ class Var(object):
     PAGE_LINK = environ.get('PAGE_LINK', None)
     OWNER_ID = int(environ.get('OWNER_ID', '777000'))
     SESSION_NAME = str(environ.get('SESSION_NAME', 'F2LxBot'))
-    FORCE_UPDATES_CHANNEL = environ.get('FORCE_UPDATES_CHANNEL', False)
-    FORCE_UPDATES_CHANNEL = True if str(FORCE_UPDATES_CHANNEL).lower() == "true" and UPDATES_CHANNEL != 'aredirect' else False
 
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-1001296894100")).split()))
