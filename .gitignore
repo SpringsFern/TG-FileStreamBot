@@ -116,6 +116,8 @@ dmypy.json
 #session files
 *.session
 *.session-journal
-.env
+*.env
 test.py
 test2.py
+updatenv.py
+.directory
