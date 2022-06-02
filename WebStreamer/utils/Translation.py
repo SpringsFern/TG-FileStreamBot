@@ -4,6 +4,14 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 class Language(object):
+    def __new__ (self, lang):
+        if lang in self.available:
+            return getattr(self, lang, self.en)
+        else:
+            return self.en
+
+    available=['en', 'Test']
+
     class en(object):
         START_TEXT = """
 <i>👋 Hᴇʏ,</i>{}\n
@@ -32,6 +40,14 @@ class Language(object):
 <b>📦 Fɪʟᴇ ꜱɪᴢᴇ :</b> <i>{}</i>\n
 <b>📥 Dᴏᴡɴʟᴏᴀᴅ :</b> <i>{}</i>\n
 <b>🖥WATCH :</b> <i>{}</i>"""
+
+    class Test(object):
+        START_TEXT = """
+<i>👋 Hᴇʏ in Russian,</i>{}\n
+<i>I'm Telegram Files Streaming Bot As Well Direct Links Generator</i>\n
+<i>Cʟɪᴄᴋ ᴏɴ Hᴇʟᴘ ᴛᴏ ɢᴇᴛ ᴍᴏʀᴇ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</i>\n
+<i><u>𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚸</u></i>\n
+<b>🔞 Pʀᴏɴ ᴄᴏɴᴛᴇɴᴛꜱ ʟᴇᴀᴅꜱ ᴛᴏ ᴘᴇʀᴍᴀɴᴇɴᴛ ʙᴀɴ ʏᴏᴜ.</b>\n\n"""
 
 # ------------------------------------------------------------------------------
 

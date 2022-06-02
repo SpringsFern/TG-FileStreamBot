@@ -75,8 +75,7 @@ def get_media_file_unique_id(m):
 # Generate Text, Stream Link, reply_markup
 async def gen_link(m: Message,log_msg: Messages, from_channel: bool):
     """Generate Text for Stream Link, Reply Text and reply_markup"""
-    # lang = getattr(Language, message.from_user.language_code)
-    lang = getattr(Language, "en")
+    lang = Language(m.from_user.language_code)
     file_name = get_name(log_msg)
     file_size = humanbytes(get_media_file_size(log_msg))
 
