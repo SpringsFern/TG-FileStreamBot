@@ -17,8 +17,7 @@ async def render_page(message_id, secure_hash):
         logging.debug(f'link hash: {secure_hash} - {file_data.unique_id[:6]}')
         logging.debug(f"Invalid hash for message with - ID {message_id}")
         raise InvalidHash
-    baseurl="http{}://{}.herokuapp.com/".format("s" if Var.HAS_SSL else "", Var.APP_NAME) if Var.ON_HEROKU else Var.URL
-    src = urllib.parse.urljoin(baseurl, f'{secure_hash}{str(message_id)}')
+    src = urllib.parse.urljoin(Var.URL, f'{secure_hash}{str(message_id)}')
     if str(file_data.mime_type.split('/')[0].strip()) == 'video':
         async with aiofiles.open('WebStreamer/template/req.html') as r:
             heading = 'Watch {}'.format(file_data.file_name)
