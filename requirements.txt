@@ -1,5 +1,5 @@
 aiohttp
-pyrogram>=2.0.17
+pyrogram>=2.0.30
 python-dotenv
 tgcrypto
 aiofiles
