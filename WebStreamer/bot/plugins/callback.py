@@ -14,7 +14,7 @@ deldbtnmsg=["Your Already Deleted the Link", "You can't undo the Action", "You c
 
 @StreamBot.on_callback_query()
 async def cb_data(bot, update: CallbackQuery):
-    lang = Language(update.from_user.language_code)
+    lang = Language(update)
     if update.data == "home":
         await update.message.edit_text(
             text=lang.START_TEXT.format(update.from_user.mention),

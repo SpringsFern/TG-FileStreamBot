@@ -1,12 +1,12 @@
 # This file is a part of TG-FileStreamBot
 from WebStreamer.vars import Var
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 
 
 class Language(object):
-    def __new__ (self, lang):
-        if lang in self.available:
-            return getattr(self, lang, self.en)
+    def __new__ (self, message: Message):
+        if getattr(message.from_user, 'language_code', 'Unknown') in self.available:
+            return getattr(self, getattr(message.from_user, 'language_code', self.en), self.en)
         else:
             return self.en
 
