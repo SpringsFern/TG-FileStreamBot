@@ -67,5 +67,6 @@
             "quantity": 1,
             "size": "free"
         }
-    }
+    },
+    "stack": "heroku-22"
   }
