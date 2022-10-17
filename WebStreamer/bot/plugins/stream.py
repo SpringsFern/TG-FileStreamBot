@@ -83,7 +83,7 @@ async def private_receive_handler(c: Client, m: Message):
 
         await m.reply_text(
             text=Stream_Text,
-            parse_mode="HTML",
+            parse_mode=ParseMode.HTML,
             disable_web_page_preview=True,
             reply_markup=reply_markup,
             quote=True
