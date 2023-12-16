@@ -1,4 +1,8 @@
 <h1 align="center">Telegram File Stream Bot</h3>
+<hr>
+I have created many repositories, and most of them are no longer maintained. So, I have decided to archive those repositories and keep only one actively maintained.
+<a href="https://github.com/SpringsFern/FileStreamBot">File Stream Bot</a> is the only repository maintained by me.
+<hr>
 <p align="center">
   <a href="https://github.com/DeekshithSH/TG-FileStreamBot">
     <img src="https://socialify.git.ci/DeekshithSH/TG-FileStreamBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&pattern=Charlie%20Brown&pulls=1&stargazers=1&theme=Dark" alt="TG-FileStreamBot" width="640" height="320" />
