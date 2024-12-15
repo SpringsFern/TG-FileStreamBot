@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Link Generator</title>
+    {{adsense}}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        nav {
+            background: #0078d7;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
+        nav a:hover {
+            background: #005bb5;
+        }
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #0078d7;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background: #0078d7;
+            color: #fff;
+        }
+        .download-button {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #0078d7;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .download-button:hover {
+            background: #005bb5;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #333;
+        }
+        .content {
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <span>Public Link Generator</span>
+        <a href="/">Home</a>
+    </nav>
+    <main>
+        <h1>Public Link Generator</h1>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>{{name}}</td>
+            </tr>
+            <tr>
+                <td>Size</td>
+                <td>{{size}}</td>
+            </tr>
+            <tr>
+                <td>File Type (MIME)</td>
+                <td>{{mime}}</td>
+            </tr>
+        </table>
+        <div class="content">
+            <p>File Stream Bot is a powerful tool designed to simplify file sharing through Telegram. The bot acts as a bridge, allowing you to upload files and generate direct download links that can be shared with anyone. These links let recipients download files directly from Telegram’s robust servers, even if they don’t use Telegram themselves.</p>
+            <p>When you send a file to the bot, it processes the file and creates a unique URL. This URL is your gateway to seamless sharing. You can share it with colleagues, friends, or anyone who needs access to the file. Since the files are hosted on Telegram’s servers, you benefit from fast, secure, and reliable downloads.</p>
+            <p>One of the key benefits of File Stream Bot is its ability to support all file types, from images and documents to videos and archives. It’s perfect for anyone looking for a no-hassle way to share files without relying on traditional cloud storage providers. Additionally, you can set custom thumbnails for your files to make them visually appealing when shared.</p>
+            <p>The bot ensures that the process is user-friendly. You don’t need to worry about storage limitations or complicated setups. Simply upload, share, and let the bot handle the rest. With File Stream Bot, sharing files has never been this easy or efficient.</p>
+        </div>
+        <a href="{{url}}" class="download-button">Download File</a>
+    </main>
+    <footer>
+        <p>Public Link Generator</p>
+    </footer>
+</body>
+</html>

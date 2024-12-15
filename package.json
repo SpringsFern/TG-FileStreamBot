@@ -10,7 +10,12 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.5.2",
-    "wrangler": "^3.60.3",
-    "vitest": "2.0.5"
+    "vitest": "2.0.5",
+    "wrangler": "^3.84.1"
+  },
+  "dependencies": {
+    "base64url": "^3.0.1",
+    "eta": "^3.5.0",
+    "hono": "^4.6.9"
   }
 }
