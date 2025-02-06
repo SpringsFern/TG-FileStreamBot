@@ -32,15 +32,14 @@ async function Redirect(c) {
 
 	let link = `${c.env.URL}/play/${filestr}`;
 
-	if ((!createTime || createTime + CONFIG.ONE_DAY >= epoch()) && !c.env.BLOG_MODE) {
-		// link = await shorten(c.env, link);
-		link = `${c.env.URL}/loading/${filestr}`;
-	}
-	if (c.env.BLOG_MODE) {
-		console.log("Executed")
-		const blogs = ["blog1", "blog2"];
-		const redirectUrl = `${c.env.URL}/${blogs[Math.floor(Math.random() * blogs.length)]}?url=${encodeURIComponent(link)}`;
-		return c.redirect(redirectUrl);
+	if ((!createTime || createTime + CONFIG.ONE_DAY >= epoch()) && c.env.SHOW_ADS) {
+		let SHOW_ADS=c.env.SHOW_ADS;
+		if (SHOW_ADS.toLocaleLowerCase()=="gplinks"){
+			link = await shorten(c.env, link);
+		}
+		else{
+			link = `${c.env.URL}/loading/${filestr}`;
+		}
 	}
 
 	return c.redirect(link);
