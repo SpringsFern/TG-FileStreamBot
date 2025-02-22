@@ -218,7 +218,7 @@ Feel free to contribute to this project if you have any further ideas
 
 ## Contact me
 
-[![Telegram Channel](https://img.shields.io/static/v1?label=Join&message=Telegram%20Channel&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/AWeirdText)
+[![Telegram Channel](https://img.shields.io/static/v1?label=Join&message=Telegram%20Channel&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/SpringsFern)
 [![Telegram Group](https://img.shields.io/static/v1?label=Join&message=Telegram%20Group&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/AWeirdString)
 
 You can contact either via my [Telegram Group](https://xn--r1a.click/AWeirdString) ~~or you can PM me on [@DeekshithSH](https://xn--r1a.click/DeekshithSH)~~
