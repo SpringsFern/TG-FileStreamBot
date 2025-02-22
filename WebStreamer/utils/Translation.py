@@ -3,17 +3,8 @@
 from telethon import Button
 from WebStreamer.vars import Var
 
-class Language:
-    def __new__(self, message=None):
-        # if getattr(message.from_user, 'language_code', 'Unknown') in self.available:
-        #     return getattr(self, getattr(message.from_user, 'language_code', "en"), self.en)
-        # else:
-        return self.en
-
-    available=['en', 'language_code']
-
-    class en:
-        START_TEXT: str = """
+class LanguageCode:
+    START_TEXT: str = """
 👋 Hi there, <a href="tg://user?id={}">{}</a>!
 
 I am the File Stream Bot, your go-to assistant for generating external download links from any file or media you send. 
@@ -24,19 +15,19 @@ Here's what you can do:
 - Need help or have a question? Just click on the 'Help' button below for more information.
 """
 
-        HELP_TEXT: str = """
+    HELP_TEXT: str = """
 - Send any file or media to me.
 - I will provide an external download link.
 - For support or to report a bug <b><a href='https://t.me/{}'>[ click here] </a></b>.
 """
 
-        ABOUT_TEXT: str = """
+    ABOUT_TEXT: str = """
 <b>Bot Name:</b> TG-FileStreamBot
 <b>Version:</b> {}
 <b>Last Updated:</b> 20-July-2023
 """
 
-        STREAM_MSG_TEXT: str = """
+    STREAM_MSG_TEXT: str = """
 <u><i>Your Link is Generated!</i></u>\n
 <b>📂 File Name:</b> <i>{name}</i>\n
 <b>📦 File Size:</b> <i>{size}</i>\n
@@ -45,6 +36,18 @@ Link generated using <a href='https://t.me/{username}'>{firstname}</a>.\n
 <b>Note:</b> Link will only work for 24 Hours.
 """
 
+class Language:
+        
+    def __new__(self, message=None):
+        # if getattr(message.from_user, 'language_code', 'Unknown') in self.available:
+        #     return getattr(self, getattr(message.from_user, 'language_code', "en"), self.en)
+        # else:
+        return self.en
+
+    available=['en', 'language_code']
+
+    en=LanguageCode()
+
 #----------------------#
 # Change the Text's below to add suport for your language
 
@@ -52,7 +55,7 @@ Link generated using <a href='https://t.me/{username}'>{firstname}</a>.\n
 # https://en.wikipedia.org/wiki/IETF_language_tag#List_of_common_primary_language_subtags
 # change language_code with your language code
 # eg:    class kn(object):
-    class language_code:
+    class language_code(LanguageCode):
         START_TEXT: str = "Hi <a href=tg://user?id={}>{}</a>"
 
         HELP_TEXT: str = "Help Text"
