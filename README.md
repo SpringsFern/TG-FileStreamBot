@@ -56,7 +56,7 @@
 ### Original Repository
 [FileStreamBot](https://github.com/SpringsFern/FileStreamBot) is a Modified Version of [TG-FileStreamBot](https://github.com/EverythingSuckz/TG-FileStreamBot) by [EverythingSuckz](https://github.com/EverythingSuckz/)
 
-The main working part was taken from [Megatron](https://github.com/eyaadh/megadlbot_oss) and thanks to [eyaadh](https://github.com/eyaadh) for his awesome project.
+The main working part was taken from [Eyaadh's](https://github.com/eyaadh) [Megatron](https://github.com/eyaadh/megadlbot_oss) and [Tulir Asokan's](https://github.com/tulir) [tgfilestream](https://github.com/tulir/tgfilestream). Thanks to them for their awesome projects
 
 ## How to make your own
 
@@ -104,13 +104,11 @@ API_ID=452525
 API_HASH=esx576f8738x883f3sfzx83
 BOT_TOKEN=55838383:yourtbottokenhere
 BIN_CHANNEL=-100
-DATABASE_URL=mongodb://admin:pAswaRd@192.168.27.1
 FQDN=192.168.27.1
 HAS_SSL=False
 MULTI_TOKEN1=55838383:yourfirstmulticlientbottokenhere
 MULTI_TOKEN2=55838383:yoursecondmulticlientbottokenhere
 MULTI_TOKEN3=55838383:yourthirdmulticlientbottokenhere
-OWNER_ID=777000
 PORT=8080
 ```
 
@@ -137,37 +135,69 @@ you may also add as many as bots you want. (max limit is not tested yet)
 
 ### Optional Vars
 
-`SLEEP_THRESHOLD` : Set a sleep threshold for flood wait exceptions happening globally in this telegram bot instance, below which any request that raises a flood wait will be automatically invoked again after sleeping for the required amount of time. Flood wait exceptions requiring higher waiting times will be raised. Defaults to 60 seconds.
-
-`WORKERS` : Number of maximum concurrent workers for handling incoming updates. Defaults to `3`
-
-`PORT` : The port that you want your webapp to be listened to. Defaults to `8080`
-
-`WEB_SERVER_BIND_ADDRESS` : Your server bind address. Defauls to `0.0.0.0`
-
-`NO_PORT` : (can be either `True` or `False`) If you don't want your port to be displayed. You should point your `PORT` to `80` (http) or `443` (https) for the links to work. Ignore this if you're on Heroku.
-
-`FQDN` :  A Fully Qualified Domain Name if present. Defaults to `WEB_SERVER_BIND_ADDRESS`
-
-`HAS_SSL` : (can be either `True` or `False`) If you want the generated links in https format.
-
-`PING_INTERVAL` : The time in ms you want the servers to be pinged each time to avoid sleeping (Only for Heroku). Defaults to `1200` or 20 minutes.
-
-`UPDATES_CHANNEL` : Your Telegram Channel Username without @
-
 `ALLOWED_USERS`: The user Telegram IDs of users to which the bot only reply to.
 
 > **Note**
 > Leave this field empty and anyone will be able to use your bot instance.
 > You may also add multiple users by adding the IDs separated by comma (,)
 
+`CHUNK_SIZE`: Size of the chunk to request from Telegram server when streaming a file [See more](https://core.telegram.org/api/files#downloading-files)
+
+`CONNECTION_LIMIT`:  (default 20) - The maximum number of connections to a single Telegram datacenter.
+
+`CUSTOM_URL`: Only set this true if you set `LINK_TEMPLATE` field
+
+`FQDN` :  A Fully Qualified Domain Name if present. Defaults to `WEB_SERVER_BIND_ADDRESS`
+
+`HAS_SSL` : (can be either `True` or `False`) If you want the generated links in https format.
+
 `KEEP_ALIVE` : If you want to make the server ping itself every
+
+> [!WARNING]
+> `LINK_TEMPLATE`: Modify format in which download links are generated
+> **Ignore this field**
+> <details>
+> <summary>[Expand]</summary>
+>   This setting allows customization of how the download link is displayed to users. It does **not** affect the actual link used by the bot to fetch the file—only the visible link format changes.  
+> 
+> You can customize the link format using placeholders that will be replaced with actual values when generating the link. Available placeholders:  
+> - `{url}` – The base URL (`CUSTOM_URL`) where the file is hosted.  
+> - `{name}` – The file name (URL-encoded).  
+> - `{size}` – The file size in human-readable format.  
+> - `{id}` – The unique ID of the file message.  
+> - `{mime}` – The file's MIME type (URL-encoded).  
+> - `{time}` – The Unix timestamp when the link is generated.  
+> 
+> Example customization:  
+> ```
+> LINK_TEMPLATE = "{url}/download/{id}/{name}?size={size}&type={mime}"
+> ```
+> This will generate a link like:  
+> ```
+> https://yourdomain.com/download/12345/sample.pdf?size=2MB&type=application/pdf
+> ```
+> </details>
+<br>
+
+`NO_PORT` : (can be either `True` or `False`) If you don't want your port to be displayed. You should point your `PORT` to `80` (http) or `443` (https) for the links to work. Ignore this if you're on Heroku.
 
 `NO_UPDATE` if set to `true` bot won't respond to any messages
 
-`LINK_LIMIT`: Limit Number of Links a User Can Generate. Value should be a Number
+`PING_INTERVAL` : The time in ms you want the servers to be pinged each time to avoid sleeping (Only for Heroku). Defaults to `1200` or 20 minutes.
 
-`TRUST_FORWARD_HEADERS`: (defaults to true) - Whether or not to trust X-Forwarded-For headers when logging requests.
+`PORT` : The port that you want your webapp to be listened to. Defaults to `8080`
+
+`REQUEST_LIMIT`: (default 5) - The maximum number of requests a single IP can have active at a time
+
+`SLEEP_THRESHOLD` : Set a sleep threshold for flood wait exceptions happening globally in this telegram bot instance, below which any request that raises a flood wait will be automatically invoked again after sleeping for the required amount of time. Flood wait exceptions requiring higher waiting times will be raised. Defaults to 60 seconds.
+
+`TRUST_HEADERS`: (defaults to true) - Whether or not to trust X-Forwarded-For headers when logging requests.
+
+`UPDATES_CHANNEL` : Your Telegram Channel Username without @
+
+`WEB_SERVER_BIND_ADDRESS` : Your server bind address. Defauls to `0.0.0.0`
+
+`WORKERS` : Number of maximum concurrent workers for handling incoming updates. Defaults to `3`
 
 ## How to use the bot
 
