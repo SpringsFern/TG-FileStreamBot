@@ -124,9 +124,9 @@ PORT=8080
 
 ### For MultiClient
 
-`MULTI_TOKEN1`: Add your first bot token or session strings here.
+`MULTI_TOKEN1`: Add your first bot token here.
 
-`MULTI_TOKEN2`: Add your second bot token or session strings here.
+`MULTI_TOKEN2`: Add your second bot token here.
 
 you may also add as many as bots you want. (max limit is not tested yet)
 `MULTI_TOKEN3`, `MULTI_TOKEN4`, etc.
@@ -135,11 +135,10 @@ you may also add as many as bots you want. (max limit is not tested yet)
 
 ### Optional Vars
 
-`ALLOWED_USERS`: The user Telegram IDs of users to which the bot only reply to.
+`ALLOWED_USERS`:  A list of user IDs separated by comma (,). If this is set, only the users in this list will be able to use the bot.
 
 > **Note**
 > Leave this field empty and anyone will be able to use your bot instance.
-> You may also add multiple users by adding the IDs separated by comma (,)
 
 `CHUNK_SIZE`: Size of the chunk to request from Telegram server when streaming a file [See more](https://core.telegram.org/api/files#downloading-files)
 
@@ -183,7 +182,7 @@ you may also add as many as bots you want. (max limit is not tested yet)
 
 `NO_UPDATE` if set to `true` bot won't respond to any messages
 
-`PING_INTERVAL` : The time in ms you want the servers to be pinged each time to avoid sleeping (Only for Heroku). Defaults to `1200` or 20 minutes.
+`PING_INTERVAL` : The time in seconds you want the servers to be pinged each time to avoid sleeping (Only for Heroku). Defaults to `600` or 10 minutes.
 
 `PORT` : The port that you want your webapp to be listened to. Defaults to `8080`
 

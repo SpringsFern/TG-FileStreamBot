@@ -37,11 +37,6 @@ loop = asyncio.get_event_loop()
 
 async def start_services():
     print()
-    if Var.NO_UPDATE:
-        print("------------------ Starting as Secondary Server ------------------")
-    else:
-        print("------------------- Starting as Primary Server -------------------")
-    print()
     print("-------------------- Initializing Telegram Bot --------------------")
     # await StreamBot.connect()
     await StreamBot.start(bot_token=Var.BOT_TOKEN)

@@ -1,10 +1,10 @@
 {
     "name": "File Stream Bot",
-    "description": "A Pyrogram Telegram bot to access Telegram Files via the web.",
+    "description": "A Telethon Telegram bot to access Telegram Files via the web.",
     "keywords": [
         "telegram",
         "web",
-        "pyrogram",
+        "telethon",
         "aiohttp",
         "python",
         "plugin",
@@ -12,83 +12,82 @@
         "media"
       ],
     "repository": "https://github.com/SpringsFern/FileStreamBot",
-    "success_url": "/",
+    "success_url": "/status",
     "website": "https://github.com/SpringsFern/FileStreamBot",
     "env": {
-        "ENV": {
-            "description": "Set this to True if you don't want to crash the bot",
-            "value": "True"
-        },
         "API_ID": {
-            "description": "Get this value from https://my.telegram.org"
+            "description": "Goto my.telegram.org to obtain this",
+            "required": true
         },
         "API_HASH": {
-            "description": "Get this value from https://my.telegram.org"
+            "description": "Goto my.telegram.org to obtain this",
+            "required": true
         },
         "BOT_TOKEN": {
-            "description": "Get this value from @BotFather"
+            "description": "Get the bot token from @BotFather",
+            "required": true
         },
         "BIN_CHANNEL": {
-            "description": "The BIN Channel ID. Read the readme for more info about this var"
+            "description": "Channel ID of your Bin Channel",
+            "required": true
         },
-        "DATABASE_URL": {
-            "description": "MongoDB URI eg: mongodb://admin:pAswaRd@192.168.27.1"
-        },
-        "SLEEP_THRESHOLD": {
-            "description": "Floodwait Sleep timer. Read the readme for more info about this var",
+        "ALLOWED_USERS": {
+            "description": "A list of user IDs separated by comma (,). If this is set, only the users in this list will be able to use the bot.",
             "required": false
         },
-        "WORKERS": {
-            "description": "Number of workers that is to be assigned. Read the readme for more info about this var",
+        "CHUNK_SIZE": {
+            "description": "Size of the chunk to request from Telegram server when streaming a file",
             "required": false
         },
-        "NO_PORT": {
-            "description": "If you don't want your port to be displayed. Read the readme for more info about this var",
-            "value": "False",
-            "required": false
-        },
-        "BIND_ADDRESS": {
-            "description": "Read the readme for more info about this var",
-            "required": false
-        },
-        "PING_INTERVAL": {
-            "description": "The time in s you want the servers to be pinged each time to avoid sleeping.",
+        "CONNECTION_LIMIT": {
+            "description": " (default 20) - The maximum number of connections to a single Telegram datacenter",
             "required": false
         },
         "FQDN": {
-            "description": "A Fully Qualified Domain Name or Heroku App URL. (eg. https://example.herokuapp.com). Update it After Deploying the Bot",
+            "description": "Heroku App URL or Custom Domain. Update it after deploying",
             "required": false
         },
         "HAS_SSL": {
-            "description": "Don't Change It",
-            "value": "True"
+            "description": "(can be either True or False) If you want the generated links in https format",
+            "value": "true",
+            "required": false
         },
-        "OWNER_ID": {
-            "description": "Your Telegram User ID(Note: Not Username)"
+        "KEEP_ALIVE": {
+            "description": "(can be either True or False) If you want to make Heroku App ping itself every. Set to True if your using Eco Dyno",
+            "required": false
+        },
+        "NO_PORT": {
+            "description": "(can be either True or False) If you don't want your port to be displayed. Leave it as it is",
+            "value": "true",
+            "required": false
+        },
+        "NO_UPDATE": {
+            "description": "if set to true bot won't respond to any messages",
+            "required": false
+        },
+        "PING_INTERVAL": {
+            "description": "The time in seconds you want the servers to be pinged each time to avoid sleeping (Only for Heroku/Render). Defaults to 1200 or 10 minutes",
+            "value": 1200,
+            "required": false
+        },
+        "REQUEST_LIMIT": {
+            "description": " (default 5) - The maximum number of requests a single IP can have active at a time",
+            "required": false
+        },
+        "SLEEP_THRESHOLD": {
+            "description": " Set a sleep threshold for flood wait exceptions happening globally in this telegram bot instance, below which any request that raises a flood wait will be automatically invoked again after sleeping for the required amount of time. Flood wait exceptions requiring higher waiting times will be raised. Defaults to 60 seconds.",
+            "required": false
+        },
+        "TRUST_HEADERS": {
+            "description": "(defaults to true) - Whether or not to trust X-Forwarded-For headers when logging requests",
+            "required": false
         },
         "UPDATES_CHANNEL": {
-            "description": "Update Channel Username without @ eg: AWeirdText",
+            "description": "Your Telegram Channel Username without @",
             "required": false
         },
-        "FORCE_UPDATES_CHANNEL": {
-            "description": "Set to True, if you want every user Join update channel to use the bot",
-            "required": false
-        },
-        "SESSION_NAME": {
-            "description": "Mongodb Database Name Default to F2LxBot",
-            "required": false
-        },
-        "KEEP_ALIVE" : {
-            "description": "If you want to make the server ping itself every `PING_INTERVAL` seconds to avoid sleeping. Helpful in PaaS Free tiers. Defaults to `False`",
-            "required": false,
-            "value": "True"
-        },
-        "TOS": {
-            "description": "URL to your Terms of Service Text",
-            "required": false
-        },
-        "LINK_LIMIT": {
-            "description": "Limit Number of Links a User Can Generate. Value should be a Number",
+        "WORKERS": {
+            "description": "Number of maximum concurrent workers for handling incoming updates. Defaults to 3",
             "required": false
         }
     },
@@ -98,7 +97,7 @@
     "formation": {
         "web": {
             "quantity": 1,
-            "size": "Eco"
+            "size": "basic"
         }
     }
   }
