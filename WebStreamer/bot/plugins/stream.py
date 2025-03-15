@@ -3,11 +3,11 @@
 import logging
 import urllib.parse
 from time import time
-from WebStreamer.bot import StreamBot
 from telethon import Button, errors
 from telethon.events import NewMessage
 from telethon.extensions import html
-from WebStreamer.utils.Translation import Language
+from WebStreamer.bot import StreamBot, BotInfo
+from WebStreamer.utils.translation import Text
 from WebStreamer.utils.utils import validate_user
 from WebStreamer.utils.file_properties import get_name, get_size
 from WebStreamer.utils.utils import humanbytes
@@ -22,7 +22,6 @@ async def private_receive_handler(event: NewMessage.Event):
         #     logging.info(f"MediaNotFound: {event.stringify()}")
         #     return
         log_msg=await event.message.forward_to(Var.BIN_CHANNEL)
-        lang = Language(event)
         file_name = get_name(event.message.file)
         file_size = humanbytes(get_size(event.message.media))
 
@@ -39,12 +38,12 @@ async def private_receive_handler(event: NewMessage.Event):
             stream_link = f"{Var.URL}dl/{log_msg.id}/{urllib.parse.quote(get_name(event.message.file))}"
 
         await event.message.reply(
-            message=lang.STREAM_MSG_TEXT.format_map({
+            message=Text.STREAM_MSG_TEXT.format_map({
                 "name": file_name,
                 "size": file_size,
                 "link": stream_link,
-                "username": StreamBot.username,
-                "firstname": StreamBot.fname
+                "username": BotInfo.username,
+                "firstname": BotInfo.fname
                 }),
             link_preview=False,
             buttons=[

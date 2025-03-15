@@ -3,7 +3,7 @@
 from telethon import Button
 from WebStreamer.vars import Var
 
-class LanguageCode:
+class Text:
     START_TEXT: str = """
 👋 Hi there, <a href="tg://user?id={}">{}</a>!
 
@@ -22,9 +22,11 @@ Here's what you can do:
 """
 
     ABOUT_TEXT: str = """
-<b>Bot Name:</b> TG-FileStreamBot
+<b>Maintained By:</b> <a href="https://github.com/DeekshithSH">DeekshithSH</a>
+<b>Source Code:</b> <a href="https://github.com/DeekshithSH/TG-FileStreamBot">TG-FileStreamBot</a>
+<b>Based On:</b> [<a href="bit.ly/tg-stream">tg filestream</a>] [<a href="https://github.com/EverythingSuckz/TG-FileStreamBot">TG-FileStreamBot</a>]
 <b>Version:</b> {}
-<b>Last Updated:</b> 20-July-2023
+<b>Last Updated:</b> 15 March 20225
 """
 
     STREAM_MSG_TEXT: str = """
@@ -32,46 +34,8 @@ Here's what you can do:
 <b>📂 File Name:</b> <i>{name}</i>\n
 <b>📦 File Size:</b> <i>{size}</i>\n
 <b>📥 Download:</b> <i>{link}</i>\n
-Link generated using <a href='https://t.me/{username}'>{firstname}</a>.\n
-<b>Note:</b> Link will only work for 24 Hours.
+Link generated using <a href='https://t.me/{username}'>{firstname}</a>
 """
-
-class Language:
-        
-    def __new__(self, message=None):
-        # if getattr(message.from_user, 'language_code', 'Unknown') in self.available:
-        #     return getattr(self, getattr(message.from_user, 'language_code', "en"), self.en)
-        # else:
-        return self.en
-
-    available=['en', 'language_code']
-
-    en=LanguageCode()
-
-#----------------------#
-# Change the Text's below to add suport for your language
-
-# you can find the language_code for your language here
-# https://en.wikipedia.org/wiki/IETF_language_tag#List_of_common_primary_language_subtags
-# change language_code with your language code
-# eg:    class kn(object):
-    class language_code(LanguageCode):
-        START_TEXT: str = "Hi <a href=tg://user?id={}>{}</a>"
-
-        HELP_TEXT: str = "Help Text"
-
-        ABOUT_TEXT: str = "<b>🔸Vᴇʀꜱɪᴏɴ : {}</b>"
-
-        STREAM_MSG_TEXT: str = """
-<u><i>Your Link is Generated!</i></u>
-<b>📂 File Name:</b> <i>{name}</i>
-<b>📦 File Size:</b> <i>{size}</i>
-<b>📥 Download:</b> <i>{link}</i>
-Link generated using <a href='https://t.me/{username}'>{firstname}</a>.
-<b>Note:</b> Link will only work for 24 hours."""
-
-# ------------------------------------------------------------------------------
-
 
 class BUTTON(object):
     START_BUTTONS = [

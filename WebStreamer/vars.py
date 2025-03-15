@@ -32,7 +32,4 @@ class Var(object):
     SLEEP_THRESHOLD = int(environ.get("SLEEP_THRESHOLD", "60"))  # 1 minte
     TRUST_HEADERS: bool = str(environ.get("TRUST_HEADERS", "1").lower()) in ("1", "true", "t", "yes", "y")
     UPDATES_CHANNEL = str(environ.get('UPDATES_CHANNEL', "Telegram"))
-    URL = "http{}://{}{}/".format(
-            "s" if HAS_SSL else "", FQDN, "" if NO_PORT else ":" + str(PORT)
-    )
-    WORKERS = int(environ.get("WORKERS", "6"))  # 6 workers = 6 commands at once
+    URL = f"http{"s" if HAS_SSL else ""}://{FQDN}{"" if NO_PORT else ":" + str(PORT)}/"

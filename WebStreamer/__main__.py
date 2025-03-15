@@ -2,30 +2,30 @@
 
 import sys
 import asyncio
-import logging
 import traceback
+import logging
 import logging.handlers as handlers
 
 
-from .vars import Var
 from aiohttp import web
-from WebStreamer.bot import StreamBot
+from WebStreamer.bot import StreamBot, BotInfo
 from WebStreamer.server import web_server
 from WebStreamer.utils.keepalive import ping_server
 from WebStreamer.utils.utils import load_plugins, startup
 from WebStreamer.bot.clients import initialize_clients
+from .vars import Var
 
 
 logging.basicConfig(
     level=logging.DEBUG if Var.DEBUG else logging.INFO,
     datefmt="%d/%m/%Y %H:%M:%S",
-    format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',
+    format="[%(asctime)s][%(name)s][%(levelname)s] ==> %(message)s",
     handlers=[logging.StreamHandler(stream=sys.stdout),
               handlers.RotatingFileHandler("streambot.log", mode="a", maxBytes=104857600, backupCount=2, encoding="utf-8")],)
 
-logging.getLogger("aiohttp").setLevel(logging.ERROR)
-logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
-logging.getLogger("telethon").setLevel(logging.ERROR)
+logging.getLogger("aiohttp").setLevel(logging.DEBUG if Var.DEBUG else logging.ERROR)
+logging.getLogger("aiohttp.web").setLevel(logging.DEBUG if Var.DEBUG else logging.ERROR)
+logging.getLogger("telethon").setLevel(logging.INFO if Var.DEBUG else logging.ERROR)
 
 server = web.AppRunner(web_server())
 
@@ -36,39 +36,29 @@ server = web.AppRunner(web_server())
 loop = asyncio.get_event_loop()
 
 async def start_services():
-    print()
-    print("-------------------- Initializing Telegram Bot --------------------")
-    # await StreamBot.connect()
+    logging.info("Initializing Telegram Bot")
     await StreamBot.start(bot_token=Var.BOT_TOKEN)
     await startup(StreamBot)
     bot_info = await StreamBot.get_me()
-    StreamBot.id = bot_info.id
-    StreamBot.username = bot_info.username
-    StreamBot.fname=bot_info.first_name
-    print("------------------------------ DONE ------------------------------")
-    print()
-    print("---------------------- Initializing Clients ----------------------")
+    BotInfo.username = bot_info.username
+    BotInfo.fname=bot_info.first_name
+    logging.info("Initialized Telegram Bot")
+    logging.info("Initializing Clients")
     await initialize_clients()
     if not Var.NO_UPDATE:
-        print('--------------------------- Importing ---------------------------')
+        logging.info('Importing plugins')
         load_plugins("WebStreamer/bot/plugins")
-        print()
-        print("------------------------------ DONE ------------------------------")
+        logging.info("Imported Plugins")
     if Var.KEEP_ALIVE:
-        print("------------------ Starting Keep Alive Service ------------------")
-        print()
+        logging.info("Starting Keep Alive Service")
         asyncio.create_task(ping_server())
-    print()
-    print("--------------------- Initializing Web Server ---------------------")
+    logging.info("Initializing Web Server")
     await server.setup()
     await web.TCPSite(server, Var.BIND_ADDRESS, Var.PORT).start()
-    print("------------------------------ DONE ------------------------------")
-    print()
-    print("------------------------- Service Started -------------------------")
-    print("                        bot =>> {}".format(bot_info.first_name))
-    print("                        DC ID =>> {}".format(str(StreamBot.session.dc_id)))
-    print(" URL =>> {}".format(Var.URL))
-    print("------------------------------------------------------------------")
+    logging.info("Service Started")
+    logging.info("bot =>> %s", BotInfo.fname)
+    logging.info("DC ID =>> %s", str(StreamBot.session.dc_id))
+    logging.info(" URL =>> %s", Var.URL)
     await StreamBot.run_until_disconnected()
 
 async def cleanup():
@@ -85,4 +75,4 @@ if __name__ == "__main__":
     finally:
         loop.run_until_complete(cleanup())
         loop.stop()
-        print("------------------------ Stopped Services ------------------------")
+        logging.info("Stopped Services")

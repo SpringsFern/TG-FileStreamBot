@@ -85,10 +85,6 @@
         "UPDATES_CHANNEL": {
             "description": "Your Telegram Channel Username without @",
             "required": false
-        },
-        "WORKERS": {
-            "description": "Number of maximum concurrent workers for handling incoming updates. Defaults to 3",
-            "required": false
         }
     },
     "buildpacks": [{

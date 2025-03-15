@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import copy
-from typing import Union, AsyncGenerator, AsyncContextManager, Dict, Optional, List
+from typing import Union, AsyncGenerator, Dict, Optional, List
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 import logging
@@ -36,13 +36,13 @@ from telethon.errors import DcIdInvalidError
 
 from WebStreamer.utils.utils import decrement_counter, increment_counter
 
-TypeLocation = Union[Document, InputDocumentFileLocation, InputPeerPhotoFileLocation,
-                     InputFileLocation, InputPhotoFileLocation]
-
 from WebStreamer.utils.file_id import FileId, FileType, ThumbnailSource
 from WebStreamer.utils.file_properties import get_file_ids
 from WebStreamer.vars import Var
 from WebStreamer.bot import work_loads
+
+TypeLocation = Union[Document, InputDocumentFileLocation, InputPeerPhotoFileLocation,
+                     InputFileLocation, InputPhotoFileLocation]
 
 root_log = logging.getLogger(__name__)
 
@@ -124,7 +124,7 @@ class DCConnectionManager:
         return best_conn
 
     @asynccontextmanager
-    async def get_connection(self) -> AsyncContextManager[Connection]:
+    async def get_connection(self) -> AsyncGenerator[Connection, None]:
         async with self._list_lock:
             conn: Connection = await asyncio.shield(self._next_connection())
             # The connection is locked so reconnections don't stack
@@ -168,19 +168,19 @@ class ParallelTransferrer:
         """
         if message_id not in self.cached_file_ids:
             await self.generate_file_properties(message_id)
-            logging.debug(f"Cached file properties for message with ID {message_id}")
+            logging.debug("Cached file properties for message with ID %s", message_id)
         return self.cached_file_ids[message_id]
-    
+
     async def generate_file_properties(self, message_id: int) -> FileId:
         """
         Generates the properties of a media file on a specific message.
         returns ths properties in a FIleId class.
         """
         file_id = await get_file_ids(self.client, Var.BIN_CHANNEL, message_id)
-        logging.debug(f"Generated file ID and Unique ID for message with ID {message_id}")
+        logging.debug("Generated file ID and Unique ID for message with ID %s", message_id)
         self.cached_file_ids[message_id] = file_id
-        logging.debug(f"Cached media message with ID {message_id}")
-    
+        logging.debug("Cached media message with ID %s", message_id)
+
     @staticmethod
     def get_location(file_id: FileId) -> TypeLocation:
         """
@@ -204,8 +204,7 @@ class ParallelTransferrer:
 
             location = InputPeerPhotoFileLocation(
                 peer=peer,
-                volume_id=file_id.volume_id,
-                local_id=file_id.local_id,
+                photo_id=file_id.media_id,
                 big=file_id.thumbnail_source == ThumbnailSource.CHAT_PHOTO_BIG,
             )
         elif file_type == FileType.PHOTO:
@@ -256,7 +255,7 @@ class ParallelTransferrer:
                         yield result.bytes[:last_part_cut]
                     else:
                         yield result.bytes
-                    log.debug(f"Part {current_part}/{last_part} (total {total_parts}) downloaded")
+                    log.debug("Part %s/%s (total %s) downloaded",current_part,last_part,total_parts)
                     current_part += 1
                 log.debug("Parallel download finished")
         except (GeneratorExit, StopAsyncIteration, asyncio.CancelledError):
@@ -265,7 +264,7 @@ class ParallelTransferrer:
         except Exception:
             log.debug("Parallel download errored", exc_info=True)
         finally:
-            logging.debug(f"Finished yielding file with {current_part} parts.")
+            logging.debug("Finished yielding file with %s parts.",current_part)
             work_loads[index] -= 1
             decrement_counter(ip)
 
@@ -283,8 +282,8 @@ class ParallelTransferrer:
         part_count = last_part - first_part
         total_parts = math.ceil(file_size / chunk_size)
 
-        self.log.debug(f"Starting parallel download: chunks {first_part}-{last_part}"
-                       f" of {part_count} {location!s}")
+        self.log.debug("Starting parallel download: chunks %s-%s"
+                       " of %s %s",first_part,last_part,part_count,location)
         request = GetFileRequest(location, offset=offset, limit=chunk_size)
 
         return self._int_download(request, dc_id, first_part_cut, last_part_cut,

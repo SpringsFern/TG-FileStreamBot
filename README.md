@@ -56,7 +56,7 @@
 ### Original Repository
 [FileStreamBot](https://github.com/SpringsFern/FileStreamBot) is a Modified Version of [TG-FileStreamBot](https://github.com/EverythingSuckz/TG-FileStreamBot) by [EverythingSuckz](https://github.com/EverythingSuckz/)
 
-The main working part was taken from [Eyaadh's](https://github.com/eyaadh) [Megatron](https://github.com/eyaadh/megadlbot_oss) and [Tulir Asokan's](https://github.com/tulir) [tgfilestream](https://github.com/tulir/tgfilestream). Thanks to them for their awesome projects
+The main working part was taken from [Eyaadh's](https://github.com/eyaadh) [Megatron](https://github.com/eyaadh/megadlbot_oss) and [Tulir Asokan's](https://github.com/tulir) [tg filestream](https://bit.ly/tg-stream). Thanks to them for their awesome projects
 
 ## How to make your own
 
@@ -195,8 +195,6 @@ you may also add as many as bots you want. (max limit is not tested yet)
 `UPDATES_CHANNEL` : Your Telegram Channel Username without @
 
 `WEB_SERVER_BIND_ADDRESS` : Your server bind address. Defauls to `0.0.0.0`
-
-`WORKERS` : Number of maximum concurrent workers for handling incoming updates. Defaults to `3`
 
 ## How to use the bot
 

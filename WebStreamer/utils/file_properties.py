@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import List, Optional
-from telethon import TelegramClient, types
+from telethon import TelegramClient
 from telethon.tl import types
 from telethon.tl.custom.file import File
 from WebStreamer.server.exceptions import FIleNotFound
@@ -13,13 +13,13 @@ from WebStreamer.utils.file_id import FileId, FileType, FileUniqueId, FileUnique
 async def get_file_ids(client: TelegramClient, chat_id: int, message_id: int) -> Optional[FileId]:
     message = await client.get_messages(chat_id, ids=message_id)
     if not message:
-        logging.debug(f"Message with ID {message_id} not found")
+        logging.debug("Message with ID %s not found",message_id)
         raise FIleNotFound
-    file_id=get_FileId(message.media, False)
+    file_id=get_fileid(message.media, False)
     setattr(file_id, "file_size", get_size(message.media))
     setattr(file_id, "mime_type", message.file.mime_type)
     setattr(file_id, "file_name", get_name(message.file))
-    setattr(file_id, "unique_id", get_FileUniqueId(message.media))
+    setattr(file_id, "unique_id", get_file_unique_id(message.media))
     return file_id
 
 def get_name(media: File | FileId) -> str:
@@ -35,10 +35,10 @@ def get_name(media: File | FileId) -> str:
         return file_name
     except Exception as e:
         logging.error(e)
-        logging.info(f"ErrorGettingFileName: {media}")
+        logging.info("ErrorGettingFileName: %s",media)
         return "None"
 
-def get_FileId(file: types.MessageMediaDocument|types.MessageMediaPhoto, encode: bool= True) -> str:
+def get_fileid(file: types.MessageMediaDocument|types.MessageMediaPhoto, encode: bool= True) -> str:
     if isinstance(file, types.MessageMediaDocument):
         document: types.Document=file.document
         file_type=FileType.DOCUMENT
@@ -71,7 +71,7 @@ def get_FileId(file: types.MessageMediaDocument|types.MessageMediaPhoto, encode:
         return file_id.encode() if encode else file_id
     elif isinstance(file, types.MessageMediaPhoto):
         photo: types.Photo=file.photo
-        
+
         photos: List[types.PhotoSize] = []
         for p in photo.sizes:
             if isinstance(p, types.PhotoSize):
@@ -104,7 +104,7 @@ def get_FileId(file: types.MessageMediaDocument|types.MessageMediaPhoto, encode:
         )
         return file_id.encode() if encode else file_id
 
-def get_FileUniqueId(file: types.MessageMediaDocument|types.MessageMediaPhoto) -> str:
+def get_file_unique_id(file: types.MessageMediaDocument|types.MessageMediaPhoto) -> str:
     if isinstance(file, types.MessageMediaDocument):
         document: types.Document=file.document
         return FileUniqueId(

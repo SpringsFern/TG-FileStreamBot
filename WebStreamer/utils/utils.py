@@ -5,10 +5,10 @@ import logging
 import sys
 import glob
 import importlib
-from pathlib import Path
-from aiohttp import web
 from collections import defaultdict
 from typing import Dict
+from pathlib import Path
+from aiohttp import web
 
 from telethon import TelegramClient
 from telethon.tl import functions
@@ -17,24 +17,24 @@ from WebStreamer.vars import Var
 
 ongoing_requests: Dict[str, int] = defaultdict(lambda: 0)
 
-ppath = "WebStreamer/bot/plugins/*.py"
-files = glob.glob(ppath)
+PPATH = "WebStreamer/bot/plugins/*.py"
+files = glob.glob(PPATH)
 
 # https://github.com/EverythingSuckz/TG-FileStreamBot/blob/webui/WebStreamer/__main__.py
 
 def load_plugins(path: str):
     for name in files:
-        with open(name) as a:
+        with open(name, encoding="utf-8") as a:
             patt = Path(a.name)
             plugin_name = patt.stem.replace(".py", "")
             plugins_dir = Path(f"{path}/{plugin_name}.py")
-            import_path = ".plugins.{}".format(plugin_name)
+            import_path = f".plugins.{plugin_name}"
             spec = importlib.util.spec_from_file_location(
                 import_path, plugins_dir)
             load = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(load)
             sys.modules["WebStreamer.bot.plugins." + plugin_name] = load
-            print("Imported => " + plugin_name)
+            logging.info("Imported => " + plugin_name)
 
 def get_requester_ip(req: web.Request) -> str:
     if Var.TRUST_HEADERS:
@@ -95,7 +95,7 @@ def humanbytes(size):
     return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
 
 async def is_allowed(event: NewMessage.Event):
-    if Var.ALLOWED_USERS and not (str(event.chat_id) in Var.ALLOWED_USERS):
+    if Var.ALLOWED_USERS and not str(event.chat_id) in Var.ALLOWED_USERS:
         await event.message.reply(message="You are not in the allowed list of users who can use me.")
         return False
     return True
@@ -113,7 +113,7 @@ async def startup(client: TelegramClient):
     for option in config.dc_options:
         if option.ip_address == client.session.server_address:
             if client.session.dc_id != option.id:
-                logging.warning(f"Fixed DC ID in session from {client.session.dc_id} to {option.id}")
+                logging.warning("Fixed DC ID in session from %s to %s",client.session.dc_id,option.id)
             client.session.set_dc(option.id, option.ip_address, option.port)
             client.session.save()
             break

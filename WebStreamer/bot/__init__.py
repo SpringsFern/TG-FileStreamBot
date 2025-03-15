@@ -12,5 +12,9 @@ StreamBot = TelegramClient(
     receive_updates=not Var.NO_UPDATE
 )
 
+class BotInfo():
+    fname: str = None
+    username: str = None
+
 multi_clients = {}
 work_loads = {}
