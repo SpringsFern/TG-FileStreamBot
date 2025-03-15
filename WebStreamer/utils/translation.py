@@ -23,7 +23,7 @@ Here's what you can do:
 
     ABOUT_TEXT: str = """
 <b>Maintained By:</b> <a href="https://github.com/DeekshithSH">DeekshithSH</a>
-<b>Source Code:</b> <a href="https://github.com/DeekshithSH/TG-FileStreamBot">TG-FileStreamBot</a>
+<b>Source Code:</b> <a href="https://github.com/SpringsFern/TG-FileStreamBot">TG-FileStreamBot</a>
 <b>Based On:</b> [<a href="bit.ly/tg-stream">tg filestream</a>] [<a href="https://github.com/EverythingSuckz/TG-FileStreamBot">TG-FileStreamBot</a>]
 <b>Version:</b> {}
 <b>Last Updated:</b> 15 March 20225
