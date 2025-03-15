@@ -1,6 +1,7 @@
 # This file is a part of FileStreamBot
 
 from __future__ import annotations
+import logging
 import sys
 import glob
 import importlib
@@ -9,6 +10,8 @@ from aiohttp import web
 from collections import defaultdict
 from typing import Dict
 
+from telethon import TelegramClient
+from telethon.tl import functions
 from telethon.events import NewMessage, CallbackQuery
 from WebStreamer.vars import Var
 
@@ -104,3 +107,14 @@ async def validate_user(event: NewMessage.Event | CallbackQuery.Event) -> bool:
     if not await is_allowed(event):
         return False
     return True
+
+async def startup(client: TelegramClient):
+    config = await client(functions.help.GetConfigRequest())
+    for option in config.dc_options:
+        if option.ip_address == client.session.server_address:
+            if client.session.dc_id != option.id:
+                logging.warning(f"Fixed DC ID in session from {client.session.dc_id} to {option.id}")
+            client.session.set_dc(option.id, option.ip_address, option.port)
+            client.session.save()
+            break
+    # transfer.post_init()

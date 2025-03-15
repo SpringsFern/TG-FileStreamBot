@@ -3,8 +3,9 @@
 import asyncio
 import logging
 from os import environ
+from telethon import TelegramClient
+from WebStreamer.utils.utils import startup
 from ..vars import Var
-from .helper import TLClient
 from telethon.sessions import MemorySession
 from . import multi_clients, work_loads, StreamBot
 
@@ -40,7 +41,7 @@ async def initialize_clients():
             if client_id == len(all_tokens):
                 await asyncio.sleep(2)
                 print("This will take some time, please wait...")
-            client = TLClient(
+            client = TelegramClient(
                 session=MemorySession(),
                 api_id=Var.API_ID,
                 api_hash=Var.API_HASH,
@@ -48,7 +49,7 @@ async def initialize_clients():
                 receive_updates=False
             )
             await client.start(bot_token=token)   
-            await client.startup()         
+            await startup(client)         
             client.id = (await client.get_me()).id
             work_loads[client_id] = 0
             return client_id, client

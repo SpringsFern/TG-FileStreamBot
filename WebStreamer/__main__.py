@@ -12,7 +12,7 @@ from aiohttp import web
 from WebStreamer.bot import StreamBot
 from WebStreamer.server import web_server
 from WebStreamer.utils.keepalive import ping_server
-from WebStreamer.utils.utils import load_plugins
+from WebStreamer.utils.utils import load_plugins, startup
 from WebStreamer.bot.clients import initialize_clients
 
 
@@ -40,7 +40,7 @@ async def start_services():
     print("-------------------- Initializing Telegram Bot --------------------")
     # await StreamBot.connect()
     await StreamBot.start(bot_token=Var.BOT_TOKEN)
-    await StreamBot.startup()
+    await startup(StreamBot)
     bot_info = await StreamBot.get_me()
     StreamBot.id = bot_info.id
     StreamBot.username = bot_info.username
