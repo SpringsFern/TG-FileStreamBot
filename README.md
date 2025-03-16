@@ -14,6 +14,8 @@
 </p>
 
 <hr>
+Checkout <a href="https://github.com/SpringsFern/TG-FileStreamBot/tree/main">Readme</a> for more information
+<hr>
 
 <details open="open">
   <summary>Table of Contents</summary>
@@ -54,9 +56,9 @@
 </p>
 
 ### Original Repository
-[FileStreamBot](https://github.com/SpringsFern/FileStreamBot) is a Modified Version of [TG-FileStreamBot](https://github.com/EverythingSuckz/TG-FileStreamBot) by [EverythingSuckz](https://github.com/EverythingSuckz/)
+[TG-FileStreamBot](https://github.com/SpringsFern/TG-FileStreamBot) is a Modified Version of [TG-FileStreamBot](https://github.com/EverythingSuckz/TG-FileStreamBot) by [EverythingSuckz](https://github.com/EverythingSuckz/)
 
-The main working part was taken from [Eyaadh's](https://github.com/eyaadh) [Megatron](https://github.com/eyaadh/megadlbot_oss) and [Tulir Asokan's](https://github.com/tulir) [tg filestream](https://bit.ly/tg-stream). Thanks to them for their awesome projects
+The main working part was taken from [Tulir Asokan's](https://github.com/tulir) [tg filestream](https://bit.ly/tg-stream). Thanks to them for their awesome projects
 
 ## How to make your own
 
@@ -73,8 +75,8 @@ then goto the <a href="#mandatory-vars">variables tab</a> for more info on setti
 ### Host it on VPS or Locally
 
 ```sh
-git clone https://github.com/DeekshithSH/FileStreamBot
-cd FileStreamBot
+git clone https://github.com/SpringsFern/TG-FileStreamBot
+cd TG-FileStreamBot
 python3 -m venv ./venv
 . ./venv/bin/activate
 pip3 install -r requirements.txt
@@ -218,12 +220,12 @@ Feel free to contribute to this project if you have any further ideas
 [![Telegram Channel](https://img.shields.io/static/v1?label=Join&message=Telegram%20Channel&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/SpringsFern)
 [![Telegram Group](https://img.shields.io/static/v1?label=Join&message=Telegram%20Group&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/AWeirdString)
 
-You can contact either via my [Telegram Group](https://xn--r1a.click/AWeirdString) ~~or you can PM me on [@DeekshithSH](https://xn--r1a.click/DeekshithSH)~~
+You can contact either via my [Telegram Group](https://xn--r1a.click/AWeirdString)
 
 
 ## Credits
 
-- [Me](https://xn--r1a.click/DeekshithSH)
+- [Me](https://github.com/DeekshithSH)
 - [EverythingSuckz](https://github.com/EverythingSuckz) for his [TG-FileStreamBot](https://github.com/EverythingSuckz/TG-FileStreamBot)
 - [Tulir Asokan](https://github.com/tulir) for his [tg filestream](bit.ly/tg-stream)
 - [eyaadh](https://github.com/eyaadh) for his awesome [Megatron Bot](https://github.com/eyaadh/megadlbot_oss).

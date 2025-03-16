@@ -11,9 +11,9 @@
         "modular",
         "media"
       ],
-    "repository": "https://github.com/SpringsFern/FileStreamBot",
+    "repository": "https://github.com/SpringsFern/TG-FileStreamBot",
     "success_url": "/status",
-    "website": "https://github.com/SpringsFern/FileStreamBot",
+    "website": "https://github.com/SpringsFern/TG-FileStreamBot",
     "env": {
         "API_ID": {
             "description": "Goto my.telegram.org to obtain this",

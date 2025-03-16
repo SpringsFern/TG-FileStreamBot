@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 from telethon.extensions import html
 from telethon.events import NewMessage
