@@ -1,15 +1,17 @@
 # Taken from megadlbot_oss <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/webserver/routes.py>
 # Thanks to Eyaadh <https://github.com/eyaadh>
 
+import re
 import time
 import logging
 import mimetypes
 from aiohttp import web
 from aiohttp.http_exceptions import BadStatusLine
 from WebStreamer.bot import multi_clients, work_loads, BotInfo
-from WebStreamer.utils.utils import allow_request, get_requester_ip, get_readable_time
+from WebStreamer.utils.file_properties import get_hash
+from WebStreamer.utils.util import allow_request, get_requester_ip, get_readable_time
 from WebStreamer.vars import Var
-from WebStreamer.server.exceptions import FIleNotFound
+from WebStreamer.server.exceptions import FIleNotFound, InvalidHash
 from WebStreamer import StartTime, __version__
 from WebStreamer.utils.paralleltransfer import ParallelTransferrer
 
@@ -37,11 +39,23 @@ async def root_route_handler(request: web.Request):
     )
 
 
-@routes.get("/dl/{path}")
-@routes.get("/dl/{path}/{name}")
+@routes.get(r"/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
+    print("-----------------",request)
     try:
-        return await media_streamer(request)
+        path = request.match_info["path"]
+        match = re.search(r"^([0-9a-f]{%s})(\d+)$" % (Var.HASH_LENGTH), path)
+        if match:
+            secure_hash = match.group(1)
+            message_id = int(match.group(2))
+        else:
+            message_id = int(re.search(r"(\d+)(?:\/\S+)?", path).group(1))
+            secure_hash = request.rel_url.query.get("hash")
+        return await media_streamer(request, message_id, secure_hash)
+    except InvalidHash as e:
+        raise web.HTTPForbidden(text=e.message)
+    except FIleNotFound as e:
+        raise web.HTTPNotFound(text=e.message)
     except (AttributeError, BadStatusLine, ConnectionResetError):
         pass
     except Exception as e:
@@ -49,9 +63,9 @@ async def stream_handler(request: web.Request):
         raise web.HTTPInternalServerError(text=str(e))
 
 
-async def media_streamer(request: web.Request):
+async def media_streamer(request: web.Request, message_id: int, secure_hash: str):
+    print(message_id, secure_hash)
     head: bool = request.method == "HEAD"
-    msg_id = int(request.match_info["path"])
     ip = get_requester_ip(request)
     range_header = request.headers.get("Range", 0)
 
@@ -72,9 +86,13 @@ async def media_streamer(request: web.Request):
         logging.debug("Created new ByteStreamer object for client %s", index)
     logging.debug("before calling get_file_properties")
     try:
-        file_id = await transfer.get_file_properties(msg_id)
+        file_id = await transfer.get_file_properties(message_id)
     except FIleNotFound:
         return web.Response(status=404, text="File not found")
+
+    if get_hash(file_id.unique_id, Var.HASH_LENGTH) != secure_hash:
+        logging.debug("Invalid hash for message with ID %s", message_id)
+        raise InvalidHash
 
     file_size = file_id.file_size
 
@@ -111,8 +129,8 @@ async def media_streamer(request: web.Request):
         mime_type = mimetypes.guess_type(
             file_name)[0] or "application/octet-stream"
 
-    # if "video/" in mime_type or "audio/" in mime_type:
-    #     disposition = "inline"
+    if ("video/" in mime_type or "audio/" in mime_type) and Var.STREAM_MEDIA:
+        disposition = "inline"
 
     return web.Response(
         status=206 if range_header else 200,

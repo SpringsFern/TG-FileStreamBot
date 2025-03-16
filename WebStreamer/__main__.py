@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 import sys
 import asyncio
@@ -11,7 +11,7 @@ from aiohttp import web
 from WebStreamer.bot import StreamBot, BotInfo
 from WebStreamer.server import web_server
 from WebStreamer.utils.keepalive import ping_server
-from WebStreamer.utils.utils import load_plugins, startup
+from WebStreamer.utils.util import load_plugins, startup
 from WebStreamer.bot.clients import initialize_clients
 from .vars import Var
 

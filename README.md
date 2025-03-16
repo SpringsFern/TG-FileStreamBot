@@ -54,9 +54,9 @@
 </p>
 
 ### Original Repository
-[FileStreamBot](https://github.com/SpringsFern/FileStreamBot) is a Modified Version of [TG-FileStreamBot](https://github.com/EverythingSuckz/TG-FileStreamBot) by [EverythingSuckz](https://github.com/EverythingSuckz/)
+[TG-FileStreamBot](https://github.com/SpringsFern/TG-FileStreamBot) is a Modified Version of [TG-FileStreamBot](https://github.com/EverythingSuckz/TG-FileStreamBot) by [EverythingSuckz](https://github.com/EverythingSuckz/)
 
-The main working part was taken from [Eyaadh's](https://github.com/eyaadh) [Megatron](https://github.com/eyaadh/megadlbot_oss) and [Tulir Asokan's](https://github.com/tulir) [tg filestream](https://bit.ly/tg-stream). Thanks to them for their awesome projects
+The main working part was taken from [Tulir Asokan's](https://github.com/tulir) [tg filestream](https://bit.ly/tg-stream). Thanks to them for their awesome projects
 
 ## How to make your own
 
@@ -73,8 +73,8 @@ then goto the <a href="#mandatory-vars">variables tab</a> for more info on setti
 ### Host it on VPS or Locally
 
 ```sh
-git clone https://github.com/DeekshithSH/FileStreamBot
-cd FileStreamBot
+git clone https://github.com/SpringsFern/TG-FileStreamBot
+cd TG-FileStreamBot
 python3 -m venv ./venv
 . ./venv/bin/activate
 pip3 install -r requirements.txt
@@ -144,39 +144,13 @@ you may also add as many as bots you want. (max limit is not tested yet)
 
 `CONNECTION_LIMIT`:  (default 20) - The maximum number of connections to a single Telegram datacenter.
 
-`CUSTOM_URL`: Only set this true if you set `LINK_TEMPLATE` field
-
 `FQDN` :  A Fully Qualified Domain Name if present. Defaults to `WEB_SERVER_BIND_ADDRESS`
 
 `HAS_SSL` : (can be either `True` or `False`) If you want the generated links in https format.
 
-`KEEP_ALIVE` : If you want to make the server ping itself every
+`HASH_LENGTH`: This is the custom hash length for generated URLs. The hash length must be greater than 5 and less than 64.
 
-> [!WARNING]
-> `LINK_TEMPLATE`: Modify format in which download links are generated
-> **Ignore this field**
-> <details>
-> <summary>[Expand]</summary>
->   This setting allows customization of how the download link is displayed to users. It does **not** affect the actual link used by the bot to fetch the file—only the visible link format changes.  
-> 
-> You can customize the link format using placeholders that will be replaced with actual values when generating the link. Available placeholders:  
-> - `{url}` – The base URL (`CUSTOM_URL`) where the file is hosted.  
-> - `{name}` – The file name (URL-encoded).  
-> - `{size}` – The file size in human-readable format.  
-> - `{id}` – The unique ID of the file message.  
-> - `{mime}` – The file's MIME type (URL-encoded).  
-> - `{time}` – The Unix timestamp when the link is generated.  
-> 
-> Example customization:  
-> ```
-> LINK_TEMPLATE = "{url}/download/{id}/{name}?size={size}&type={mime}"
-> ```
-> This will generate a link like:  
-> ```
-> https://yourdomain.com/download/12345/sample.pdf?size=2MB&type=application/pdf
-> ```
-> </details>
-<br>
+`KEEP_ALIVE` : If you want to make the server ping itself every
 
 `NO_PORT` : (can be either `True` or `False`) If you don't want your port to be displayed. You should point your `PORT` to `80` (http) or `443` (https) for the links to work. Ignore this if you're on Heroku.
 
@@ -190,9 +164,9 @@ you may also add as many as bots you want. (max limit is not tested yet)
 
 `SLEEP_THRESHOLD` : Set a sleep threshold for flood wait exceptions happening globally in this telegram bot instance, below which any request that raises a flood wait will be automatically invoked again after sleeping for the required amount of time. Flood wait exceptions requiring higher waiting times will be raised. Defaults to 60 seconds.
 
-`TRUST_HEADERS`: (defaults to true) - Whether or not to trust X-Forwarded-For headers when logging requests.
+`STREAM_MEDIA`: (default false, can be either `True` or `False`) If you want to play the media (audio or video) in browser
 
-`UPDATES_CHANNEL` : Your Telegram Channel Username without @
+`TRUST_HEADERS`: (defaults to true) - Whether or not to trust X-Forwarded-For headers when logging requests.
 
 `WEB_SERVER_BIND_ADDRESS` : Your server bind address. Defauls to `0.0.0.0`
 

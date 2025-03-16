@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 #
 # Copyright (C) 2019 Tulir Asokan
 #
@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import copy
-from typing import Union, AsyncGenerator, Dict, Optional, List
+from typing import AsyncGenerator, Dict, Optional, List
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 import logging
@@ -29,20 +29,13 @@ from telethon.tl.functions import InvokeWithLayerRequest
 from telethon.tl.functions.auth import ExportAuthorizationRequest, ImportAuthorizationRequest
 from telethon.tl.functions.upload import GetFileRequest
 from telethon.tl.alltlobjects import LAYER
-from telethon.tl.types import (Document, InputFileLocation, InputDocumentFileLocation,
-                               InputPhotoFileLocation, InputPeerPhotoFileLocation, DcOption,
-                               InputPeerChat, InputPeerUser, InputPeerChannel)
+from telethon.tl.types import DcOption
 from telethon.errors import DcIdInvalidError
 
-from WebStreamer.utils.utils import decrement_counter, increment_counter
-
-from WebStreamer.utils.file_id import FileId, FileType, ThumbnailSource
-from WebStreamer.utils.file_properties import get_file_ids
+from WebStreamer.utils.util import decrement_counter, increment_counter
+from WebStreamer.utils.file_properties import FileInfo, get_file_ids
 from WebStreamer.vars import Var
 from WebStreamer.bot import work_loads
-
-TypeLocation = Union[Document, InputDocumentFileLocation, InputPeerPhotoFileLocation,
-                     InputFileLocation, InputPhotoFileLocation]
 
 root_log = logging.getLogger(__name__)
 
@@ -157,10 +150,10 @@ class ParallelTransferrer:
             5: DCConnectionManager(client, 5),
         }
         self.clean_timer = 30 * 60
-        self.cached_file_ids: Dict[int, FileId] = {}
+        self.cached_file_ids: Dict[int, FileInfo] = {}
         asyncio.create_task(self.clean_cache())
 
-    async def get_file_properties(self, message_id: int) -> FileId:
+    async def get_file_properties(self, message_id: int) -> FileInfo:
         """
         Returns the properties of a media of a specific message in a FIleId class.
         if the properties are cached, then it'll return the cached results.
@@ -171,7 +164,7 @@ class ParallelTransferrer:
             logging.debug("Cached file properties for message with ID %s", message_id)
         return self.cached_file_ids[message_id]
 
-    async def generate_file_properties(self, message_id: int) -> FileId:
+    async def generate_file_properties(self, message_id: int) -> FileInfo:
         """
         Generates the properties of a media file on a specific message.
         returns ths properties in a FIleId class.
@@ -180,48 +173,6 @@ class ParallelTransferrer:
         logging.debug("Generated file ID and Unique ID for message with ID %s", message_id)
         self.cached_file_ids[message_id] = file_id
         logging.debug("Cached media message with ID %s", message_id)
-
-    @staticmethod
-    def get_location(file_id: FileId) -> TypeLocation:
-        """
-        Returns the file location for the media file.
-        """
-        file_type = file_id.file_type
-
-        if file_type == FileType.CHAT_PHOTO:
-            if file_id.chat_id > 0:
-                peer = InputPeerUser(
-                    user_id=file_id.chat_id, access_hash=file_id.chat_access_hash
-                )
-            else:
-                if file_id.chat_access_hash == 0:
-                    peer = InputPeerChat(chat_id=-file_id.chat_id)
-                else:
-                    peer = InputPeerChannel(
-                        channel_id=-1000000000000 - file_id.chat_id,
-                        access_hash=file_id.chat_access_hash,
-                    )
-
-            location = InputPeerPhotoFileLocation(
-                peer=peer,
-                photo_id=file_id.media_id,
-                big=file_id.thumbnail_source == ThumbnailSource.CHAT_PHOTO_BIG,
-            )
-        elif file_type == FileType.PHOTO:
-            location = InputPhotoFileLocation(
-                id=file_id.media_id,
-                access_hash=file_id.access_hash,
-                file_reference=file_id.file_reference,
-                thumb_size=file_id.thumbnail_size,
-            )
-        else:
-            location = InputDocumentFileLocation(
-                id=file_id.media_id,
-                access_hash=file_id.access_hash,
-                file_reference=file_id.file_reference,
-                thumb_size=file_id.thumbnail_size,
-            )
-        return location
 
     def post_init(self) -> None:
         self.dc_managers[self.client.session.dc_id].auth_key = self.client.session.auth_key
@@ -268,10 +219,10 @@ class ParallelTransferrer:
             work_loads[index] -= 1
             decrement_counter(ip)
 
-    def download(self, file_id: FileId, file_size: int, from_bytes: int, until_bytes: int, index: int, ip: str
+    def download(self, file_id: FileInfo, file_size: int, from_bytes: int, until_bytes: int, index: int, ip: str
         ) -> AsyncGenerator[bytes, None]:
         dc_id = file_id.dc_id
-        location=self.get_location(file_id)
+        location=file_id.location
 
         chunk_size = Var.CHUNK_SIZE
         offset = from_bytes - (from_bytes % chunk_size)

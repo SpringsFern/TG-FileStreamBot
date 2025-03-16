@@ -6,7 +6,7 @@ import logging
 from os import environ
 from telethon import TelegramClient
 from telethon.sessions import MemorySession
-from WebStreamer.utils.utils import startup
+from WebStreamer.utils.util import startup
 from ..vars import Var
 from . import multi_clients, work_loads, StreamBot
 

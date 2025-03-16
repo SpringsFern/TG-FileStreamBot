@@ -1,79 +1,52 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 from __future__ import annotations
+import hashlib
 import logging
 from datetime import datetime
-from typing import List, Optional
+from typing import List
 from telethon import TelegramClient
 from telethon.tl import types
 from telethon.tl.custom.file import File
+from telethon.tl.patched import Message
+from telethon.tl.types import InputDocumentFileLocation, InputPhotoFileLocation
 from WebStreamer.server.exceptions import FIleNotFound
-from WebStreamer.utils.file_id import FileId, FileType, FileUniqueId, FileUniqueType, ThumbnailSource
+from WebStreamer.utils.file_id import FileUniqueId, FileUniqueType
 
-async def get_file_ids(client: TelegramClient, chat_id: int, message_id: int) -> Optional[FileId]:
-    message = await client.get_messages(chat_id, ids=message_id)
+class FileInfo:
+    file_size: int = None
+    mime_type: str = None
+    file_name: str = None
+    unique_id: str = None
+    dc_id: int = None
+    location: types.InputPhotoFileLocation | types.InputDocumentFileLocation = None
+
+async def get_file_ids(client: TelegramClient, chat_id: int, message_id: int) -> FileInfo:
+    message: Message = await client.get_messages(chat_id, ids=message_id)
     if not message:
         logging.debug("Message with ID %s not found",message_id)
         raise FIleNotFound
-    file_id=get_fileid(message.media, False)
-    setattr(file_id, "file_size", get_size(message.media))
-    setattr(file_id, "mime_type", message.file.mime_type)
-    setattr(file_id, "file_name", get_name(message.file))
-    setattr(file_id, "unique_id", get_file_unique_id(message.media))
-    return file_id
 
-def get_name(media: File | FileId) -> str:
-    try:
-        file_name=None
-        if isinstance(media, File):
-            file_name=media.name
-        elif isinstance(media, FileId):
-            file_name = getattr(media, "file_name", "")
-        if not file_name:
-            date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-            file_name = f"{date}{media.ext}"
-        return file_name
-    except Exception as e:
-        logging.error(e)
-        logging.info("ErrorGettingFileName: %s",media)
-        return "None"
+    media: types.MessageMediaDocument|types.MessageMediaPhoto = message.media
+    file_id=FileInfo()
+    file_id.file_size=get_size(media)
+    file_id.mime_type=message.file.mime_type
+    file_id.file_name=get_name(message.file)
+    file_id.unique_id=get_file_unique_id(media)
 
-def get_fileid(file: types.MessageMediaDocument|types.MessageMediaPhoto, encode: bool= True) -> str:
-    if isinstance(file, types.MessageMediaDocument):
-        document: types.Document=file.document
-        file_type=FileType.DOCUMENT
-        for attr in document.attributes:
-            if isinstance(attr, types.DocumentAttributeVideo):
-                if attr.round_message:
-                    file_type=FileType.VIDEO_NOTE
-                else:
-                    file_type=FileType.VIDEO
-                break
-            elif isinstance(attr, types.DocumentAttributeAnimated):
-                file_type=FileType.ANIMATION
-                break
-            elif isinstance(attr, types.DocumentAttributeAudio):
-                if attr.voice:
-                    file_type=FileType.VOICE
-                else:
-                    file_type=FileType.AUDIO
-                break
-            elif isinstance(attr, types.DocumentAttributeSticker):
-                file_type=FileType.STICKER
-                break
-        file_id = FileId(
-            file_type=file_type,
-            dc_id=document.dc_id,
-            media_id=document.id,
-            access_hash=document.access_hash,
-            file_reference=document.file_reference
+    if isinstance(media, types.MessageMediaDocument):
+        file: types.Document=media.document
+        thumbnail_size=""
+        file_id.location = InputDocumentFileLocation(
+            id=file.id,
+            access_hash=file.access_hash,
+            file_reference=file.file_reference,
+            thumb_size="",
         )
-        return file_id.encode() if encode else file_id
-    elif isinstance(file, types.MessageMediaPhoto):
-        photo: types.Photo=file.photo
-
+    elif isinstance(media, types.MessageMediaPhoto):
+        file: types.Photo=media.photo
         photos: List[types.PhotoSize] = []
-        for p in photo.sizes:
+        for p in file.sizes:
             if isinstance(p, types.PhotoSize):
                 photos.append(p)
 
@@ -89,20 +62,29 @@ def get_fileid(file: types.MessageMediaDocument|types.MessageMediaPhoto, encode:
         photos.sort(key=lambda p: p.size)
         main = photos[-1]
 
-        file_type=FileType.PHOTO
-        file_id = FileId(
-            file_type=FileType.PHOTO,
-            dc_id=photo.dc_id,
-            media_id=photo.id,
-            access_hash=photo.access_hash,
-            file_reference=photo.file_reference,
-            thumbnail_source=ThumbnailSource.THUMBNAIL,
-            thumbnail_file_type=FileType.PHOTO,
-            thumbnail_size=main.type,
-            volume_id=0,
-            local_id=0
+        thumbnail_size=main.type
+        file_id.location = InputPhotoFileLocation(
+            id=file.id,
+            access_hash=file.access_hash,
+            file_reference=file.file_reference,
+            thumb_size=thumbnail_size,
         )
-        return file_id.encode() if encode else file_id
+
+    file_id.dc_id=file.dc_id
+
+    return file_id
+
+def get_name(media: File) -> str:
+    try:
+        file_name=media.name
+        if not file_name:
+            date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            file_name = f"{date}{media.ext}"
+        return file_name
+    except Exception as e:
+        logging.error(e)
+        logging.info("ErrorGettingFileName: %s",media)
+        return "None"
 
 def get_file_unique_id(file: types.MessageMediaDocument|types.MessageMediaPhoto) -> str:
     if isinstance(file, types.MessageMediaDocument):
@@ -140,3 +122,11 @@ def get_size(file: types.MessageMediaDocument|types.MessageMediaPhoto) -> int:
         photos.sort(key=lambda p: p.size)
         main = photos[-1]
         return main.size
+
+def get_hash(file: types.MessageMediaDocument|types.MessageMediaPhoto, length: int) -> str:
+    if isinstance(file, str):
+        unique_id = file
+    else:
+        unique_id = get_file_unique_id(file)
+    long_hash = hashlib.sha256(unique_id.encode("UTF-8")).hexdigest()
+    return long_hash[:length]

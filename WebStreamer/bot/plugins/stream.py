@@ -1,53 +1,34 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 import logging
 import urllib.parse
-from time import time
 from telethon import Button, errors
 from telethon.events import NewMessage
 from telethon.extensions import html
-from WebStreamer.bot import StreamBot, BotInfo
-from WebStreamer.utils.translation import Text
-from WebStreamer.utils.utils import validate_user
-from WebStreamer.utils.file_properties import get_name, get_size
-from WebStreamer.utils.utils import humanbytes
+from WebStreamer.bot import StreamBot
+from WebStreamer.utils.file_properties import get_hash, get_name
 from WebStreamer.vars import Var
 
-@StreamBot.on(NewMessage(func=lambda e: True if e.message.file else False))
-async def private_receive_handler(event: NewMessage.Event):
-    if not await validate_user(event):
-        return
+@StreamBot.on(NewMessage(func=lambda e: True if e.message.file and e.is_private else False))
+async def media_receive_handler(event: NewMessage.Event):
+    user = await event.get_sender()
+    if Var.ALLOWED_USERS and not ((str(user.id) in Var.ALLOWED_USERS) or (user.username in Var.ALLOWED_USERS)):
+        return await event.message.reply(
+            message="You are not in the allowed list of users who can use me.",
+            link_preview=False,
+            parse_mode=html
+        )
     try:
-        # if not event.message.file:
-        #     logging.info(f"MediaNotFound: {event.stringify()}")
-        #     return
         log_msg=await event.message.forward_to(Var.BIN_CHANNEL)
-        file_name = get_name(event.message.file)
-        file_size = humanbytes(get_size(event.message.media))
-
-        if Var.CUSTOM_URL:
-            stream_link=Var.LINK_TEMPLATE.format_map({
-                "url": Var.CUSTOM_URL,
-                "name": urllib.parse.quote(file_name),
-                "size": get_size(event.message.media),
-                "id": log_msg.id,
-                "mime": urllib.parse.quote(log_msg.file.mime_type),
-                "time": int(time())
-            })
-        else:
-            stream_link = f"{Var.URL}dl/{log_msg.id}/{urllib.parse.quote(get_name(event.message.file))}"
+        file_hash = get_hash(log_msg.media, Var.HASH_LENGTH)
+        stream_link = f"{Var.URL}{log_msg.id}/{urllib.parse.quote_plus(get_name(event.message.file))}?hash={file_hash}"
+        short_link = f"{Var.URL}{file_hash}{log_msg.id}"
 
         await event.message.reply(
-            message=Text.STREAM_MSG_TEXT.format_map({
-                "name": file_name,
-                "size": file_size,
-                "link": stream_link,
-                "username": BotInfo.username,
-                "firstname": BotInfo.fname
-                }),
+            message=f"<code>{stream_link}</code>\n(<a href='{short_link}'>shortened</a>)",
             link_preview=False,
             buttons=[
-            [Button.url("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]
+            [Button.url("Open", url=stream_link)]
             ],
             parse_mode=html
         )

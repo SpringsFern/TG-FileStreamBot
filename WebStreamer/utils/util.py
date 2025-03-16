@@ -1,4 +1,4 @@
-# This file is a part of FileStreamBot
+# This file is a part of TG-FileStreamBot
 
 from __future__ import annotations
 import logging
@@ -12,7 +12,6 @@ from aiohttp import web
 
 from telethon import TelegramClient
 from telethon.tl import functions
-from telethon.events import NewMessage, CallbackQuery
 from WebStreamer.vars import Var
 
 ongoing_requests: Dict[str, int] = defaultdict(lambda: 0)
@@ -34,7 +33,7 @@ def load_plugins(path: str):
             load = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(load)
             sys.modules["WebStreamer.bot.plugins." + plugin_name] = load
-            logging.info("Imported => " + plugin_name)
+            logging.info("Imported => %s", plugin_name)
 
 def get_requester_ip(req: web.Request) -> str:
     if Var.TRUST_HEADERS:
@@ -79,34 +78,6 @@ def get_readable_time(seconds: int) -> str:
     time_list.reverse()
     readable_time += ": ".join(time_list)
     return readable_time
-
-# moved from WebStreamer/utils/human_readable.py
-def humanbytes(size):
-    # https://stackoverflow.com/a/49361727/4723940
-    # 2**10 = 1024
-    if not size:
-        return ""
-    power = 2**10
-    n = 0
-    Dic_powerN = {0: ' ', 1: 'Ki', 2: 'Mi', 3: 'Gi', 4: 'Ti'}
-    while size > power:
-        size /= power
-        n += 1
-    return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
-
-async def is_allowed(event: NewMessage.Event):
-    if Var.ALLOWED_USERS and not str(event.chat_id) in Var.ALLOWED_USERS:
-        await event.message.reply(message="You are not in the allowed list of users who can use me.")
-        return False
-    return True
-
-async def validate_user(event: NewMessage.Event | CallbackQuery.Event) -> bool:
-    if isinstance(event, NewMessage.Event):
-        if not event.is_private:
-            return False
-    if not await is_allowed(event):
-        return False
-    return True
 
 async def startup(client: TelegramClient):
     config = await client(functions.help.GetConfigRequest())
