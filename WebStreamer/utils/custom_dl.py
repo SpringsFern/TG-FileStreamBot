@@ -2,13 +2,13 @@
 
 import asyncio
 import logging
-from typing import Dict, Union
-from WebStreamer.bot import work_loads
+from typing import AsyncGenerator, Dict, Union
 from pyrogram import Client, utils, raw
-from .file_properties import get_file_ids
 from pyrogram.session import Session, Auth
 from pyrogram.errors import AuthBytesInvalid
 from pyrogram.file_id import FileId, FileType, ThumbnailSource
+from WebStreamer.bot import work_loads
+from .file_properties import get_file_ids
 
 
 class ByteStreamer:
@@ -41,9 +41,9 @@ class ByteStreamer:
         if not db_id in self.cached_file_ids:
             logging.debug("Before Calling generate_file_properties")
             await self.generate_file_properties(db_id, multi_clients)
-            logging.debug(f"Cached file properties for file with ID {db_id}")
+            logging.debug("Cached file properties for file with ID %s", db_id)
         return self.cached_file_ids[db_id]
-    
+
     async def generate_file_properties(self, db_id: str, multi_clients) -> FileId:
         """
         Generates the properties of a media file on a specific message.
@@ -51,9 +51,9 @@ class ByteStreamer:
         """
         logging.debug("Before calling get_file_ids")
         file_id = await get_file_ids(self.client, db_id, multi_clients)
-        logging.debug(f"Generated file ID and Unique ID for file with ID {db_id}")
+        logging.debug("Generated file ID and Unique ID for file with ID %s", db_id)
         self.cached_file_ids[db_id] = file_id
-        logging.debug(f"Cached media file with ID {db_id}")
+        logging.debug("Cached media file with ID %s", db_id)
         return self.cached_file_ids[db_id]
 
     async def generate_media_session(self, client: Client, file_id: FileId) -> Session:
@@ -91,7 +91,8 @@ class ByteStreamer:
                         break
                     except AuthBytesInvalid:
                         logging.debug(
-                            f"Invalid authorization bytes for DC {file_id.dc_id}"
+                            "Invalid authorization bytes for DC %s",
+                            file_id.dc_id
                         )
                         continue
                 else:
@@ -106,10 +107,10 @@ class ByteStreamer:
                     is_media=True,
                 )
                 await media_session.start()
-            logging.debug(f"Created media session for DC {file_id.dc_id}")
+            logging.debug("Created media session for DC %s", file_id.dc_id)
             client.media_sessions[file_id.dc_id] = media_session
         else:
-            logging.debug(f"Using cached media session for DC {file_id.dc_id}")
+            logging.debug("Using cached media session for DC %s", file_id.dc_id)
         return media_session
 
 
@@ -138,9 +139,8 @@ class ByteStreamer:
 
             location = raw.types.InputPeerPhotoFileLocation(
                 peer=peer,
-                volume_id=file_id.volume_id,
-                local_id=file_id.local_id,
-                big=file_id.thumbnail_source == ThumbnailSource.CHAT_PHOTO_BIG,
+                photo_id=file_id.media_id,
+                big=file_id.thumbnail_source == ThumbnailSource.CHAT_PHOTO_BIG
             )
         elif file_type == FileType.PHOTO:
             location = raw.types.InputPhotoFileLocation(
@@ -167,7 +167,7 @@ class ByteStreamer:
         last_part_cut: int,
         part_count: int,
         chunk_size: int,
-    ) -> Union[str, None]:
+    ) -> AsyncGenerator[bytes, None]:
         """
         Custom generator that yields the bytes of the media file.
         Modded from <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/telegram/utils/custom_download.py#L20>
@@ -175,7 +175,7 @@ class ByteStreamer:
         """
         client = self.client
         work_loads[index] += 1
-        logging.debug(f"Starting to yielding file with client {index}.")
+        logging.debug("Starting to yielding file with client %s.", index)
         media_session = await self.generate_media_session(client, file_id)
 
         current_part = 1
@@ -216,10 +216,10 @@ class ByteStreamer:
         except (TimeoutError, AttributeError):
             pass
         finally:
-            logging.debug(f"Finished yielding file with {current_part} parts.")
+            logging.debug("Finished yielding file with %s parts.", current_part)
             work_loads[index] -= 1
 
-    
+
     async def clean_cache(self) -> None:
         """
         function to clean the cache to reduce memory usage

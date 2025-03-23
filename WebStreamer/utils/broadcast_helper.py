@@ -2,10 +2,11 @@
 
 import asyncio
 import traceback
+from pyrogram.types import Message
 from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked, PeerIdInvalid
 
 
-async def send_msg(user_id, message):
+async def send_msg(user_id: int, message: Message):
     try:
         await message.copy(chat_id=user_id)
         return 200, None

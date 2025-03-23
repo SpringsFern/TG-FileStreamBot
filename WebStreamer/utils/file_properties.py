@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 import logging
+from typing import Any, Optional
 from datetime import datetime
 from pyrogram import Client
-from typing import Any, Optional
 from pyrogram.types import Message
 from pyrogram.file_id import FileId
 from WebStreamer.bot import StreamBot
@@ -108,7 +108,7 @@ def get_file_info(message):
 
 async def update_file_id(msg_id, multi_clients):
     file_ids={}
-    for client_id, client in multi_clients.items():
+    for _, client in multi_clients.items():
         log_msg=await client.get_messages(Var.BIN_CHANNEL, msg_id)
         media = get_media_from_message(log_msg)
         file_ids[str(client.id)]=getattr(media, "file_id", "")

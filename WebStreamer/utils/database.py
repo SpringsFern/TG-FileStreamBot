@@ -1,7 +1,7 @@
 # This file is a part of FileStreamBot
 
-import pymongo
 import time
+import pymongo
 import motor.motor_asyncio
 from bson.objectid import ObjectId
 from bson.errors import InvalidId
@@ -84,7 +84,7 @@ class Database:
     async def total_banned_users_count(self):
         count = await self.black.count_documents({})
         return count
-        
+
 # ----------[Add File]----------
     async def add_file(self, file_info):
         file_info["time"]=time.time()
@@ -109,9 +109,9 @@ class Database:
             if not file_info:
                 raise FIleNotFound
             return file_info
-        except InvalidId:
-            raise FIleNotFound
-    
+        except InvalidId as e:
+            raise FIleNotFound from e
+
 # ----------[Get File Using File Unique ID]----------
     async def get_file_by_fileuniqueid(self, id, file_unique_id, many=False):
         if many:

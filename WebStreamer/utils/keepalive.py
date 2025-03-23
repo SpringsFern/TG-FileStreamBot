@@ -2,8 +2,8 @@
 
 import asyncio
 import logging
-import aiohttp
 import traceback
+import aiohttp
 from WebStreamer.vars import Var
 
 
@@ -16,7 +16,7 @@ async def ping_server():
                 timeout=aiohttp.ClientTimeout(total=10)
             ) as session:
                 async with session.get(Var.URL) as resp:
-                    logging.info("Pinged server with response: {}".format(resp.status))
+                    logging.info("Pinged server with response: %s",resp.status)
         except TimeoutError:
             logging.warning("Couldn't connect to the site URL..!")
         except Exception:

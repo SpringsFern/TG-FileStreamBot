@@ -2,6 +2,7 @@
 
 import datetime
 import math
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from WebStreamer import __version__
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.bot_utils import file_format
@@ -10,7 +11,6 @@ from WebStreamer.utils.Translation import Language, BUTTON
 from WebStreamer.utils.database import Database
 from WebStreamer.utils.human_readable import humanbytes
 from WebStreamer.server.exceptions import FIleNotFound
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 @StreamBot.on_callback_query()
@@ -98,7 +98,7 @@ async def gen_file_menu(_id, file_list_no, update: CallbackQuery):
     page_link = f"{Var.URL}watch/{myfile_info['_id']}"
     stream_link = f"{Var.URL}dl/{myfile_info['_id']}"
     TiMe=myfile_info['time']
-    if type(TiMe) == float:
+    if isinstance(TiMe, float):
         date = datetime.datetime.fromtimestamp(TiMe)
     await update.edit_message_caption(
         caption="Name: {}\nFile Size: {}\nType: {}\nCreated at: {}\nTime: {}".format(myfile_info['file_name'], humanbytes(int(myfile_info['file_size'])), file_type, TiMe if isinstance(TiMe, str) else date.date(), "N/A" if isinstance(TiMe, str) else date.time().strftime("%I:%M:%S %p %Z")),
@@ -121,5 +121,5 @@ async def delete_user_file(_id, update:CallbackQuery):
     await db.delete_one_file(myfile_info['_id'])
     await update.message.edit_caption(
             caption= "<b>Deleted Link Successfully<b>\n" + update.message.caption.replace("Do You Want to Delete the file", ""),
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Back", callback_data=f"userfiles_1")]])
+            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Back", callback_data="userfiles_1")]])
         )

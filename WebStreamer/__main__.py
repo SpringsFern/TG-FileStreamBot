@@ -2,16 +2,16 @@
 
 import sys
 import asyncio
-import logging
 import traceback
+import logging
 import logging.handlers as handlers
-from .vars import Var
 from aiohttp import web
 from pyrogram import idle
 from WebStreamer.bot import StreamBot
 from WebStreamer.server import web_server
 from WebStreamer.utils import ping_server
 from WebStreamer.bot.clients import initialize_clients
+from .vars import Var
 
 
 logging.basicConfig(
@@ -62,10 +62,10 @@ async def start_services():
     print("------------------------------ DONE ------------------------------")
     print()
     print("------------------------- Service Started -------------------------")
-    print("                        bot =>> {}".format(bot_info.first_name))
+    print(f"                        bot =>> {bot_info.first_name}")
     if bot_info.dc_id:
-        print("                        DC ID =>> {}".format(str(bot_info.dc_id)))
-    print(" URL =>> {}".format(Var.URL))
+        print(f"                        DC ID =>> {str(bot_info.dc_id)}")
+    print(f" URL =>> {Var.URL}")
     print("------------------------------------------------------------------")
     await idle()
 

@@ -1,12 +1,8 @@
-<h1 align="center">Telegram File Stream Bot</h3>
-<p align="center">
-  <a href="https://github.com/DeekshithSH/FileStreamBot">
-    <img src="https://socialify.git.ci/DeekshithSH/FileStreamBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&pattern=Charlie%20Brown&pulls=1&stargazers=1&theme=Dark" alt="FileStreamBot" width="640" height="320" />
-  </a>
-  <p align="center">
+<h1>Telegram File Stream Bot</h3>
+<p>
+  <p>
     A Telegram bot to stream files to web<br/>
-    <a href="https://telegram.dog/DirectLinkGenerator_Bot"><strong>Demo Bot (Not Available)»</strong></a>
-    <br />
+    <a href="https://telegram.dog/DirectLinkGenerator_Bot"><strong>Demo Bot (Not Exactly)»</strong></a>
     <a href="https://github.com/DeekshithSH/FileStreamBot/issues">Report a Bug</a>
     |
     <a href="https://github.com/DeekshithSH/FileStreamBot/issues">Request Feature</a>
@@ -44,12 +40,7 @@
 
 ## About This Bot
 
-<p align="center">
-    <a herf="https://github.com/DeekshithSH/FileStreamBot">
-        <img src="https://telegra.ph/file/a8bb3f6b334ad1200ddb4.png" height="100" width="100" alt="Telegram Logo">
-    </a>
-</p>
-<p align='center'>
+<p>
     This bot will give you stream links for Telegram files without the need of waiting till the download completes
 </p>
 
@@ -126,7 +117,7 @@ PORT=8080
 
 `OWNER_ID` : Your Telegram User ID, Send `/id` to [@missrose_bot](https://telegram.dog/MissRose_bot) to get Your Telegram User ID
 
-`DATABASE_URL` : MongoDB URI for saving User IDs when they first Start the Bot. We will use that for Broadcasting to them. I will try to add more features related with Database. If you need help to get the URI you can ask in [Me Telegram](https://t.me/Avishkarpatil).
+`DATABASE_URL` : MongoDB URI for saving User IDs when they first Start the Bot. We will use that for Broadcasting to them. I will try to add more features related with Database. If you need help to get the URI watch this video [https://youtu.be/cTN0L3TgQJA?si=A2o_Eq45db9eSLV9&t=281](https://youtu.be/cTN0L3TgQJA?si=A2o_Eq45db9eSLV9&t=281).
 
 ### For MultiClient
 
@@ -197,10 +188,10 @@ Feel free to contribute to this project if you have any further ideas
 
 ## Contact me
 
-[![Telegram Channel](https://img.shields.io/static/v1?label=Join&message=Telegram%20Channel&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/AWeirdText)
+[![Telegram Channel](https://img.shields.io/static/v1?label=Join&message=Telegram%20Channel&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/SpringsFern)
 [![Telegram Group](https://img.shields.io/static/v1?label=Join&message=Telegram%20Group&color=blueviolet&style=for-the-badge&logo=telegram&logoColor=violet)](https://xn--r1a.click/AWeirdString)
 
-You can contact either via my [Telegram Group](https://xn--r1a.click/AWeirdString) ~~or you can PM me on [@DeekshithSH](https://xn--r1a.click/DeekshithSH)~~
+You can contact via my [Telegram Group](https://xn--r1a.click/AWeirdString)
 
 
 ## Credits
@@ -212,3 +203,5 @@ You can contact either via my [Telegram Group](https://xn--r1a.click/AWeirdStrin
 - [BlackStone](https://github.com/eyMarv) for adding multi-client support.
 - [Dan Tès](https://telegram.dog/haskell) for his [Pyrogram Library](https://github.com/pyrogram/pyrogram)
 - [TheHamkerCat](https://github.com/TheHamkerCat) for helping me with my common doubts.
+- [KurimuzonAkuma](https://github.com/KurimuzonAkuma) for his [Updated Pyrogram Library](https://github.com/KurimuzonAkuma/pyrogram)
+

@@ -49,16 +49,16 @@ async def gen_link(m: Message, _id, name: list) -> tuple[InlineKeyboardMarkup, s
     file_name = get_name(m)
     file_size = humanbytes(get_media_file_size(m))
     page_link = f"{Var.URL}watch/{_id}"
-    
+
     stream_link = f"{Var.URL}dl/{_id}"
-    Stream_Text=lang.STREAM_MSG_TEXT.format(file_name, file_size, stream_link, page_link, name[0], name[1])
+    stream_text=lang.STREAM_MSG_TEXT.format(file_name, file_size, stream_link, page_link, name[0], name[1])
     reply_markup=InlineKeyboardMarkup(
         [
             [InlineKeyboardButton("🖥STREAM", url=page_link), InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ 📥", url=stream_link)]
             ]
         )
 
-    return reply_markup, Stream_Text
+    return reply_markup, stream_text
 
 async def is_user_banned(message, lang) -> bool:
     if await db.is_user_banned(message.from_user.id):
@@ -80,7 +80,7 @@ async def is_user_exist(message: Message):
 
 async def is_user_accepted_tos(message: Message) -> bool:
     user=await db.get_user(message.from_user.id)
-    if not ("agreed_to_tos" in user) or not (user["agreed_to_tos"]):
+    if not ("agreed_to_tos" in user) or not user["agreed_to_tos"]:
         await message.reply(f"Hi {message.from_user.mention},\nplease read and accept the Terms of Service to continue using the bot")
         await message.reply_text(
             Var.TOS,

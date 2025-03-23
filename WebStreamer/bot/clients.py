@@ -3,8 +3,8 @@
 import asyncio
 import logging
 from os import environ
-from ..vars import Var
 from pyrogram import Client
+from ..vars import Var
 from . import multi_clients, work_loads, StreamBot
 
 
@@ -22,7 +22,7 @@ async def initialize_clients():
         work_loads[0] = 0
         print("No additional clients found, using default client")
         return
-    
+
     async def start_client(client_id, token):
         try:
             if len(token) >= 100:
@@ -50,12 +50,10 @@ async def initialize_clients():
             work_loads[client_id] = 0
             return client_id, client
         except Exception:
-            logging.error(f"Failed starting Client - {client_id} Error:", exc_info=True)
-    
+            logging.error("Failed starting Client - {%s} Error:", client_id, exc_info=True)
+
     clients = await asyncio.gather(*[start_client(i, token) for i, token in all_tokens.items()])
     multi_clients.update(dict(clients))
     if len(multi_clients) != 1:
         Var.MULTI_CLIENT = True
         print("Multi-Client Mode Enabled")
-    else:
-        print("No additional clients were initialized, using default client")
