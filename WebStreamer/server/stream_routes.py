@@ -1,7 +1,6 @@
 # Taken from megadlbot_oss <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/webserver/routes.py>
 # Thanks to Eyaadh <https://github.com/eyaadh>
 
-import re
 import time
 import logging
 import mimetypes
@@ -20,7 +19,7 @@ routes = web.RouteTableDef()
 class_cache = {}
 
 @routes.get("/status", allow_head=True)
-async def root_route_handler(request: web.Request):
+async def root_route_handler(_: web.Request):
     return web.json_response(
         {
             "server_status": "running",
@@ -39,18 +38,11 @@ async def root_route_handler(request: web.Request):
     )
 
 
-@routes.get(r"/{path:\S+}", allow_head=True)
+@routes.get(r"/stream/{messageID:\d+}", allow_head=True)
 async def stream_handler(request: web.Request):
-    print("-----------------",request)
     try:
-        path = request.match_info["path"]
-        match = re.search(r"^([0-9a-f]{%s})(\d+)$" % (Var.HASH_LENGTH), path)
-        if match:
-            secure_hash = match.group(1)
-            message_id = int(match.group(2))
-        else:
-            message_id = int(re.search(r"(\d+)(?:\/\S+)?", path).group(1))
-            secure_hash = request.rel_url.query.get("hash")
+        message_id = int(request.match_info["messageID"])
+        secure_hash = request.rel_url.query.get("hash")
         return await media_streamer(request, message_id, secure_hash)
     except InvalidHash as e:
         raise web.HTTPForbidden(text=e.message)
@@ -64,7 +56,6 @@ async def stream_handler(request: web.Request):
 
 
 async def media_streamer(request: web.Request, message_id: int, secure_hash: str):
-    print(message_id, secure_hash)
     head: bool = request.method == "HEAD"
     ip = get_requester_ip(request)
     range_header = request.headers.get("Range", 0)
