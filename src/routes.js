@@ -44,13 +44,15 @@ async function renderPlayer(c) {
 	}
 
 	const link = `${messageId}?hash=${secureHash}&d=true`
-	console.log(c.env.DL_URL2 + link)
 
 	try {
         const response = await fetch(c.env.DL_URL2 + link, { method: 'HEAD' });
 
         if (!response.ok) {
-            return c.json({ error: 'Failed to fetch file info' }, 400);
+			const response = await fetch(c.env.DL_URL + link, { method: 'GET' });
+			if (!response.ok) {
+				return c.json({ error: 'Failed to fetch file info' }, 400);
+			}
         }
 
         // Extract file details from headers
