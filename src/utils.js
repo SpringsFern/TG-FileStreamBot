@@ -42,5 +42,5 @@ export function humanbytes(size){
 		size /= power
 		n += 1
 	}
-	return Math.round(size, 2) + " " + Dic_powerN[n] + 'B'
+	return Math.round(size*100)/100 + " " + Dic_powerN[n] + 'B'
 }
