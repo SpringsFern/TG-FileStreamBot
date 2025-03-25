@@ -88,8 +88,7 @@ async function renderPlayer(c) {
 			"file_name": fileName,
 			"file_size": humanbytes(contentLength),
 			"vlc_link": `vlc://${c.env.DL_URL.replace('https://', '')}${link}`,
-			"mx_link": `intent:${c.env.DL_URL + link}#Intent;package=com.mxtech.videoplayer.ad;end`,
-			"adsense": '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9019718369052772"crossorigin="anonymous"></script>'
+			"mx_link": `intent:${c.env.DL_URL + link}#Intent;package=com.mxtech.videoplayer.ad;end`
 		})
 		return c.html(res);
 
@@ -136,8 +135,7 @@ async function ads_page(c) {
 			"name": fileName,
 			"size": humanbytes(contentLength),
 			"mime": file_type,
-			"url": `${c.env.URL}/play/${messageId}?hash=${secureHash}`,
-			"adsense": '<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9019718369052772"crossorigin="anonymous"></script>'
+			"url": `${c.env.URL}/play/${messageId}?hash=${secureHash}`
 		})
 		return c.html(res);
 	} catch (error) {
