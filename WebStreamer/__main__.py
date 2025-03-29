@@ -39,12 +39,23 @@ async def start_services():
     logging.info("Initializing Telegram Bot")
     await StreamBot.start(bot_token=Var.BOT_TOKEN)
     await startup(StreamBot)
+    try:
+        peer = await StreamBot.get_entity(Var.BIN_CHANNEL)
+    except ValueError:
+        logging.error("Bin Channel not found. Please ensure the bot has been added to the bin channel.")
+        return
     bot_info = await StreamBot.get_me()
     BotInfo.username = bot_info.username
     BotInfo.fname=bot_info.first_name
     logging.info("Initialized Telegram Bot")
     logging.info("Initializing Clients")
     await initialize_clients()
+    if peer.megagroup:
+        if Var.MULTI_CLIENT:
+            logging.error("Bin Channel is a group. It must be a channel; multi-client won't work with groups.")
+            return
+        else:
+            logging.warning("Bin Channel is a group. Use a channel for multi-client support.")
     if not Var.NO_UPDATE:
         logging.info('Importing plugins')
         load_plugins("WebStreamer/bot/plugins")

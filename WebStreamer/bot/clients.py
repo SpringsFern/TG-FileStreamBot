@@ -41,6 +41,10 @@ async def initialize_clients():
             )
             await client.start(bot_token=token)
             await startup(client)
+            try:
+                await client.get_input_entity(Var.BIN_CHANNEL)
+            except ValueError:
+                logging.error("Client - %s is not in the Bin Channel.", client_id)
             work_loads[client_id] = 0
             return client_id, client
         except Exception:

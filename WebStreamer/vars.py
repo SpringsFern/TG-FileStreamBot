@@ -8,8 +8,8 @@ load_dotenv()
 
 class Var(object):
     MULTI_CLIENT = False
-    API_ID = int(environ.get("API_ID"))
-    API_HASH = str(environ.get("API_HASH"))
+    API_ID = int(environ.get("API_ID", 0))
+    API_HASH = str(environ.get("API_HASH", ""))
     BIN_CHANNEL = int(
         environ.get("BIN_CHANNEL", None)
     )  # you NEED to use a CHANNEL when you're using MULTI_CLIENT
